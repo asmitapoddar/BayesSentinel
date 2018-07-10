@@ -1,43 +1,18 @@
 #-----------------------------------------------------------------------
 #' Perform regularisation on covariance matrix
 #'
-#' #-----------------------------------------------------------------------
-#' Create a list with a simulated data set of spectra
+#' Perform regularisation on covariance matrix based on the model selected
 #'
-#' Simulate one or more Gaussian spectra at regularly sampling time
-#'
-#' @param x spectroscopic data
-#' @param modelname name of model to be used for calculating the covariance matrix
-#' @param dist type of distribution
+#' @param fittedCov covariance matrix
+#' @param lambda parameter for regularisation
 #'
 #' @examples
-#' predModel = predict(m, fittedCov)
+#' reg = regularisation(fittedCov, 0.3)
 #'
 #'
-#' @return A list with the spectra
+#' @return Regularised covariance matrix
 #' @author Asmita Poddar & Florent Latimier
 #'
-#'
-#'@example
-#'p = predict(m, cov, 50)
-#'
-#'
-#' @param x spectroscopic data
-#' @param modelname name of model to be used for calculating the covariance matrix
-#' @param dist type of distribution
-#'
-#' @examples
-#' predModel = predict(m, fittedCov)
-#'
-#'
-#' @return A list with the spectra
-#' @author Asmita Poddar & Florent Latimier
-#'
-#'
-#'@example
-#'p = predict(m, cov, 50)
-#'
-
 
 regularisation = function(fittedCov, lambda)
 {

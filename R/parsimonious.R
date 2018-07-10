@@ -1,10 +1,10 @@
 ### Full Spectra
 vectorSpectraLabel <- function(data,spectra,label){
-  as.numeric(data[[6]][[spectra]][which(data[[1]]==label),])
+  as.numeric(data[[3]][[spectra]][which(data[[1]]==label),])
 }
 
 covSLabel <- function(data,label){
-  cov(do.call("cbind",lapply(1:length(data[[6]]),vectorSpectraLabel,label=label,data=data)))
+  cov(do.call("cbind",lapply(1:length(data[[3]]),vectorSpectraLabel,label=label,data=data)))
 }
 
 fullSpectra <- function(data){
@@ -14,11 +14,11 @@ fullSpectra <- function(data){
 
 ### Full time
 matrixSpectraLabel <- function(data,spectra,label){
-  data[[6]][[spectra]][which(data[[1]]==label),]
+  data[[3]][[spectra]][which(data[[1]]==label),]
 }
 
 covTLabel <- function(data,label){
-  cov(do.call("rbind",lapply(1:length(data[[6]]),matrixSpectraLabel,label=label,data=data)))
+  cov(do.call("rbind",lapply(1:length(data[[3]]),matrixSpectraLabel,label=label,data=data)))
 }
 
 fullTime <- function(data){
@@ -27,7 +27,7 @@ fullTime <- function(data){
 
 
 
-### Parsionious
+### Parsimonious
 
 parsimoniousSpectra <- function(data){
   lA = lapply(fullSpectra(data),diag)

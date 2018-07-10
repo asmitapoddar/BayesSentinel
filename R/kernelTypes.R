@@ -1,19 +1,19 @@
-# Noyau Epanechnikov
+# Epanechnikov
 K_E <- function(u,h){
   (1-(u/h)^2)*(u/h <= 1)
 }
 
-# Noyau Gaussien
+# Gaussian
 K_G <- function(u,h){
   exp(-(u^2)/(2*h))
 }
 
-# Noyau exponentielle
+# Exponential
 K_Exp <- function(u,h){
   exp(-(u)/(h))
 }
 
-# Noyau Uniforme
+# Uniform
 K_U <- function(u,h){
   (u/h <= 1)
 }
@@ -23,17 +23,17 @@ K_Q <- function(u,h){
   (1-(u/h)^2)^2*(u/h <= 1)
 }
 
-# Noyau Circulaire
+# Circular
 K_C <- function(u,h){
   cos(pi/2*u/h)*(u/h <= 1)
 }
 
-# Noyau Triangulaire
+# Triangular
 K_T<- function(u,h){
   (1-u/h)*(u/h <= 1)
 }
 
-#Rational Quadratique
+#Rational Quadratic
 K_RQ <- function(u,h){
   1 - (u^2)/((u^2)+h)
 }

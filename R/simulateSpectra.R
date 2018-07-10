@@ -10,14 +10,14 @@
 #' @param sigma a vector of size nbSpectrum giving the variance level of
 #' the spectrum
 #' @param kernelName [\code{string}] with the kernel to use for the covariance matrix.
-#' Available kernels are "gaussian", "exponential", "rationalQuadratic".
-#' Default is "gaussian".
-#' @param width the width of the kernel to use. Default is 50.
+#' Available kernels are "gaussian", "tstudent". Default is "gaussian".
+#' @param width the width of the kernel to use for Gaussian simulation. Default is 50.
+#'              It also signifies the degree of freedom for Student-T simulation.
 #'
 #' @examples
 #' m = simulateSpectra(1000,15,10)
 #'
-#' @return A list with the spectra
+#' @return A list with the labels, times, spectra, clouds, means and sigma
 #' @author Serge Iovleff & Asmita Poddar
 #'
 simulateSpectra<-function(nbPixel, nbCluster, nbSpectrum, kernelName = "gaussian"

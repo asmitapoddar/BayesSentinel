@@ -54,19 +54,19 @@ readMultiSentinelSmoothedData <- function(path="./data/", file = "gp.hdf5", size
   else
   { samples <- sample(1:nbSample, size = size)}
 
-  labels <- list(years1 = as.vector(y)[samples])
-  times  <- list(years1 = t)
-  spect1 <- list(years1 = as.matrix(x[samples,1:33]))
-  spect2 <- list(years1 = as.matrix(x[samples,34:66]))
-  spect3 <- list(years1 = as.matrix(x[samples,67:99]))
-  spect4 <- list(years1 = as.matrix(x[samples,100:132]))
-  spect5 <- list(years1 = as.matrix(x[samples,133:165]))
-  spect6 <- list(years1 = as.matrix(x[samples,166:198]))
-  spect7 <- list(years1 = as.matrix(x[samples,199:231]))
-  spect8 <- list(years1 = as.matrix(x[samples,232:264]))
-  spect9 <- list(years1 = as.matrix(x[samples,265:297]))
-  spect10 <- list(years1 = as.matrix(x[samples,298:330]))
-  clouds <- list(years1 = matrix(0, nrow = length(samples), ncol = length(t) ))
+  labels <- as.vector(y)[samples]
+  times  <- t
+  spect1 <- as.matrix(x[samples,1:33])
+  spect2 <- as.matrix(x[samples,34:66])
+  spect3 <- as.matrix(x[samples,67:99])
+  spect4 <- as.matrix(x[samples,100:132])
+  spect5 <- as.matrix(x[samples,133:165])
+  spect6 <- as.matrix(x[samples,166:198])
+  spect7 <- as.matrix(x[samples,199:231])
+  spect8 <- as.matrix(x[samples,232:264])
+  spect9 <- as.matrix(x[samples,265:297])
+  spect10 <- as.matrix(x[samples,298:330])
+  clouds <- matrix(0, nrow = length(samples), ncol = length(t) )
 
   # return data in a list
   list( labels  = labels

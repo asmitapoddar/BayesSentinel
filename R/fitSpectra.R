@@ -1,31 +1,46 @@
 #-----------------------------------------------------------------------
-#' Create a list with a simulated data set of spectra
+#' Create a list with covariance matrices of the spectra and times
 #'
-#' Simulate one or more Gaussian spectra at regularly sampling time
+#' Return the covariance matrices
 #'
-#' @param x spectroscopic data
+#' @param m spectroscopic data
 #' @param modelname name of model to be used for calculating the covariance matrix
-#' @param dist type of distribution
+#' @param spectra type of spectra. Available models are "diag", "unknown" and "kernel".
+#' Default is "diag".
+#' @param time type of time. Available models are "diag", "unknown" and "kernel".
+#' Default is "diag".
+#' @param kerneltypeSpectra kernel to be used for covariance matrix of spectra
+#' Available kernels are "epanechnikov", "gaussian", "exponential", "uniform",
+#' "quadratic", "circular", "triangular", "rational quadratic", "inverse multiquadratic".
+#' Default is "exponential".
+#' @param kerneltypeTime kernel to be used for covariance matrix of time
+#' Available kernels are "epanechnikov", "gaussian", "exponential", "uniform",
+#' "quadratic", "circular", "triangular", "rational quadratic", "inverse multiquadratic".
+#' Default is "exponential".
+#' @param h used for kernel calculation
+#'
 #'
 #' @examples
-#' fittedCov = fit(x, "full", "gaussian")
+#' fittedCov = fit(x, "full")
 #'
+#' @return A list with the covariance matrices for spectra and time, modelname, spectra,
+#' time, weight and mean
 #'
-#' @return A list with the covaria
 #' @author Asmita Poddar & Florent Latimier
 #'
-#' @example
-#' cov = fit(m)
 #'
 
-fit <- function(m, modelname = "full", spectra = "diag", time = "diag", kerneltype = "exponential", h = 10)
+fit <- function(m, modelname = "full", spectra = "diag", time = "diag"
+                , kerneltypeSpectra = "exponential",kerneltypeTime = "exponential", h = 10)
 {
-
+  source('~/bayes/R/mean.R')
   source('~/bayes/R/full.R')
   source('~/bayes/R/kernelTime.R')
   source('~/bayes/R/parsimonious.R')
 
   weight = lapply(levels(factor(m[[1]])), function(k,data){length(data[which(data==k)])/length(data)}, data = m[[1]])
+
+  mean = mean(m)
 
   if (modelname=="full")
     covmat = full(m)
@@ -41,7 +56,7 @@ fit <- function(m, modelname = "full", spectra = "diag", time = "diag", kernelty
     }
     if (spectra == "kernel")
     {
-      #covSpectra = parsimoniousSpectra(m)
+      covSpectra = kernelSpectra(m, kerneltypeSpectra, h)
     }
 
     if (time == "diag")
@@ -54,14 +69,14 @@ fit <- function(m, modelname = "full", spectra = "diag", time = "diag", kernelty
     }
     if (time == "kernel")
     {
-      covTime = kernelTime(m, kerneltype, h)
+      covTime = kernelTime(m, kerneltypeTime, h)
     }
   }
 
   if (modelname=="full")
-    covMat = list (covS = covmat, covT = 1, modelname = "full", spectra = spectra, time = time, weight=weight)
+    covMat = list (covS = covmat, covT = 1, modelname = "full", spectra = spectra, time = time, weight=weight,mean=mean)
   else
-    covMat = list (covS = covSpectra, covT = covTime, modelname = modelname, spectra = spectra, time = time, weight=weight)
+    covMat = list (covS = covSpectra, covT = covTime, modelname = modelname, spectra = spectra, time = time, weight=weight,mean=mean)
 
   covMat
 }
