@@ -1,0 +1,19 @@
+Package: bayes
+Date: 2018-06-28
+Type: Package
+Title: Bayes Classification of Spetrometric Data
+Version: 0.1.0
+Author: Asmita Poddar
+Maintainer: The package maintainer <asmita.podar@gmail.com>
+Depends:
+    R (>= 3.0.2)
+Description: Different models for estimating the covariance matrix of the spectra and times, and  using it for classification of spectrometric data using the Bayes Decision Rule 
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
+Collate:
+    hello.R
+    readSpectra.R
+    simulateSpectra.R
+    fitSpectra.R
+    predict.R

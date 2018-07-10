@@ -1,0 +1,10 @@
+export( simulateSpectra
+	, readMultiSentinelSmoothedData
+	, readMultiSentinelRawData
+	, fit
+	, predict
+      )
+
+importFrom("mvtnorm", "rmvnorm")
+importFrom("stats", "dnorm", "rnorm","rexp")
+importFrom("matlib", "inv")
