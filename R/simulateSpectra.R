@@ -10,7 +10,7 @@
 #' @param sigma a vector of size nbSpectrum giving the variance level of
 #' the spectrum
 #' @param kernelName [\code{string}] with the kernel to use for the covariance matrix.
-#' Available kernels are "gaussian", "tstudent". Default is "gaussian".
+#'
 #' @param width the width of the kernel to use for Gaussian simulation. Default is 50.
 #'              It also signifies the degree of freedom for Student-T simulation.
 #'
@@ -60,6 +60,8 @@ simulateSpectra<-function(nbPixel, nbCluster, nbSpectrum, kernelName = "gaussian
           res[i,j] <- exp(-abs(s-t)^2/width)
         else if (kernelName == "tstudent")
           res[i,j] <- 1/(1+(abs(s-t))^width)
+        else if (kernelName == "tskewed")
+          res[i,j] <- 1/(1+(abs(s-t))^width)
         else
           stop("Enter a valid kernel name for simulating the data")
       }
@@ -78,6 +80,7 @@ simulateSpectra<-function(nbPixel, nbCluster, nbSpectrum, kernelName = "gaussian
   labels <- sample(1:nbCluster, nbPixel , prob = rexp(nbCluster) , replace = T)
   ##prob = rep(1, nbCluster)
 
+  gamma = 3
   for (i in 1:nbPixel)
     {
       k <- labels[i]
@@ -88,6 +91,8 @@ simulateSpectra<-function(nbPixel, nbCluster, nbSpectrum, kernelName = "gaussian
           process[s,] <- rmvnorm(1, mean = means[k,s,], sigma = covariance )
         if (kernelName == "tstudent")
           process = rt(nbSampling, width, means[k,s,] )
+        if (kernelName == "tskewed")
+          res[i,j] <- rskt(nbSampling, width, gamma)
       }
       data[i,,] <- process
     }
