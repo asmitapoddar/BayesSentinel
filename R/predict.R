@@ -1,0 +1,111 @@
+#-----------------------------------------------------------------------
+#' Predict the label classes of the data
+#'
+#' Simulate one or more Gaussian spectra at regularly sampling time
+#'
+#' @param m spectroscopic data
+#' @param fittedCov fitted covariance matrix for the data
+#' @param lambda parameter for regularisation
+#' @param model type of model to be used for prediction of labels
+#' Available models are "gaussian", "fisher". Default is "gaussian".
+#'
+#' @examples
+#' p = predict(m, fittedCov)
+#'
+#' @return A list with the spectra
+#'
+#' @author Asmita Poddar & Florent Latimier
+#'
+
+setClass(
+  Class="predictClass",
+  representation( m                     = "list"
+                  , fittedCov           = "list"
+                  , lambdaS              = "numeric"
+                  , lambdaT              = "numeric"
+                  , model               = "character"
+                  , accuracy            = "numeric"
+  ),
+  prototype( m                   = list(0)
+             , fittedCov         = list(0)
+             , lambdaS            = 0.3
+             , lambdaT            = 0.3
+             , model             = "gaussian"
+             ,accuracy           = 0
+  ),
+  # validity function
+  validity = function(object)
+  {
+    #if (length(object@m)!=7)
+    # stop("Enter correct format of data to be predicted.")
+    #if (length(object@fittedCov)!=7)
+    # stop("Enter correct format of covariance matrix to be predicted.")
+    #if ( round(object@lambda) != object@lambda)
+    # stop("lambda must be an integer.")
+    if (object@model != "gaussian" && object@model !="fisher")
+      stop("model must be either \"gaussian\", \"fisher\".")
+    return(TRUE)
+  }
+)
+
+setGeneric("predict",
+           def=function(Object)
+           {
+             standardGeneric("predict")
+           }
+)
+
+setMethod(
+  f = "predict",
+  signature = "predictClass",
+  definition=function(Object)
+  {
+    mvnorm = function(data,reg,mean,weight, X)
+    {
+      weight * dmvnorm(X,mean,reg,log=TRUE)
+    }
+
+    source('~/bayesS4/R/regularisation.R')
+    source('~/bayesS4/R/automatisation.R')
+
+    nbLabel = length(unique(Object@m[[1]]))
+    nbPixel = length(Object@m[[1]])
+
+    p = matrix(0, nbLabel, nbPixel)
+    weight  = Object@fittedCov$weight
+    mean = Object@fittedCov$mean
+    reg = regularisation(Object@fittedCov, Object@lambdaS, Object@lambdaT)
+
+    powerLabelG <- function(data,inv,mean,weight,X)
+    {
+      X = X - mean
+      power = rowSums((X %*% inv) * X)
+      log(weight) +  log(sqrt(abs(det(inv)))) + (-power/2)
+    }
+
+    powerLabelF <-function(data,inv,mean,weight,X)
+    {
+       X = X - mean
+       power = rowSums((X %*% inv) * X)
+      log(weight) - 1/2*log(abs(det(inv))) -165*log(1+power)
+
+    }
+
+    power <- function(data,invers,mean,weight)
+    {
+    nbLabel = length( unique( Object@m[[1]] ) )
+    nbPixel = length( Object@m[[1]] )
+    p = matrix(0, nbLabel, nbPixel)
+    if(Object@model == "gaussian"){powerL = powerLabelG}
+    if(Object@model == "fisher"){powerL = powerLabelF}
+    if(Object@model == "mvnorm"){powerL = mvnorm}
+    X = do.call('cbind',Object@m[[3]])
+    for(i in 1:nbLabel)
+      p[i,] = powerL(data,invers[[i]],mean[[i]],weight[[i]], X)
+    p
+   }
+
+  Object@accuracy = max.col(t(power(Object@m,reg,mean,weight)))
+  Object
+  }
+)

@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1531405002080.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "C0F6DF7C",
+    "lastKnownWriteTime" : 1531481679,
+    "last_content_update" : 1531481679038,
+    "path" : "~/bayesS4/R/predict.R",
+    "project_path" : "R/predict.R",
+    "properties" : {
+        "cursorPosition" : "8,14",
+        "scrollLine" : "12"
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

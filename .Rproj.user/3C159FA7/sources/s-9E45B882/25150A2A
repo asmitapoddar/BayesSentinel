@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1531315169893.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "25150A2A",
+    "lastKnownWriteTime" : 1500624695,
+    "last_content_update" : 1500624695,
+    "path" : "~/workspace/CloHe/R/ICloHeModel.R",
+    "project_path" : null,
+    "properties" : {
+        "cursorPosition" : "108,1",
+        "scrollLine" : "97"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

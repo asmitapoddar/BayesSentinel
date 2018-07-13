@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1531480454646.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1885654515",
+    "id" : "D942FE3E",
+    "lastKnownWriteTime" : 1531475766,
+    "last_content_update" : 1531475766,
+    "path" : "~/bayesS4/R/CV lambda.R",
+    "project_path" : "R/CV lambda.R",
+    "properties" : {
+    },
+    "relative_order" : 8,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
