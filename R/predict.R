@@ -3,11 +3,14 @@
 #'
 #' Simulate one or more Gaussian spectra at regularly sampling time
 #'
-#' @param m spectroscopic data
-#' @param fittedCov fitted covariance matrix for the data
-#' @param lambda parameter for regularisation
-#' @param model type of model to be used for prediction of labels
+#' @slot m spectroscopic data
+#' @slot fittedCov fitted covariance matrix for the data
+#' @slot lambdaS parameter for regularisation of spectra
+#' @slot lambdaT parameter for regularisation of time
+#' @slot model type of model to be used for prediction of labels
 #' Available models are "gaussian", "fisher". Default is "gaussian".
+#' @slot predicted_labels predicted class labels
+#' @slot accuracy accracy of prediction
 #'
 #' @examples
 #' p = predict(m, fittedCov)
@@ -21,17 +24,19 @@ setClass(
   Class="predictClass",
   representation( m                     = "list"
                   , fittedCov           = "list"
-                  , lambdaS              = "numeric"
-                  , lambdaT              = "numeric"
+                  , lambdaS             = "numeric"
+                  , lambdaT             = "numeric"
                   , model               = "character"
+                  , predicted_labels    = "numeric"
                   , accuracy            = "numeric"
   ),
   prototype( m                   = list(0)
              , fittedCov         = list(0)
-             , lambdaS            = 0.3
-             , lambdaT            = 0.3
+             , lambdaS           = 0.3
+             , lambdaT           = 0.3
              , model             = "gaussian"
-             ,accuracy           = 0
+             , predicted_labels  = 0
+             , accuracy          = 0
   ),
   # validity function
   validity = function(object)
@@ -105,7 +110,22 @@ setMethod(
     p
    }
 
-  Object@accuracy = max.col(t(power(Object@m,reg,mean,weight)))
+  Object@predicted_labels = max.col(t(power(Object@m,reg,mean,weight)))
+  Object@accuracy = percent(Object@m$labels, Object@predicted_labels)
   Object
+  }
+)
+
+setMethod(
+  "initialize",
+  "predictClass",
+  function(.Object, m = list(0), fittedCov = list(0), lambdaS = 0.3, lambdaT = 0.3
+           , model = "gaussian")
+  { .Object@m = m
+  .Object@fittedCov = fittedCov
+  .Object@lambdaS = lambdaS
+  .Object@lambdaT = lambdaT
+  .Object@model = model
+  return(.Object)
   }
 )

@@ -10,5 +10,5 @@ export( simulateSpectra
 
 importFrom("mvtnorm", "rmvnorm")
 importFrom("stats", "dnorm", "rnorm","rexp", "rt")
-importFrom("mvtnorm", "dmvnorm")
+importFrom("mvtnorm", "dmvnorm", "rmvnorm")
 importFrom("skewt", "rskt")

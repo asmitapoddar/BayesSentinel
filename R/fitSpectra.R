@@ -3,29 +3,33 @@
 #'
 #' Return the covariance matrices
 #'
-#' @param m spectroscopic data
-#' @param modelname name of model to be used for calculating the covariance matrix. Available models are
+#' @slot m spectroscopic data
+#' @slot modelname name of model to be used for calculating the covariance matrix. Available models are
 #' "full", "parsimonious". Default is "full".
-#' @param spectra type of spectra. Available models are "diag", "unknown" and "kernel".
+#' @slot spectra type of spectra. Available models are "diag", "unknown" and "kernel".
 #' Default is "diag".
-#' @param time type of time. Available models are "diag", "unknown" and "kernel".
+#' @slot time type of time. Available models are "diag", "unknown" and "kernel".
 #' Default is "diag".
-#' @param kerneltypeSpectra kernel to be used for covariance matrix of spectra
+#' @slot kerneltypeSpectra kernel to be used for covariance matrix of spectra
 #' Available kernels are "epanechnikov", "gaussian", "exponential", "uniform",
 #' "quadratic", "circular", "triangular", "rational quadratic", "inverse multiquadratic".
 #' Default is "exponential".
-#' @param kerneltypeTime kernel to be used for covariance matrix of time
+#' @slot kerneltypeTime kernel to be used for covariance matrix of time
 #' Available kernels are "epanechnikov", "gaussian", "exponential", "uniform",
 #' "quadratic", "circular", "triangular", "rational quadratic", "inverse multiquadratic".
 #' Default is "exponential".
-#' @param h used for kernel calculation
-#'
+#' @slot h used for kernel calculation
+#' @slot s regularisation paramater for flip flop algorithm
+#' @slot lambdaS regularisation for spectra for flip flop algorithm
+#' @slot lambdaT regularisation for spectra for flip flop algorithm
+#' @slot covMat returning the covariance matrx
 #'
 #' @examples
 #' fittedCov = fit(x, "full")
 #'
-#' @return A list with the covariance matrices for spectra and time, modelname, spectra,
-#' time, weight and mean
+#' @name fitSpectra
+#' @aliases fitSpectra-class
+#' @rdname fitSpectra-class
 #'
 #' @author Asmita Poddar & Florent Latimier
 #'
@@ -42,7 +46,7 @@ setClass(
                   , s                   = "numeric"
                   , lambdaS             = "numeric"
                   , lambdaT             = "numeric"
-                  , covMat                 = "list"
+                  , covMat              = "list"
   ),
   prototype( m                   = list(0)
              , modelname         = "full"
@@ -155,8 +159,26 @@ setMethod(
   else
     Object@covMat = list (covS = covSpectra, covT = covTime, modelname = Object@modelname
                           , spectra = Object@spectra, time = Object@time, weight=weight, mean=mean)
-  Object
+  Object@covMat
   }
+)
 
-
+setMethod(
+  "initialize",
+  "fitSpectra",
+  function(.Object, m = list(0), modelname = "full", spectra = "diag", time = "diag"
+           , kerneltypeSpectra = "exponential", kerneltypeTime    = "exponential"
+           , h = 10, s = 0.01, lambdaS = 0.3, lambdaT = 0.3)
+  { .Object@m = m
+  .Object@modelname = modelname
+  .Object@spectra = spectra
+  .Object@time = time
+  .Object@kerneltypeSpectra = kerneltypeSpectra
+  .Object@kerneltypeTime = kerneltypeTime
+  .Object@h = h
+  .Object@s = s
+  .Object@lambdaS = lambdaS
+  .Object@lambdaT = lambdaT
+  return(.Object)
+  }
 )

@@ -13,12 +13,17 @@
 #'
 #' @slot width the width of the kernel to use for Gaussian simulation. Default is 50.
 #'              It also signifies the degree of freedom for Student-T simulation.
+#' @slot result return a list of simulated data
 #'
 #' @examples
-#' m = simulateSpectra(1000,15,10)
+#' m = new("simulateSpectra")
+#' res = simulate(m)
 #'
-#' @return A list with the labels, times, spectra, clouds, means and sigma
 #' @author Serge Iovleff & Asmita Poddar
+#'
+#' @name simulateSpectra
+#' @aliases simulateSpectra-class
+#' @rdname simulateSpectra-class
 #'
 
 setClass(
@@ -31,6 +36,7 @@ setClass(
                   , sigma         = "numeric"
                   , times         = "numeric"
                   , width         = "numeric"
+                  , labels        = "numeric"
                   , result        = "list"
   ),
   prototype( nbPixel        = 1000
@@ -188,7 +194,7 @@ setMethod(
        , clouds = list(years1 = matrix(0, nrow = Object@nbPixel, ncol = length(Object@times) ))
        , means = means, sigma = sigma, process = process
   )
-  return(Object)
+  return(Object@result)
 }
 
 )
