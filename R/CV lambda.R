@@ -45,11 +45,12 @@ matxMax <- function(mat)
 
 
 bestFitLambda = function(objFit,listS,listT,model){
-  perc = vapply(listS, function(objFit,lambdaS,listT,model){vapply(listT,fitChangLambda,objFit,lambdaS,lambdaT,model,FUN.VALUE = vector('double',length(1)))},objFit=objFit,listT=listT,model=model,FUN.VALUE = vector('double',length = length(listT)))
+  perc = vapply(listS, function(objFit,lambdaS,listT,model){vapply(listT,fitChangLambda,objFit = objFit,lambdaS = lambdaS,model =model,FUN.VALUE = vector('double',length(1)))},objFit=objFit,listT=listT,model=model,FUN.VALUE = vector('double',length = length(listT)))
   list(lambdaS = listS[[matxMax(perc)[1]]], lambdaT = listS[[matxMax(perc)[2]]])
 }
 
-fitChangLambda = function(objFit,lambdaS,lambdaT){
+fitChangLambda = function(objFit,lambdaS,lambdaT,model)
+{
   objFit@lambdaS = lambdaS
   objFit@lambdaT = lambdaT
   p = new("predictClass",objFit@m,fit(objFit),lambdaS = lambdaS, lambdaT = lambdaT, model= model)
