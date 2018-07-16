@@ -1,6 +1,3 @@
-# flo 3 ^^
-
-
 # Epanechnikov
 K_E <- function(u,h){
   (1-(u/h)^2)*(u/h <= 1)
