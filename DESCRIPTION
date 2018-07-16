@@ -15,9 +15,9 @@ Collate:
     automatisation.R
     fitSpectra.R
     full.R
-    kernelTime.R
+    kernel.R
     kernelTypes.R
-    mean.R
+    meanData.R
     parsimonious.R
     predict.R
     readSpectra.R

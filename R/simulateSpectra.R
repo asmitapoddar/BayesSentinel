@@ -3,15 +3,15 @@
 #'
 #' Simulate one or more Gaussian spectra at regularly sampling time
 #'
-#' @param nbPixel number of pixels belonging to class k
-#' @param nbCluster number of cluster
-#' @param nbSpectrum number of spectra
-#' @param nbSampling number of sampling
-#' @param sigma a vector of size nbSpectrum giving the variance level of
+#' @slot nbPixel number of pixels belonging to class k
+#' @slot nbCluster number of cluster
+#' @slot nbSpectrum number of spectra
+#' @slot nbSampling number of sampling
+#' @slot sigma a vector of size nbSpectrum giving the variance level of
 #' the spectrum
-#' @param kernelName [\code{string}] with the kernel to use for the covariance matrix.
+#' @slot kernelName [\code{string}] with the kernel to use for the covariance matrix.
 #'
-#' @param width the width of the kernel to use for Gaussian simulation. Default is 50.
+#' @slot width the width of the kernel to use for Gaussian simulation. Default is 50.
 #'              It also signifies the degree of freedom for Student-T simulation.
 #'
 #' @examples
