@@ -70,7 +70,7 @@ tablesModel = function(data,lkernelS=list(),lkernelT=list(),lhS=list(),lhT=list(
         h = lhT[[j-2]]
       }
       print(c(spectra,time))
-      cov <- fit(l[[1]],"parsimonious",spectra,time,kerneltypeSpectra,kerneltypeTime,h)
+      cov <- fit(l[[1]],"parsimonious",spectra,time,kerneltypeSpectra,kerneltypeTime,h,s,lambdaS,lambdaT)
       cv <- bestLambda(data = l[[2]],fittedCov = cov,listLambdaS = listLambdaS,listLambdaT = listLambdaT,model = "gaussian")
       print(c(cv$lambdaS,cv$lambdaT))
       pG[i,j] <- cv$percent
