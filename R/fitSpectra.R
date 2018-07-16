@@ -40,6 +40,8 @@ setClass(
                   , kerneltypeTime      = "character"
                   , h                   = "numeric"
                   , s                   = "numeric"
+                  , lambdaS             = "numeric"
+                  , lambdaT             = "numeric"
                   , covMat                 = "list"
   ),
   prototype( m                   = list(0)
@@ -50,6 +52,8 @@ setClass(
              , kerneltypeTime    = "exponential"
              , h                 = 10
              , s                 = 0.01
+             , lambdaS           = 0.3
+             , lambdaT           = 0.3
   ),
   # validity function
   validity = function(object)
@@ -118,7 +122,7 @@ setMethod(
     {
       if(Object@time=="unknown")
       {
-        ff = flipflop(data = Object@m, lmean = mean, s=Object@s)
+        ff = flipflop(data = Object@m, lmean = mean, s=Object@s, lambdaS = Object@lambdaS,lambdaT = Object@lambdaT)
         covSpectra = listof(ff,1)
         covTime = listof(ff,2)
       }

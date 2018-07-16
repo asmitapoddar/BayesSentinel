@@ -1,6 +1,6 @@
 flipflop = function(data,lmean,s,lambdaS,lambdaT){
   X = array(as.numeric(unlist(data[[3]])),dim = c(nrow(data[[3]][[1]]),ncol(data[[3]][[1]]),length(data[[3]])))
-  lapply(levels(factor(data[[1]])), function(data,lmean,label,s,lambdaS,lambdaT){flipflopLabel(X[which(data[[1]]==label),,],lmean[[which(levels(factor(data[[1]]))==label)]],s,lambdaS,lambdaT)},data=data,lmean=lmean,s=s,lambdaS=lambdaS,lambdaT=lambdaT)
+  lapply(levels(factor(data[[1]])), function(data,lmean,label,s,lambdaS,lambdaT){flipflopLabel(data = X[which(data[[1]]==label),,],mean = lmean[[which(levels(factor(data[[1]]))==label)]],s = s,lambdaS = lambdaS,lambdaT = lambdaT)},data=data,lmean=lmean,s=s,lambdaS=lambdaS,lambdaT=lambdaT)
 }
 
 
