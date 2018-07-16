@@ -13,8 +13,12 @@ bestLambda = function(data,fittedCov,listLambdaS=c(0),listLambdaT = c(0),model =
   }
   p = lapply(X = listLambdaS,FUN = predict2, data=data,fittedCov=fittedCov,listLambdaT=listLambdaT,model=model)
   perc = vapply(p, percent2,list2=data[[1]],FUN.VALUE = vector('double',length = length(listLambdaT)))
-  #plot(x=listLambda,y=perc,type = 'l')
-  #title(paste(fittedCov$modelname,fittedCov$spectra,fittedCov$time))
+
+  if(length(listLambdaS)==1 | length(listLambdaS)==1){
+    plot(x=listLambda,y=perc,type = 'l')
+    title(paste(fittedCov$modelname,fittedCov$spectra,fittedCov$time))
+  }
+
   list(lambdaS = listLambdaS[matxMax(perc)[1]],lambdaT = listLambdaT[matxMax(perc)[2]],predict = p[[matxMax(perc)[1]]][[matxMax(perc)[2]]],percent = max(perc))
 }
 
