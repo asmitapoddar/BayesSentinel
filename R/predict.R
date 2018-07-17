@@ -1,3 +1,4 @@
+
 #-----------------------------------------------------------------------
 #' Predict the label classes of the data
 #'
@@ -90,29 +91,29 @@ setMethod(
 
     powerLabelF <-function(data,inv,mean,weight,X)
     {
-       X = X - mean
-       power = rowSums((X %*% inv) * X)
+      X = X - mean
+      power = rowSums((X %*% inv) * X)
       log(weight) - 1/2*log(abs(det(inv))) -165*log(1+power)
 
     }
 
     power <- function(data,invers,mean,weight)
     {
-    nbLabel = length( unique( Object@m[[1]] ) )
-    nbPixel = length( Object@m[[1]] )
-    p = matrix(0, nbLabel, nbPixel)
-    if(Object@model == "gaussian"){powerL = powerLabelG}
-    if(Object@model == "fisher"){powerL = powerLabelF}
-    if(Object@model == "mvnorm"){powerL = mvnorm}
-    X = do.call('cbind',Object@m[[3]])
-    for(i in 1:nbLabel)
-      p[i,] = powerL(data,invers[[i]],mean[[i]],weight[[i]], X)
-    p
-   }
+      nbLabel = length( unique( Object@m[[1]] ) )
+      nbPixel = length( Object@m[[1]] )
+      p = matrix(0, nbLabel, nbPixel)
+      if(Object@model == "gaussian"){powerL = powerLabelG}
+      if(Object@model == "fisher"){powerL = powerLabelF}
+      if(Object@model == "mvnorm"){powerL = mvnorm}
+      X = do.call('cbind',Object@m[[3]])
+      for(i in 1:nbLabel)
+        p[i,] = powerL(data,invers[[i]],mean[[i]],weight[[i]], X)
+      p
+    }
 
-  Object@predicted_labels = max.col(t(power(Object@m,reg,mean,weight)))
-  Object@accuracy = percent(Object@m$labels, Object@predicted_labels)
-  Object
+    Object@predicted_labels = max.col(t(power(Object@m,reg,mean,weight)))
+    Object@accuracy = percent(Object@m$labels, Object@predicted_labels)
+    Object
   }
 )
 

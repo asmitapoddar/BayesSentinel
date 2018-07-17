@@ -1,6 +1,4 @@
-export( simulateSpectra
-	, readMultiSentinelSmoothedData
-	, readMultiSentinelRawData
+export( simulate
 	, fit
 	, predict
 	, percent
@@ -12,3 +10,4 @@ importFrom("mvtnorm", "rmvnorm")
 importFrom("stats", "dnorm", "rnorm","rexp", "rt")
 importFrom("mvtnorm", "dmvnorm", "rmvnorm")
 importFrom("skewt", "rskt")
+importFrom("matrixcalc")
