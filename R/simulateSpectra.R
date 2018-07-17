@@ -9,8 +9,6 @@
 #' @slot nbSampling number of sampling
 #' @slot sigma a vector of size nbSpectrum giving the variance level of
 #' the spectrum
-#' @slot kernelName [\code{string}] with the kernel to use for the covariance matrix.
-#'
 #' @slot width the width of the kernel to use for Gaussian simulation. Default is 50.
 #'              It also signifies the degree of freedom for Student-T simulation.
 #' @slot result return a list of simulated data
@@ -31,7 +29,10 @@ setClass(
   representation( nbPixel         = "numeric"
                   , nbCluster     = "numeric"
                   , nbSpectrum    = "numeric"
-                  , kernelName    = "character"
+                  , simulationType = "character"
+                  , modelname     = "character"
+                  , kernelSpectra = "character"
+                  , kernelTime    = "character"
                   , nbSampling    = "numeric"
                   , sigma         = "numeric"
                   , times         = "numeric"
@@ -42,7 +43,10 @@ setClass(
   prototype( nbPixel        = 1000
              , nbCluster    = 15
              , nbSpectrum   = 10
-             , kernelName   = "gaussian"
+             , simulationType = "gaussian"
+             , modelname     = "full"
+             , kernelSpectra = "gaussian"
+             , kernelTime    = "gaussian"
              , nbSampling   = 33
              , sigma        = integer(0)
              , width        = 50
@@ -61,8 +65,8 @@ setClass(
     { stop("nbCluster must be an integer.")}
     if (round(object@nbSpectrum) != object@nbSpectrum)
     { stop("nbSpectrum must be an integer.")}
-    if (object@kernelName != "gaussian" && object@kernelName != "tstudent" && object@kernelName != "tskewed")
-    { stop("kernelName must be either \"gaussian\", \"tstudent\", \"tskewed\".")}
+    #if (object@kernelName != "gaussian" && object@kernelName != "tstudent" && object@kernelName != "tskewed")
+    #{ stop("kernelName must be either \"gaussian\", \"tstudent\", \"tskewed\".")}
     if (round(object@nbSampling) != object@nbSampling)
     { stop("nbSampling must be an integer.")}
     if (round(object@width) != object@width)
@@ -106,31 +110,18 @@ setMethod(
         res
      }
 
-  KernelCov <- function(times, width, sigma, kernelName)
+  KernelCov <- function(times, width, modelname, kernelSpectra, kernelTime
+                        , nbCluster, nbSpectrum, nbSampling, h)
   {
-    tLength <- length(times)
-    res <- matrix(0, nrow=tLength, ncol=tLength)
-    for(i in 1:tLength)
-    {
-      for(j in 1:tLength)
-      {
-        s <- times[i]
-        t <- times[j]
-        if (kernelName == "gaussian")
-          res[i,j] <- exp(-abs(s-t)^2/width)
-        else if (kernelName == "tstudent")
-          res[i,j] <- 1/(1+(abs(s-t))^width)
-        else if (kernelName == "tskewed")
-          res[i,j] <- 1/(1+(abs(s-t))^width)
-        else
-          stop("Enter a valid kernel name for simulating the data")
-      }
-    }
-    sigma * res
-  }
-  #times <- seq(from=0, to=365, length.out=nbSampling)
+    source('~/bayesS4/R/simulateKernel.R')
+    sigmaS = rexp(nbSpectrum)
+    sigmaT = rexp(nbSampling)
+    sigmaL = rexp(nbCluster)
 
-  Object@sigma = rexp(Object@nbSpectrum)
+    simulateKernel(modelname, kernelSpectra, kernelTime, times, spectra, labels
+                   , sigmaL, sigmaS, sigmaT, h)
+  }
+
   Object@times = c(0,10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180,190,200,210
             ,220,230,240,250,260,270,280,290,300,310,321)
   means <- mean(Object@times, Object@nbSpectrum, Object@nbCluster)
@@ -141,26 +132,26 @@ setMethod(
   #the probablilty of each cluster being between 0 and 1
   labels <- sample(1:Object@nbCluster, Object@nbPixel
                    , prob = rexp(Object@nbCluster) , replace = T)
+  spectra = 1:Object@nbSpectrum
   ##prob = rep(1, nbCluster)
 
-  gamma = 3
-  for (i in 1:Object@nbPixel)
+  covariance <- KernelCov(Object@times, Object@width,Object@modelname
+                          , Object@kernelSpectra, Object@kernelTime, Object@nbCluster
+                          , Object@nbSpectrum, Object@nbSampling, Object@width)
+
+  if(Object@modelname == "full")
   {
-    k <- labels[i]
-    for ( s in 1:Object@nbSpectrum)
-    {
-      covariance <- KernelCov(Object@times, Object@width, Object@sigma[s], Object@kernelName)
-      if (Object@kernelName == "gaussian")
-        process[s,] <- rmvnorm(1, mean = means[k,s,], sigma = covariance )
-      if (Object@kernelName == "tstudent")
-        process[s,] = rt(Object@nbSampling, Object@width, means[k,s,] )
-      if (Object@kernelName == "tskewed")
-        process[s,] <- rskt(Object@nbSampling, Object@width, gamma)
-    }
-    data[i,,] <- process
+    if (Object@simulationType == "gaussian")
+      labels  = sort(labels)
+      nb = table(labels)
+      data <- lapply(1:Object@nbSpectrum, function(spect,nb,means,covariance)
+        {lapply(1:Object@nbCluster, function(spect,nb,means,covariance,label)
+          {rmvnorm(nb[label], mean = means[label,spect,], sigma = covariance[[label]])}
+          ,spect=spect,nb=nb,means=means,covariance=covariance)}
+        ,nb=nb,means=means,covariance=covariance)
+      data <- lapply(data, do.call, what="cbind")
   }
 
-  samples <- 1:Object@nbSampling
 
   if (Object@nbSpectrum == 4)
   {
@@ -202,18 +193,23 @@ setMethod(
 setMethod(
   "initialize",
   "simulateSpectra",
-  function(.Object, nbPixel = 1000, nbCluster = 15, nbSpectrum = 10, kernelName = "gaussian"
+  function(.Object, nbPixel = 1000, nbCluster = 15, nbSpectrum = 10
            , nbSampling = 33, sigma = rexp(nbSpectrum)
            , times = c(0,10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180,190
-                       ,200,210,220,230,240,250,260,270,280,290,300,310,321), width = 50)
+                       ,200,210,220,230,240,250,260,270,280,290,300,310,321), width = 50
+           , simulationType = "gaussian", modelname     = "full"
+           , kernelSpectra = "gaussian", kernelTime = "gaussian")
   { .Object@nbPixel = nbPixel
     .Object@nbCluster = nbCluster
     .Object@nbSpectrum = nbSpectrum
-    .Object@kernelName = kernelName
+    .Object@simulationType = simulationType
     .Object@nbSampling = nbSampling
     .Object@sigma = sigma
     .Object@times = times
     .Object@width = width
+    .Object@modelname = modelname
+    .Object@kernelSpectra = kernelSpectra
+    .Object@kernelTime = kernelTime
     return(.Object)
   }
 )

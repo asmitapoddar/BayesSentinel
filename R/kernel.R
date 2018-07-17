@@ -55,14 +55,16 @@ kernelSpectra = function(data,k,h)
   if (k=="circular") K = K_C
   if (k=="triangular") K = K_T
   if (k=="rational quadratic") K = K_RQ
-  if (k=="unverse multiquadratic") K = K_IMQ
+  if (k=="inverse multiquadratic") K = K_IMQ
 
   q = K(QmatrixSpectra(data),h)
   v = parsimoniousSpectra(data)
   for (j in 1:length(unique(data[[1]])) )
   {
     v[[j]] <- sqrt(v[[j]])%*%q%*%sqrt(v[[j]])
-  }
+  }()
   v
 }
+
+
 
