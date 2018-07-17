@@ -22,6 +22,8 @@
 #' @slot s regularisation paramater for flip flop algorithm
 #' @slot lambdaS regularisation for spectra for flip flop algorithm
 #' @slot lambdaT regularisation for spectra for flip flop algorithm
+#' @slot validation to optimize lambda or not
+#' @slot model use in prediction in case of validation is TRUE
 #' @slot covMat returning the covariance matrx
 #'
 #' @examples
@@ -46,6 +48,8 @@ setClass(
                   , s                   = "numeric"
                   , lambdaS             = "numeric"
                   , lambdaT             = "numeric"
+                  , validation          = "logical"
+                  , model               = "gaussian"
                   , covMat              = "list"
   ),
   prototype( m                   = list(0)
@@ -58,6 +62,7 @@ setClass(
              , s                 = 0.01
              , lambdaS           = 0.3
              , lambdaT           = 0.3
+             , validation        = FALSE
   ),
   # validity function
   validity = function(object)
@@ -82,6 +87,14 @@ setClass(
     { stop("wrong kerneltypeTime entered. ")}
     if (round(object@h) != object@h)
     { stop("h must be an integer.")}
+    if (object@lambdaS < 0 | object@lambdaT < 0 )
+    { stop("lambdaS and lambdaT must be positiv.")}
+    if (object@validation != TRUE && object@validation != FALSE )
+    { stop("validation is a logical argument.")}
+    if(object@validation)
+    { if(object@model != "gaussian" && object@model != "fisher")
+      { stop("With validation, the model to predict must be gaussian or fisher")}
+    }
     return(TRUE)
   }
 )
@@ -126,6 +139,12 @@ setMethod(
     {
       if(Object@time=="unknown")
       {
+        if(Object@validation)
+        {
+          lambda = bestFitLambda(Object,lambdaS = seq(from=0,to=10,by=0.1),lambdaT = seq(from=0,to=10,by=0.1))
+          Object@lambdaS = lambda[[1]]
+          Object@lambdaT = lambda[[2]]
+        }
         ff = flipflop(data = Object@m, lmean = mean, s=Object@s, lambdaS = Object@lambdaS,lambdaT = Object@lambdaT)
         covSpectra = listof(ff,1)
         covTime = listof(ff,2)

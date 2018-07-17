@@ -44,7 +44,8 @@ matxMax <- function(mat)
 
 
 
-bestFitLambda = function(objFit,listS,listT,model){
+bestFitLambda = function(objFit,listS,listT){
+  model = objFit@model
   perc = vapply(listS, function(objFit,lambdaS,listT,model){vapply(listT,fitChangLambda,objFit = objFit,lambdaS = lambdaS,model =model,FUN.VALUE = vector('double',length(1)))},objFit=objFit,listT=listT,model=model,FUN.VALUE = vector('double',length = length(listT)))
   list(lambdaS = listS[[matxMax(perc)[1]]], lambdaT = listS[[matxMax(perc)[2]]])
 }
