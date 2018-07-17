@@ -49,7 +49,7 @@ setClass(
                   , lambdaS             = "numeric"
                   , lambdaT             = "numeric"
                   , validation          = "logical"
-                  , model               = "gaussian"
+                  , model               = "character"
                   , covMat              = "list"
   ),
   prototype( m                   = list(0)
@@ -63,6 +63,7 @@ setClass(
              , lambdaS           = 0.3
              , lambdaT           = 0.3
              , validation        = FALSE
+             , model             = "gaussian"
   ),
   # validity function
   validity = function(object)
@@ -93,7 +94,7 @@ setClass(
     { stop("validation is a logical argument.")}
     if(object@validation)
     { if(object@model != "gaussian" && object@model != "fisher")
-      { stop("With validation, the model to predict must be gaussian or fisher")}
+      { stop("With validation, the model must be either \"gaussian\", \"fisher\".")}
     }
     return(TRUE)
   }
@@ -124,6 +125,7 @@ setMethod(
 
   weight = lapply(levels(factor(Object@m[[1]])), function(k,data){length(data[which(data==k)])/length(data)}
                   , data = Object@m[[1]])
+
 
   mean = meanData(Object@m)
 
@@ -187,7 +189,7 @@ setMethod(
   "fitSpectra",
   function(.Object, m = list(0), modelname = "full", spectra = "diag", time = "diag"
            , kerneltypeSpectra = "exponential", kerneltypeTime    = "exponential"
-           , h = 10, s = 0.01, lambdaS = 0.3, lambdaT = 0.3)
+           , h = 10, s = 0.01, lambdaS = 0.3, lambdaT = 0.3,validation = FALSE, model = "gaussian")
   { .Object@m = m
   .Object@modelname = modelname
   .Object@spectra = spectra
@@ -198,6 +200,8 @@ setMethod(
   .Object@s = s
   .Object@lambdaS = lambdaS
   .Object@lambdaT = lambdaT
+  .Object@validation = validation
+  .Object@model = model
   return(.Object)
   }
 )

@@ -1,22 +1,28 @@
-bestLambda = function(data,fittedCov,listLambdaS=c(0),listLambdaT = c(0),model = "gaussian"){
-  if(fittedCov$modelname == "full"){
+bestPredLambda = function(objPred,listLambdaS=c(0),listLambdaT = c(0)){
+  objPred@validation = FALSE
+  if(objPred@fittedCov$modelname == "full"){
     listLambdaS = unique(c(listLambdaS , listLambdaT))
     listLambdaT = c(0)
   }
   else{
-    if(fittedCov$spectra != "unknown"){
+    if(objPred@fittedCov$spectra != "unknown"){
       listLambdaS = c(0)
     }
-    if(fittedCov$time != "unknown"){
+    if(objPred@fittedCov$time != "unknown"){
       listLambdaT = c(0)
     }
+    if(objPred@fittedCov$spectra == "unknown" && objPred@fittedCov$time == "unknown")
+    {
+      p = predict(objPred)
+      return(list(lambdaS = objPred@lamdbaS, lambdaT = objPred@lambdaT, predict = p@perdict, percent = p@accuracy))
+    }
   }
-  p = lapply(X = listLambdaS,FUN = predict2, data=data,fittedCov=fittedCov,listLambdaT=listLambdaT,model=model)
-  perc = vapply(p, percent2,list2=data[[1]],FUN.VALUE = vector('double',length = length(listLambdaT)))
+  p = lapply(listLambdaS,predict2, objPred = objPred,listLambdaT=listLambdaT)
+  prec = vapply(p,function(list){vapply(list,function(pred){pred@accuracy},FUN.VALUE = vector('double',length = 1))},FUN.VALUE = vector('double',length = length(p[[1]])))
 
   if(length(listLambdaS)==1 | length(listLambdaS)==1){
     plot(x=listLambda,y=perc,type = 'l')
-    title(paste(fittedCov$modelname,fittedCov$spectra,fittedCov$time))
+    title(paste(objPred@fittedCov$modelname,objPred@fittedCov$spectra,objPred@fittedCov$time))
   }
 
   list(lambdaS = listLambdaS[matxMax(perc)[1]],lambdaT = listLambdaT[matxMax(perc)[2]],predict = p[[matxMax(perc)[1]]][[matxMax(perc)[2]]],percent = max(perc))
@@ -24,12 +30,14 @@ bestLambda = function(data,fittedCov,listLambdaS=c(0),listLambdaT = c(0),model =
 
 
 
-predict2 = function(data,fittedCov,lambdaS,listLambdaT,model){
-  lapply(listLambdaT,predict,m=data,fittedCov=fittedCov,lambdaS=lambdaS, model=model)
-}
-
-percent2 = function(Llist,list2){
-  vapply(Llist,percent,list2 = list2,FUN.VALUE = vector('double',1))
+predict2 = function(objPred,lambdaS,listLambdaT){
+  objPred@lambdaS = lambdaS
+  lapply(listLambdaT,
+         function(objPred,lambdaT)
+        { objPred@lambdaT = lambdaT
+          predict(objPred)
+        }
+        ,objPred = objPred)
 }
 
 matxMax <- function(mat)
