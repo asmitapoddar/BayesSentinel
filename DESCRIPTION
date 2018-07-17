@@ -13,14 +13,15 @@ Encoding: UTF-8
 LazyData: true
 Collate:
     automatisation.R
+    CV_lambda.R
     fitSpectra.R
+    flip-flop.R
     full.R
     kernel.R
     kernelTypes.R
     meanData.R
     parsimonious.R
     predict.R
-    readSpectra.R
     regularisation.R
     simulateSpectra.R
 RoxygenNote: 6.0.1
