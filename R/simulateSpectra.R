@@ -153,9 +153,9 @@ setMethod(
 
 
 
-  Object@result = list(labels=labels , times = Object@times, spectra = spectra
+  Object@result = list(labels=labels , times = Object@times, spectra = process
        , clouds = list(years1 = matrix(0, nrow = Object@nbPixel, ncol = length(Object@times) ))
-       , means = means, sigma = sigma, process = process
+       , means = means, sigma = sigma
   )
   return(Object@result)
 }
