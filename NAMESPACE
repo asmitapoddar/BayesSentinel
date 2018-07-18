@@ -1,13 +1,11 @@
 export( simulate
-	, fit
-	, predict
-	, percent
-	, testTrain
-	, fitPredPrecent
+	      , fit
+      	, predict
+      	, percent
+	      , testTrain
+	      , fitPredPrecent
       )
 
 importFrom("mvtnorm", "rmvnorm")
 importFrom("stats", "dnorm", "rnorm","rexp", "rt")
-importFrom("mvtnorm", "dmvnorm", "rmvnorm")
-importFrom("skewt", "rskt")
-importFrom("matrixcalc")
+importFrom("matrixcalc", "is.positive.definite")

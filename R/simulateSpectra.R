@@ -50,8 +50,8 @@ setClass(
              , nbSampling   = 33
              , sigma        = integer(0)
              , width        = 50
-             , times = c(0,10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180,190,200,210
-                               ,220,230,240,250,260,270,280,290,300,310,321)
+             , times = c(0,10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170
+                         ,180,190,200,210,220,230,240,250,260,270,280,290,300,310,321)
              , result = list()
   ),
   # validity function
@@ -65,7 +65,8 @@ setClass(
     { stop("nbCluster must be an integer.")}
     if (round(object@nbSpectrum) != object@nbSpectrum)
     { stop("nbSpectrum must be an integer.")}
-    #if (object@kernelName != "gaussian" && object@kernelName != "tstudent" && object@kernelName != "tskewed")
+    #if (object@kernelName != "gaussian" && object@kernelName != "tstudent"
+    # && object@kernelName != "tskewed")
     #{ stop("kernelName must be either \"gaussian\", \"tstudent\", \"tskewed\".")}
     if (round(object@nbSampling) != object@nbSampling)
     { stop("nbSampling must be an integer.")}
@@ -122,8 +123,8 @@ setMethod(
                    , sigmaL, sigmaS, sigmaT, h)
   }
 
-  Object@times = c(0,10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180,190,200,210
-            ,220,230,240,250,260,270,280,290,300,310,321)
+  Object@times = c(0,10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180
+                   ,190,200,210,220,230,240,250,260,270,280,290,300,310,321)
   means <- mean(Object@times, Object@nbSpectrum, Object@nbCluster)
 
   #creating a vector of size nbPixel containing the labels (number of labels = nbCluster)
@@ -136,25 +137,29 @@ setMethod(
   covariance <- KernelCov(Object@times, spectra, labels, Object@modelname
                           , Object@kernelSpectra, Object@kernelTime, Object@nbCluster
                           , Object@nbSpectrum, Object@nbSampling, Object@width)
-  covariance <- lapply(covariance, function(mat){(mat %*% t(mat)) /2})   #to check the symmetry
+  covariance <- lapply(covariance, function(mat){(mat %*% t(mat)) /2}) #to check symmetry
 
   if (Object@simulationType == "gaussian")
   {
     labels  = sort(labels)
     nb = table(labels)
     process <- lapply(1:Object@nbCluster, function(nb,mean,covariance,label)
-    {rmvnorm(nb[label], mean = as.numeric(t(means[label,,])), sigma = covariance[[label]])}
+    {rmvnorm(nb[label], mean = as.numeric(t(means[label,,]))
+             , sigma = covariance[[label]])}
       ,nb=nb,mean=means,covariance=covariance)
 
     data <- do.call("rbind",process)
-    process <- lapply(1:Object@nbSpectrum,function(data,spectra,nbSampling){data[,((spectra-1)*nbSampling+1):(spectra*nbSampling)]},data=data,nbSampling=Object@nbSampling)
+    process <- lapply(1:Object@nbSpectrum,function(data,spectra,nbSampling)
+      {data[,((spectra-1)*nbSampling+1):(spectra*nbSampling)]}
+      , data = data, nbSampling = Object@nbSampling)
     names(process) <- paste("spectra",1:length(process),sep="")
   }
 
 
 
   Object@result = list(labels=labels , times = Object@times, spectra = process
-       , clouds = list(years1 = matrix(0, nrow = Object@nbPixel, ncol = length(Object@times) ))
+       , clouds = list(years1 = matrix(0, nrow = Object@nbPixel
+                                       , ncol = length(Object@times) ))
        , means = means, sigma = sigma
   )
   return(Object@result)
@@ -167,9 +172,9 @@ setMethod(
   "simulateSpectra",
   function(.Object, nbPixel = 1000, nbCluster = 15, nbSpectrum = 10
            , nbSampling = 33, sigma = rexp(nbSpectrum)
-           , times = c(0,10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180,190
-                       ,200,210,220,230,240,250,260,270,280,290,300,310,321), width = 50
-           , simulationType = "gaussian", modelname     = "full"
+           , times = c(0,10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170
+                       ,180,190,200,210,220,230,240,250,260,270,280,290,300,310,321)
+           , width = 50, simulationType = "gaussian", modelname     = "full"
            , kernelSpectra = "gaussian", kernelTime = "gaussian")
   { .Object@nbPixel = nbPixel
     .Object@nbCluster = nbCluster
