@@ -23,5 +23,6 @@ Collate:
     parsimonious.R
     predict.R
     regularisation.R
+    simulateKernel.R
     simulateSpectra.R
 RoxygenNote: 6.0.1

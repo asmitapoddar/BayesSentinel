@@ -41,8 +41,8 @@
 
 regularisation = function(fittedCov, lambdaS = 0.3 , lambdaT = 0.3)
 {
-  print(lambdaT)
-  print(lambdaS)
+  #print(lambdaT)
+  #print(lambdaS)
   returnMatrices = function(mat, lambda)
   {
     print(lambda)
