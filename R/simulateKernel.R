@@ -6,20 +6,20 @@ simulateKernel = function(modelname, kernelSpectra, kernelTime, times, spectra
  {
    Q = matrix(0, nrow = (length(times)*length(spectra))
               , ncol = (length(times)*length(spectra)) )
-   l <- vector("double",length = length(times)*length(spectra))
-    sigma <- vector("double",length = length(times)*length(spectra))
+   l <- vector("double",length = (length(times)*length(spectra)))
+    sigma <- vector("double",length = (length(times)*length(spectra)))
     for(i in 1:length(spectra))
     {
-      l[(i-1)*length(spectra)+1:i*length(spectra)] <- spectra[i] * times
-      sigma[(i-1)*length(spectra)+1:i*length(spectra)] <- sigmaS[i] * sigmaT
+      l[((i-1)*length(times)+1):(i*length(times))] <- spectra[i] * times
+      sigma[((i-1)*length(times)+1):(i*length(times))] <- sigmaS[i] * sigmaT
     }
-   for (i in 1:length(spectra))
+   for (i in 1:length(times))
    {
      Q[,i] <- abs(l[i]-l)
    }
   sigmal = lapply(sigmaL, function(list,int){int*list},list = sigma)
   Q = ker(Q,kernelSpectra,h)
-  res = lapply(sigmal,function(mat,vect){sqrt(vect) %*% mat %*% sqrt(vect)}, mat = Q)
+  res = lapply(sigmal,function(mat,vect){diag(sqrt(vect)) %*% mat %*% diag(sqrt(vect))}, mat = Q)
  }
 
 
@@ -27,18 +27,32 @@ simulateKernel = function(modelname, kernelSpectra, kernelTime, times, spectra
   {
     QS = matrix(0, nrow = length(spectra), ncol = length(spectra))
     QT = matrix(0, nrow = length(times), ncol = length(times))
-    for(i in 1:length(spectra))
+    if(kernelSpectra != "diag")
     {
-      QS[,i] <- abs(spectra[i]-spectra)
+      for(i in 1:length(spectra))
+      {
+        QS[,i] <- abs(spectra[i]-spectra)
+      }
+      QS = ker(QS,kernelSpectra,h)
     }
-    for(i in 1:length(times))
+    else
     {
-      QS[,i] <- abs(times[i]-times)
+      QS = diag(rep(1,length(spectra)))
     }
-    QS = ker(QS,kernelSpectra,h)
-    QT = ker(QT,kernelTime,h)
+    if(kernelTime != "diag")
+    {
+      for(i in 1:length(times))
+      {
+        QT[,i] <- abs(times[i]-times)
+      }
+      QT = ker(QT,kernelTime,h)
+    }
+    else
+    {
+      QT = diag(rep(1,length(times)))
+    }
 
-    res = lapply(sigmaL,function(matS,vectS,matT,vectT,int){(sqrt(int*vectS) %*% matS %*% sqrt(int*vectS)) %x% (sqrt(int*vectT) %*% matT %*% sqrt(int*vectT))}, mat = QS , vect = sigmaS)
+    res = lapply(sigmaL,function(matS,vectS,matT,vectT,int){(diag(sqrt(int*vectS)) %*% matS %*% diag(sqrt(int*vectS))) %x% (diag(sqrt(int*vectT)) %*% matT %*% diag(sqrt(int*vectT)))}, matS = QS , vectS = sigmaS, matT = QT , vectT = sigmaT)
   }
 
   res

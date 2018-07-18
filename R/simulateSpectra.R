@@ -110,7 +110,7 @@ setMethod(
         res
      }
 
-  KernelCov <- function(times, width, modelname, kernelSpectra, kernelTime
+  KernelCov <- function(times, spectra, labels, modelname, kernelSpectra, kernelTime
                         , nbCluster, nbSpectrum, nbSampling, h)
   {
     source('~/bayesS4/R/simulateKernel.R')
@@ -125,8 +125,6 @@ setMethod(
   Object@times = c(0,10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180,190,200,210
             ,220,230,240,250,260,270,280,290,300,310,321)
   means <- mean(Object@times, Object@nbSpectrum, Object@nbCluster)
-  data <- array(0, dim = c(Object@nbPixel, Object@nbSpectrum, Object@nbSampling))
-  process <- matrix(0, nrow=Object@nbSpectrum, ncol= Object@nbSampling)
 
   #creating a vector of size nbPixel containing the labels (number of labels = nbCluster)
   #the probablilty of each cluster being between 0 and 1
@@ -135,52 +133,26 @@ setMethod(
   spectra = 1:Object@nbSpectrum
   ##prob = rep(1, nbCluster)
 
-  covariance <- KernelCov(Object@times, Object@width,Object@modelname
+  covariance <- KernelCov(Object@times, spectra, labels, Object@modelname
                           , Object@kernelSpectra, Object@kernelTime, Object@nbCluster
                           , Object@nbSpectrum, Object@nbSampling, Object@width)
+  covariance <- lapply(covariance, function(mat){(mat %*% t(mat)) /2})   #to check the symmetry
 
-  if(Object@modelname == "full")
+  if (Object@simulationType == "gaussian")
   {
-    if (Object@simulationType == "gaussian")
-      labels  = sort(labels)
-      nb = table(labels)
-      data <- lapply(1:Object@nbSpectrum, function(spect,nb,means,covariance)
-        {lapply(1:Object@nbCluster, function(spect,nb,means,covariance,label)
-          {rmvnorm(nb[label], mean = means[label,spect,], sigma = covariance[[label]])}
-          ,spect=spect,nb=nb,means=means,covariance=covariance)}
-        ,nb=nb,means=means,covariance=covariance)
-      data <- lapply(data, do.call, what="cbind")
+    labels  = sort(labels)
+    nb = table(labels)
+    process <- lapply(1:Object@nbCluster, function(nb,mean,covariance,label)
+    {rmvnorm(nb[label], mean = as.numeric(t(means[label,,])), sigma = covariance[[label]])}
+      ,nb=nb,mean=means,covariance=covariance)
+
+    data <- do.call("rbind",process)
+    process <- lapply(1:Object@nbSpectrum,function(data,spectra,nbSampling){data[,((spectra-1)*nbSampling+1):(spectra*nbSampling)]},data=data,nbSampling=Object@nbSampling)
+    names(process) <- paste("spectra",1:length(process),sep="")
   }
 
 
-  if (Object@nbSpectrum == 4)
-  {
-    spectra = list( spect1  = data[,1,]
-                    , spect2  = data[,2,]
-                    , spect3  = data[,3,]
-                    , spect4  = data[,4,]
-    )
-  }
 
-  else if (Object@nbSpectrum == 10)
-  {
-    spectra = list( spect1  = data[,1,]
-                    , spect2  = data[,2,]
-                    , spect3  = data[,3,]
-                    , spect4  = data[,4,]
-                    , spect5  = data[,5,]
-                    , spect6  = data[,6,]
-                    , spect7  = data[,7,]
-                    , spect8  = data[,8,]
-                    , spect9  = data[,9,]
-                    , spect10 = data[,10,]
-    )
-  }
-
-  else
-    stop("Number of Spectra must be 4 or 10")
-
-  Object@result = list(labels=labels)
   Object@result = list(labels=labels , times = Object@times, spectra = spectra
        , clouds = list(years1 = matrix(0, nrow = Object@nbPixel, ncol = length(Object@times) ))
        , means = means, sigma = sigma, process = process
