@@ -18,7 +18,7 @@ bestPredLambda = function(objPred,listLambdaS=c(0),listLambdaT = c(0)){
     }
   }
   p = lapply(listLambdaS,predict2, objPred = objPred,listLambdaT=listLambdaT)
-  prec = vapply(p,function(list){vapply(list,function(pred){pred@accuracy},FUN.VALUE = vector('double',length = 1))},FUN.VALUE = vector('double',length = length(p[[1]])))
+  perc = vapply(p,function(list){vapply(list,function(pred){pred@accuracy},FUN.VALUE = vector('double',length = 1))},FUN.VALUE = vector('double',length = length(p[[1]])))
 
   if(length(listLambdaS)==1 | length(listLambdaS)==1){
     plot(x=listLambda,y=perc,type = 'l')

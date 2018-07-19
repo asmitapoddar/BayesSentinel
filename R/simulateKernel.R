@@ -1,8 +1,7 @@
 simulateKernel = function(modelname, kernelSpectra, kernelTime, times, spectra
                           , labels, sigmaL, sigmaS, sigmaT, h)
 {
-  source('~/bayesS4/R/kernelTypes.R')
- if(modelname == "full")
+  if(modelname == "full")
  {
    Q = matrix(0, nrow = (length(times)*length(spectra))
               , ncol = (length(times)*length(spectra)) )
