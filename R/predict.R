@@ -87,9 +87,6 @@ setMethod(
         weight * dmvnorm(X,mean,reg,log=TRUE)
       }
 
-      source('~/bayesS4/R/regularisation.R')
-      source('~/bayesS4/R/automatisation.R')
-
       nbLabel = length(unique(Object@m[[1]]))
       nbPixel = length(Object@m[[1]])
 

@@ -1,5 +1,3 @@
-source('~/bayesS4/R/kernelTypes.R')
-
 QmatrixTime <- function(data)
 {
   n = length(data[[2]])

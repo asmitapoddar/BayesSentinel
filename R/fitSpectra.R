@@ -113,11 +113,6 @@ setMethod(
   definition=function(Object)
   {
 
-  source('~/bayesS4/R/meanData.R')
-  source('~/bayesS4/R/full.R')
-  source('~/bayesS4/R/kernel.R')
-  source('~/bayesS4/R/parsimonious.R')
-
   #return a list of the list of integer elements
   listof = function(list, int)
   { lapply(list, function(l,int){l[[int]]}, int = int)

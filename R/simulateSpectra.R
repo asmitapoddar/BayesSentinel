@@ -114,7 +114,7 @@ setMethod(
   KernelCov <- function(times, spectra, labels, modelname, kernelSpectra, kernelTime
                         , nbCluster, nbSpectrum, nbSampling, h)
   {
-    source('~/bayesS4/R/simulateKernel.R')
+    #source('~/bayesS4/R/simulateKernel.R')
     sigmaS = rexp(nbSpectrum)
     sigmaT = rexp(nbSampling)
     sigmaL = rexp(nbCluster)
