@@ -1,12 +1,9 @@
 #-----------------------------------------------------------------------
 #' Perform regularisation on covariance matrix
 #'
-#' @fittedCov fitted covariance matrix
+#' @param fittedCov fitted covariance matrix
 #' @param lambdaS regularisation parameter for spectra
 #' @param lambdaT regularisation parameter for time
-#'
-#' @examples
-#' reg = regularisation(fittedCov)
 #'
 #' @return A list with regularised covariance matrix
 #'

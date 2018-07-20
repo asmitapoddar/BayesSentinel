@@ -11,9 +11,6 @@
 #'
 #' @return list of predicted sigma for every label
 #'
-#' @examples
-#' ff = flipflop(o, lmean,s,lambdaS,lambdaT)
-#'
 #' @author Asmita Poddar & Florent Latimier
 
 flipflop = function(data,lmean,s,lambdaS,lambdaT)

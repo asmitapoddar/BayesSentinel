@@ -4,23 +4,20 @@
 \alias{regularisation}
 \title{Perform regularisation on covariance matrix}
 \usage{
-regularisation(fittedCov, lambda)
+regularisation(fittedCov, lambdaS = 0.3, lambdaT = 0.3)
 }
 \arguments{
-\item{fittedCov}{covariance matrix}
+\item{fittedCov}{fitted covariance matrix}
 
-\item{lambda}{parameter for regularisation}
+\item{lambdaS}{regularisation parameter for spectra}
+
+\item{lambdaT}{regularisation parameter for time}
 }
 \value{
-Regularised covariance matrix
+A list with regularised covariance matrix
 }
 \description{
-Perform regularisation on covariance matrix based on the model selected
-}
-\examples{
-reg = regularisation(fittedCov, 0.3)
-
-
+Perform regularisation on covariance matrix
 }
 \author{
 Asmita Poddar & Florent Latimier

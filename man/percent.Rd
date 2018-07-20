@@ -2,24 +2,22 @@
 % Please edit documentation in R/automatisation.R
 \name{percent}
 \alias{percent}
-\title{Calculate accuracy of prediction}
+\title{Find percentage of accuracy
+Find percentage of accuracy when two lists containig the class labels are provided}
 \usage{
 percent(list1, list2)
 }
 \arguments{
-\item{list1}{list containing predicted labels}
+\item{list1}{first list}
 
-\item{list2}{list containing actual ground truth labels}
+\item{list2}{second list}
 }
 \value{
-A floating value of the accuracy percentage
+percentage value - numeric
 }
 \description{
-Take two lists containing the predicted and actual labels of the data
-}
-\examples{
-p = percent(p, m$labels)
-
+Find percentage of accuracy
+Find percentage of accuracy when two lists containig the class labels are provided
 }
 \author{
 Asmita Poddar & Florent Latimier
