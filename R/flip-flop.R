@@ -49,7 +49,6 @@ flipflop = function(data,lmean,s,lambdaS,lambdaT)
       SigmaSnew <- calculFlop(X=data,S = invT,ns=ns)
 
     }
-    print(l)
     list(SigmaS = SigmaSnew, SigmaT = SigmaTnew)
   }
 
