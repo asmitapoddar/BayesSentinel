@@ -1,4 +1,21 @@
-bestPredLambda = function(objPred,listLambdaS=c(0),listLambdaT = c(0)){
+#-----------------------------------------------------------------------
+#' Find best fitted lambda
+#'
+#' Find best fitted lambda
+#'
+#' @param objPred prediction object
+#' @param listLambdaS list of lambda for spectra
+#' @param listLambdaT list of lambda for time
+#'
+#' @return list of predicted lambda for spectra and time
+#'
+#' @examples
+#' bestlambda = bestPredLambda(o)
+#'
+#' @author Asmita Poddar & Florent Latimier
+
+
+bestPredLambda = function(objPred, listLambdaS=c(0), listLambdaT = c(0)){
   objPred@validation = FALSE
   if(objPred@fittedCov$modelname == "full"){
     listLambdaS = unique(c(listLambdaS , listLambdaT))
@@ -14,31 +31,49 @@ bestPredLambda = function(objPred,listLambdaS=c(0),listLambdaT = c(0)){
     if(objPred@fittedCov$spectra == "unknown" && objPred@fittedCov$time == "unknown")
     {
       p = predict(objPred)
-      return(list(lambdaS = objPred@lamdbaS, lambdaT = objPred@lambdaT, predict = p@perdict, percent = p@accuracy))
+      return(list(lambdaS = objPred@lamdbaS, lambdaT = objPred@lambdaT
+                  , predict = p@perdict, percent = p@accuracy))
     }
   }
   p = lapply(listLambdaS,predict2, objPred = objPred,listLambdaT=listLambdaT)
-  perc = vapply(p,function(list){vapply(list,function(pred){pred@accuracy},FUN.VALUE = vector('double',length = 1))},FUN.VALUE = vector('double',length = length(p[[1]])))
+  perc = vapply(p, function(list){vapply(list,function(pred)
+    {pred@accuracy}, FUN.VALUE = vector('double',length = 1))}
+    ,FUN.VALUE = vector('double', length = length(p[[1]])))
 
   if(length(listLambdaS)==1 | length(listLambdaS)==1){
-    plot(x=listLambda,y=perc,type = 'l')
-    title(paste(objPred@fittedCov$modelname,objPred@fittedCov$spectra,objPred@fittedCov$time))
+    plot(x = listLambda, y=perc, type = 'l')
+    title( paste( objPred@fittedCov$modelname, objPred@fittedCov$spectra
+                  ,objPred@fittedCov$time))
   }
 
-  list(lambdaS = listLambdaS[matxMax(perc)[1]],lambdaT = listLambdaT[matxMax(perc)[2]],predict = p[[matxMax(perc)[1]]][[matxMax(perc)[2]]],percent = max(perc))
-}
+  list(lambdaS = listLambdaS[matxMax(perc)[1]],lambdaT = listLambdaT[matxMax(perc)[2]]
+       ,predict = p[[matxMax(perc)[1]]][[matxMax(perc)[2]]],percent = max(perc))
 
+  predict2 = function(objPred,lambdaS,listLambdaT){
+    objPred@lambdaS = lambdaS
+    lapply(listLambdaT,
+           function(objPred,lambdaT)
+           { objPred@lambdaT = lambdaT
+           predict(objPred)
+           }
+           ,objPred = objPred)
+  }
 
+  }
 
-predict2 = function(objPred,lambdaS,listLambdaT){
-  objPred@lambdaS = lambdaS
-  lapply(listLambdaT,
-         function(objPred,lambdaT)
-        { objPred@lambdaT = lambdaT
-          predict(objPred)
-        }
-        ,objPred = objPred)
-}
+#-----------------------------------------------------------------------
+#' Find row and column of maximum element
+#' Find row and column of maximum element
+#'
+#' @param mat Matrix
+#'
+#' @return Vector containing the row and column of maximum element
+#'
+#' @examples
+#' rowcol = matxMax(o)
+#'
+#' @author Asmita Poddar & Florent Latimier
+
 
 matxMax <- function(mat)
 {
@@ -48,20 +83,41 @@ matxMax <- function(mat)
   c(row, colmn)
 }
 
-
-
-
-
-bestFitLambda = function(objFit,listS,listT){
-  model = objFit@model
-  perc = vapply(listS, function(objFit,lambdaS,listT,model){vapply(listT,fitChangLambda,objFit = objFit,lambdaS = lambdaS,model =model,FUN.VALUE = vector('double',length(1)))},objFit=objFit,listT=listT,model=model,FUN.VALUE = vector('double',length = length(listT)))
-  list(lambdaS = listS[[matxMax(perc)[1]]], lambdaT = listS[[matxMax(perc)[2]]])
-}
-
-fitChangLambda = function(objFit,lambdaS,lambdaT,model)
+#-----------------------------------------------------------------------
+#' Find best fitted lambda
+#'
+#' Find best fitted lambda
+#'
+#' @param objPred prediction object
+#' @param listS list of lambda for spectra
+#' @param listT list of lambda for time
+#'
+#' @return list of predicted lambda for spectra and time
+#'
+#' @examples
+#' bestlambda = bestFitLambda(o,listS,listT)
+#'
+#' @author Asmita Poddar & Florent Latimier
+#'
+bestFitLambda = function(objFit, istS, listT)
 {
-  objFit@lambdaS = lambdaS
-  objFit@lambdaT = lambdaT
-  p = new("predictClass",objFit@m,fit(objFit),lambdaS = lambdaS, lambdaT = lambdaT, model= model)
-  predict(p)@accuracy
+  fitChangLambda = function(objFit, lambdaS, lambdaT, model)
+  {
+    objFit@lambdaS = lambdaS
+    objFit@lambdaT = lambdaT
+    p = new("predictClass", objFit@m,fit(objFit), lambdaS = lambdaS, lambdaT = lambdaT
+            , model= model)
+    predict(p)@accuracy
+  }
+
+  model = objFit@model
+  perc = vapply(listS, function(objFit, lambdaS, listT, model)
+    {vapply(listT, fitChangLambda, objFit = objFit, lambdaS = lambdaS, model =model
+            ,FUN.VALUE = vector('double',length(1)))}
+    , objFit=objFit, listT=listT, model=model
+    , FUN.VALUE = vector('double',length = length(listT)))
+  list(lambdaS = listS[[matxMax(perc)[1]]], lambdaT = listS[[matxMax(perc)[2]]])
+
 }
+
+

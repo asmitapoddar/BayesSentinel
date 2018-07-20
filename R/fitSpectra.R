@@ -27,7 +27,7 @@
 #' @slot covMat returning the covariance matrx
 #'
 #' @examples
-#' fittedCov = fit(x, "full")
+#' fittedCov = fit(x)
 #'
 #' @name fitSpectra
 #' @aliases fitSpectra-class
@@ -184,7 +184,8 @@ setMethod(
   "fitSpectra",
   function(.Object, m = list(0), modelname = "full", spectra = "diag", time = "diag"
            , kerneltypeSpectra = "exponential", kerneltypeTime    = "exponential"
-           , h = 10, s = 0.01, lambdaS = 0.3, lambdaT = 0.3,validation = FALSE, model = "gaussian")
+           , h = 10, s = 0.01, lambdaS = 0.3, lambdaT = 0.3,validation = FALSE
+           , model = "gaussian")
   { .Object@m = m
   .Object@modelname = modelname
   .Object@spectra = spectra

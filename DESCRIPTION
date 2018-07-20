@@ -7,8 +7,8 @@ Author: Asmita Poddar & Florent Latimier
 Maintainer: Asmita Poddar & Florent Latimier <asmita.podar@gmail.com>
 Depends:
     R (>= 3.0.2)
-Description: Different models for estimating the covariance matrix of the spectra and times, and  using it for classification of spectrometric data using the Bayes Decision Rule 
-License: What license is it under?
+Description: This package contains different models for estimating the covariance matrix of the spectra and times, and  using it for classification of spectrometric data using the Bayes Decision Rule. 
+License: GPL (>= 2)
 Encoding: UTF-8
 LazyData: true
 Collate:
@@ -22,7 +22,10 @@ Collate:
     meanData.R
     parsimonious.R
     predict.R
+    readSentinelFiles.R
     regularisation.R
     simulateKernel.R
     simulateSpectra.R
+Imports: matrixcalc, mvtnorm, methods
+Depends: h5
 RoxygenNote: 6.0.1

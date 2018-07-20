@@ -4,8 +4,18 @@ export( simulate
       	, percent
 	      , testTrain
 	      , fitPredPrecent
+        , readMultiSentinelRawData
+        , readMultiSentinelSmoothedData
       )
 
-importFrom("mvtnorm", "rmvnorm")
-importFrom("stats", "dnorm", "rnorm","rexp", "rt")
-importFrom("matrixcalc", "is.positive.definite")
+exportClasses( simulateSpectra
+             , fitSpectra
+             , predictClass
+             )
+
+importFrom("stats", "dnorm", "rnorm","rexp", "rt", "cov", "runif", "sigma")
+importFrom("graphics", "plot", "title")
+importFrom("h5", "h5file")
+importFrom("methods", "new")
+importFrom("mvtnorm", "rmvnorm", "dmvnorm")
+

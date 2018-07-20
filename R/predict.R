@@ -21,6 +21,10 @@
 #'
 #' @author Asmita Poddar & Florent Latimier
 #'
+#' @name predictClass
+#' @aliases predictClass-class
+#' @rdname predictClass-class
+#'
 
 setClass(
   Class="predictClass",
@@ -132,6 +136,15 @@ setMethod(
     Object
   }
 )
+
+
+#' Initialize an instance of a predictClass S4 class.
+#'
+#' Initialization method of the predictClass class.
+#'
+#' @rdname initialize-methods
+#' @keywords internal
+#'
 
 setMethod(
   "initialize",
