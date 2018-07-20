@@ -213,6 +213,37 @@ setMethod(
 #'
 #' Initialization method of the simulateSpectra class.
 #'
+#' @slot .Object object of class simulateSpectra
+#' @slot nbPixel number of pixels belonging to class k
+#' @slot nbCluster number of cluster
+#' @slot nbSpectrum number of spectra
+#' @slot simulationType type of simulation. Available options are "gaussian" and
+#' "tstudent". Default is "gaussian".
+#' @slot modelname type of model to be used to build covariance matrix.
+#' Available options are "full" and "parsimonious". Default is "full".
+#' @slot kernelSpectra type of kernel to be used to simulate  spectra. Available options
+#' are "diag", ""epanechnikov", "gaussian", "exponential", "uniform", "quadratic"
+#' , "circular", "triangular", "rational quadratic", "inverse multiquadratic".
+#' Default is "gaussian".
+#' @slot kernelTime type of kernel to be used for simulating time. Available options are
+#' "diag", ""epanechnikov", "gaussian", "exponential", "uniform", "quadratic",
+#' "circular", "triangular", "rational quadratic", "inverse multiquadratic".
+#' Default is "gaussian".
+#' @slot nbSampling number of sampling
+#' @slot sigma a vector of size nbSpectrum giving the variance level of
+#' the spectrum
+#' @slot nbSampling number of time intervals of the simulation
+#' @slot times time intervals of the simulation
+#' @slot width the width of the kernel to use for "gaussian" simulation. Default is 50.
+#' @slot gamma degrees of freedom used for simulating "tstudent" distribution of data.
+#' Default is 3.
+#' @slot labels class labels of the data
+#' @slot result return a list of simulated data
+#'
+#' @examples
+#' m = new("simulateSpectra")
+#' res = simulate(m)
+#'
 #' @name initialize
 #' @rdname initialize-methods
 #' @keywords internal
@@ -221,6 +252,7 @@ setMethod(
 setMethod(
   "initialize",
   "simulateSpectra",
+
   function(.Object, nbPixel = 1000, nbCluster = 15, nbSpectrum = 10
            , nbSampling = 33, sigma = rexp(nbSpectrum)
            , times = c(0,10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170
@@ -228,18 +260,19 @@ setMethod(
            , width = 50, simulationType = "gaussian", modelname     = "full"
            , kernelSpectra = "gaussian", kernelTime = "gaussian")
   { .Object@nbPixel = nbPixel
-    .Object@nbCluster = nbCluster
-    .Object@nbSpectrum = nbSpectrum
-    .Object@simulationType = simulationType
-    .Object@nbSampling = nbSampling
-    .Object@sigma = sigma
-    .Object@times = times
-    .Object@width = width
-    .Object@modelname = modelname
-    .Object@kernelSpectra = kernelSpectra
-    .Object@kernelTime = kernelTime
-    return(.Object)
+  .Object@nbCluster = nbCluster
+  .Object@nbSpectrum = nbSpectrum
+  .Object@simulationType = simulationType
+  .Object@nbSampling = nbSampling
+  .Object@sigma = sigma
+  .Object@times = times
+  .Object@width = width
+  .Object@modelname = modelname
+  .Object@kernelSpectra = kernelSpectra
+  .Object@kernelTime = kernelTime
+  return(.Object)
   }
+
 )
 
 #' Wrapper function simulaSpectra.
@@ -247,4 +280,9 @@ setMethod(
 #' @name simulateSpectra
 #' @rdname simulateSpectra-class
 #' @export
-simulateSpectra <- function(...) new("simulateSpectra", ...)
+simulateSpectra <- function(...)
+  {
+    o = new("simulateSpectra", ...)
+    simulate(o)
+}
+

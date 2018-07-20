@@ -1,5 +1,7 @@
 export( simulate
+        , simulateSpectra
 	      , fit
+        , fitSpectra
       	, predict
       	, percent
 	      , testTrain
@@ -18,4 +20,5 @@ importFrom("graphics", "plot", "title")
 importFrom("h5", "h5file")
 importFrom("methods", "new")
 importFrom("mvtnorm", "rmvnorm", "dmvnorm")
+importFrom("matrixcalc", "is.positive.definite")
 

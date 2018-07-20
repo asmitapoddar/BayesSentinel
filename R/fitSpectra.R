@@ -201,3 +201,14 @@ setMethod(
   return(.Object)
   }
 )
+
+#' Wrapper function fitSpectra.
+#'
+#' @namefitSpectra
+#' @rdname fitSpectra-class
+#' @export
+fitSpectra <- function(...)
+{
+  o = new("fitSpectra", ...)
+  fit(o)
+}
