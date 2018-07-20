@@ -115,7 +115,8 @@ setMethod(
 
   #return a list of the list of integer elements
   listof = function(list, int)
-  { lapply(list, function(l,int){l[[int]]}, int = int)
+  {
+    lapply(list, function(l,int){l[[int]]}, int = int)
   }
 
   weight = lapply(levels(factor(Object@m[[1]])), function(k,data){length(data[which(data==k)])/length(data)}
