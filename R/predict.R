@@ -75,7 +75,7 @@ setMethod(
   {
     if(Object@validation)
     {
-      res = bestPredLambda(Object,listLambdaS = seq(from=0,to=2,by=1),listLambdaT = seq(from=0,to=2,by=1))
+      res = bestPredLambda(Object,listLambdaS = seq(from=0.1,to=10,by=0.1),listLambdaT = seq(from=0.1,to=10,by=0.1))
       Object@lambdaS = res$lambdaS
       Object@lambdaT = res$lambdaT
       Object@predicted_labels = res$predicted

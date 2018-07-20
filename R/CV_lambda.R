@@ -105,6 +105,7 @@ matxMax <- function(mat)
 #'
 bestFitLambda = function(objFit, listS, listT)
 {
+  objFit@validation = FALSE
   fitChangLambda = function(objFit, lambdaS, lambdaT, model)
   {
     objFit@lambdaS = lambdaS
@@ -120,8 +121,8 @@ bestFitLambda = function(objFit, listS, listT)
             ,FUN.VALUE = vector('double',length(1)))}
     , objFit=objFit, listT=listT, model=model
     , FUN.VALUE = vector('double',length = length(listT)))
-  list(lambdaS = listS[[matxMax(perc)[1]]], lambdaT = listS[[matxMax(perc)[2]]])
 
+  list(lambdaS = listS[[matxMax(perc)[2]]], lambdaT = listS[[matxMax(perc)[1]]])
 }
 
 

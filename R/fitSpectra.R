@@ -138,7 +138,7 @@ setMethod(
       {
         if(Object@validation)
         {
-          lambda = bestFitLambda(Object,lambdaS = seq(from=0,to=10,by=0.1),lambdaT = seq(from=0,to=10,by=0.1))
+          lambda = bestFitLambda(Object,listS = seq(from=0.1,to=10,by=0.1),listT = seq(from=0.1,to=10,by=0.1))
           Object@lambdaS = lambda[[1]]
           Object@lambdaT = lambda[[2]]
         }
