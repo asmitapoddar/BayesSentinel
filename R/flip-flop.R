@@ -50,7 +50,7 @@ flipflop = function(data,lmean,s,lambdaS,lambdaT)
 
     }
     list(SigmaS = SigmaSnew, SigmaT = SigmaTnew)
-  }
+}
 
   testFlop = function(old, new)
   {

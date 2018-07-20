@@ -32,98 +32,65 @@ inversion <- function(mat){
 
 
 ## tous les test possibles :
-tablesModel = function(data,lkernelS=list(),lkernelT=list(),lhS=list(),lhT=list(),listLambdaS=seq(from=0,to=10,by=0.1),listLambdaT=seq(from=0,to=10,by=0.1)){
-  l = testTrain(data,0.1)
+tablesModel = function(data,lkernelS=list(),lkernelT=list(),lhS=list(),lhT=list(),listLambdaS=seq(from=0,to=10,by=0.1),listLambdaT=seq(from=0,to=10,by=0.1),listModel=list("gaussian")){
+  l = testTrain(data,0.8)
   nr = 2 + length(lkernelS)
   nc = 2 + length(lkernelT)
-  cov <- fit(l[[1]])
-  cv <- bestLambda(data = l[[2]],fittedCov = cov,listLambdaS = listLambdaS,listLambdaT = listLambdaT,model = "gaussian")
-  print(cv$lambdaS)
-  fuulG <- cv$percent
-  pG = matrix(ncol = nc, nrow = nr)
-  for(i in 1:nr){
-    if(i==1){
-      spectra = "diag"
-    }
-    if(i==2){
-      spectra = "unknown"
-    }
-    kerneltypeSpectra = ""
-    h=0
-    if(i>2){
-      spectra = "kernel"
-      kerneltypeSpectra = lkernelS[[i-2]]
-      h = lhS[[i-2]]
+  res = list()
+  for(k in 1:length(listModel))
+  {
+    cov <- new("fitSpectra",l[[1]])
+    cov <- fit(cov)
+    pred <- new("predictClass",m=l[[2]],fittedCov=cov,model=listModel[[k]],validation=TRUE)
+    pred <- predict(pred)
+    full <- pred@accuracy
+    p = matrix(ncol = nc, nrow = nr)
+    for(i in 1:nr){
+      if(i==1){
+        spectra = "diag"
+      }
+      if(i==2){
+        spectra = "unknown"
+      }
+      kerneltypeSpectra = ""
+      h=0
+      if(i>2){
+        spectra = "kernel"
+        kerneltypeSpectra = lkernelS[[i-2]]
+        h = lhS[[i-2]]
+      }
+
+      for(j in 1:nc){
+        if(j==1){
+          time = "diag"
+        }
+        if(j==2){
+          time = "unknown"
+        }
+        kerneltypeTime = ""
+        if(j>2){
+          time = "kernel"
+          kerneltypeTime = lkernelT[[j-2]]
+          h = lhT[[j-2]]
+        }
+        print(c(spectra,time))
+        cov <- new("fitSpectra",m=l[[1]],modelname="parsimonious",spectra=spectra,time=time,
+                   kerneltypeSpectra=kerneltypeSpectra,kerneltypeTime=kerneltypeTime,h=h,s=s,
+                   model=listModel[[k]],lambdaS=lambdaS,lambdaT=lambdaT,validation=TRUE)
+        cov <- fit(cov)
+        pred <- new("predictClass",m=l[[2]],fittedCov=cov,model=listModel[[k]],validation=TRUE)
+        pred <- predict(pred)
+        p[i,j] <- pred@accuracy
+      }
     }
 
-    for(j in 1:nc){
-      if(j==1){
-        time = "diag"
-      }
-      if(j==2){
-        time = "unknown"
-      }
-      kerneltypeTime = ""
-      if(j>2){
-        time = "kernel"
-        kerneltypeTime = lkernelT[[j-2]]
-        h = lhT[[j-2]]
-      }
-      print(c(spectra,time))
-      cov <- fit(l[[1]],"parsimonious",spectra,time,kerneltypeSpectra,kerneltypeTime,h,s,lambdaS,lambdaT)
-      cv <- bestLambda(data = l[[2]],fittedCov = cov,listLambdaS = listLambdaS,listLambdaT = listLambdaT,model = "gaussian")
-      print(c(cv$lambdaS,cv$lambdaT))
-      pG[i,j] <- cv$percent
-    }
+    rownames(p) <- c("diag","unknown",as.character(lkernelS))
+    colnames(p) <- c("diag","unknown",as.character(lkernelT))
+    noms = paste(c(full,p),"_",listModel[[k]],sep="")
+    res = c(res,list(noms[1]=full,noms[2]=p))
   }
-  rownames(pG) <- c("diag","unknown",as.character(lkernelS))
-  colnames(pG) <- c("diag","unknown",as.character(lkernelT))
 
-  # pour fisher
-  cov <- fit(l[[1]])
-  cv <- bestLambda(data = l[[2]],fittedCov = cov,listLambdaS = listLambdaS,listLambdaT = listLambdaT,model = "fisher")
-  print(cv$lambdaS)
-  fuulF <- cv$percent
-  pF = matrix(ncol = nc, nrow = nr)
-  for(i in 1:nr){
-    if(i==1){
-      spectra = "diag"
-    }
-    if(i==2){
-      spectra = "unknown"
-    }
-    kerneltypeSpectra = ""
-    h=0
-    if(i>2){
-      spectra = "kernel"
-      kerneltypeSpectra = lkernelS[[i-2]]
-      h = lhS[[i-2]]
-    }
-
-    for(j in 1:nc){
-      if(j==1){
-        time = "diag"
-      }
-      if(j==2){
-        time = "unknown"
-      }
-      kerneltypeTime = ""
-      if(j>2){
-        time = "kernel"
-        kerneltypeTime = lkernelT[[j-2]]
-        h = lhT[[j-2]]
-      }
-      print(c(spectra,time))
-      cov <- fit(l[[1]],"parsimonious",spectra,time,kerneltypeSpectra,kerneltypeTime,h)
-      cv <- bestLambda(data = l[[2]],fittedCov = cov,listLambdaS = listLambdaS,listLambdaT = listLambdaT,model = "fisher")
-      print(c(cv$lambdaS,cv$lambdaT))
-      pF[i,j] <- cv$percent
-    }
-  }
-  rownames(pF) <- c("diag","unknown",as.character(lkernelS))
-  colnames(pF) <- c("diag","unknown",as.character(lkernelT))
-
-  list(fullG=fullG,pG=pG,fullF=fullF,pF=pF)
+  res
 }
 
 
