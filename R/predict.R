@@ -34,7 +34,7 @@ setClass(
                   , lambdaT             = "numeric"
                   , model               = "character"
                   , validation          = "logical"
-                  , predicted_labels    = "numeric"
+                  , predicted_labels    = "integer"
                   , accuracy            = "numeric"
   ),
   prototype( m                   = list(0)
@@ -43,8 +43,6 @@ setClass(
              , lambdaT           = 0.3
              , model             = "gaussian"
              , validation        = FALSE
-             , predicted_labels  = 0
-             , accuracy          = 0
   ),
   # validity function
   validity = function(object)
@@ -77,10 +75,10 @@ setMethod(
   {
     if(Object@validation)
     {
-      res = bestPredLambda(Object,listLambdaS = seq(from=0,to=10,by=0.1),listLambdaT = seq(from=0,to=10,by=0.1))
+      res = bestPredLambda(Object,listLambdaS = seq(from=0,to=2,by=1),listLambdaT = seq(from=0,to=2,by=1))
       Object@lambdaS = res$lambdaS
       Object@lambdaT = res$lambdaT
-      Object@predicted_labels = res$perdict
+      Object@predicted_labels = res$predicted
       Object@accuracy = res$percent
     }
 
@@ -129,7 +127,7 @@ setMethod(
       }
 
       Object@predicted_labels = max.col(t(power(Object@m,reg,mean,weight)))
-      Object@accuracy = percent(Object@m$labels, Object@predicted_labels)
+      Object@accuracy = percent(Object@m[[1]], Object@predicted_labels)
 
     }
 
