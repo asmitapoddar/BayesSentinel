@@ -26,6 +26,5 @@ Collate:
     regularisation.R
     simulateKernel.R
     simulateSpectra.R
-Imports: matrixcalc, mvtnorm, methods
-Depends: h5
+Imports: matrixcalc, mvtnorm, methods, h5
 RoxygenNote: 6.0.1

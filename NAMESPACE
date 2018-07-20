@@ -5,7 +5,7 @@ export( simulate
       	, predict
       	, percent
 	      , testTrain
-	      , fitPredPrecent
+	      , tablesModel
         , readMultiSentinelRawData
         , readMultiSentinelSmoothedData
       )

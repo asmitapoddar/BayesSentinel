@@ -96,8 +96,9 @@ setClass(
 )
 
 #' Method num.
+#'
 #' @name simulate
-#' @rdname simulate-methods
+#' @rdname simulate-method
 #' @exportMethod simulate
 
 setGeneric("simulate",
@@ -108,7 +109,11 @@ setGeneric("simulate",
 )
 
 
-#' @rdname simulate-methods
+#' #' Method num.
+#'
+#' @param Object object to be input
+#'
+#' @rdname simulate-method
 #' @aliases simulate
 
 setMethod(
@@ -213,39 +218,39 @@ setMethod(
 #'
 #' Initialization method of the simulateSpectra class.
 #'
-#' @slot .Object object of class simulateSpectra
-#' @slot nbPixel number of pixels belonging to class k
-#' @slot nbCluster number of cluster
-#' @slot nbSpectrum number of spectra
-#' @slot simulationType type of simulation. Available options are "gaussian" and
+#' @param .Object object of class simulateSpectra
+#' @param nbPixel number of pixels belonging to class k
+#' @param nbCluster number of cluster
+#' @param nbSpectrum number of spectra
+#' @param simulationType type of simulation. Available options are "gaussian" and
 #' "tstudent". Default is "gaussian".
-#' @slot modelname type of model to be used to build covariance matrix.
+#' @param modelname type of model to be used to build covariance matrix.
 #' Available options are "full" and "parsimonious". Default is "full".
-#' @slot kernelSpectra type of kernel to be used to simulate  spectra. Available options
+#' @param kernelSpectra type of kernel to be used to simulate  spectra. Available options
 #' are "diag", ""epanechnikov", "gaussian", "exponential", "uniform", "quadratic"
 #' , "circular", "triangular", "rational quadratic", "inverse multiquadratic".
 #' Default is "gaussian".
-#' @slot kernelTime type of kernel to be used for simulating time. Available options are
+#' @param kernelTime type of kernel to be used for simulating time. Available options are
 #' "diag", ""epanechnikov", "gaussian", "exponential", "uniform", "quadratic",
 #' "circular", "triangular", "rational quadratic", "inverse multiquadratic".
 #' Default is "gaussian".
-#' @slot nbSampling number of sampling
-#' @slot sigma a vector of size nbSpectrum giving the variance level of
+#' @param nbSampling number of sampling
+#' @param sigma a vector of size nbSpectrum giving the variance level of
 #' the spectrum
-#' @slot nbSampling number of time intervals of the simulation
-#' @slot times time intervals of the simulation
-#' @slot width the width of the kernel to use for "gaussian" simulation. Default is 50.
-#' @slot gamma degrees of freedom used for simulating "tstudent" distribution of data.
+#' @param nbSampling number of time intervals of the simulation
+#' @param times time intervals of the simulation
+#' @param width the width of the kernel to use for "gaussian" simulation. Default is 50.
+#' @param gamma degrees of freedom used for simulating "tstudent" distribution of data.
 #' Default is 3.
-#' @slot labels class labels of the data
-#' @slot result return a list of simulated data
+#' @param labels class labels of the data
+#' @param result return a list of simulated data
 #'
 #' @examples
 #' m = new("simulateSpectra")
 #' res = simulate(m)
 #'
 #' @name initialize
-#' @rdname initialize-methods
+#' @rdname initialize-method
 #' @keywords internal
 #'
 
@@ -276,6 +281,8 @@ setMethod(
 )
 
 #' Wrapper function simulaSpectra.
+#'
+#' @param ... any paramaters to be input into the function
 #'
 #' @name simulateSpectra
 #' @rdname simulateSpectra-class

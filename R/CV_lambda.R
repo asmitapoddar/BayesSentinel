@@ -9,9 +9,6 @@
 #'
 #' @return list of predicted lambda for spectra and time
 #'
-#' @examples
-#' bestlambda = bestPredLambda(o)
-#'
 #' @author Asmita Poddar & Florent Latimier
 
 
@@ -73,9 +70,6 @@ bestPredLambda = function(objPred,listLambdaS=c(0),listLambdaT = c(0))
 #'
 #' @return Vector containing the row and column of maximum element
 #'
-#' @examples
-#' rowcol = matxMax(o)
-#'
 #' @author Asmita Poddar & Florent Latimier
 
 
@@ -92,17 +86,16 @@ matxMax <- function(mat)
 #'
 #' Find best fitted lambda
 #'
-#' @param objPred prediction object
+#' @param objFit prediction object
 #' @param listS list of lambda for spectra
 #' @param listT list of lambda for time
 #'
 #' @return list of predicted lambda for spectra and time
 #'
-#' @examples
-#' bestlambda = bestFitLambda(o,listS,listT)
-#'
 #' @author Asmita Poddar & Florent Latimier
 #'
+
+
 bestFitLambda = function(objFit, listS, listT)
 {
   objFit@validation = FALSE

@@ -2,25 +2,20 @@
 % Please edit documentation in R/automatisation.R
 \name{testTrain}
 \alias{testTrain}
-\title{Split data into training and test set}
+\title{Divide the data into training and test sets
+Divide the data into training and test sets according to percentage provided by user}
 \usage{
 testTrain(data, pTrain)
 }
 \arguments{
-\item{data}{spectroscopic data}
+\item{data}{first list}
 
-\item{pTrain}{percentage of data to be used for training}
+\item{pTrain}{second list}
 }
 \value{
-A list with training and test data
+list containing training and test set
 }
 \description{
-Split data into training and test set depending on percentage set by the user
-}
-\examples{
-t = testTrain(data, 0.2)
-
-}
-\author{
-Asmita Poddar & Florent Latimier
+Divide the data into training and test sets
+Divide the data into training and test sets according to percentage provided by user
 }

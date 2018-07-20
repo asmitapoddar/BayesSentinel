@@ -14,9 +14,6 @@
 #' @slot predicted_labels predicted class labels
 #' @slot accuracy accracy of prediction
 #'
-#' @examples
-#' p = predict(m, fittedCov)
-#'
 #' @return A list with the spectra
 #'
 #' @author Asmita Poddar & Florent Latimier
@@ -61,12 +58,25 @@ setClass(
   }
 )
 
+#' Method num.
+#'
+#' @name predict
+#' @rdname predict-method
+#' @exportMethod predict
+
 setGeneric("predict",
            def=function(Object)
            {
              standardGeneric("predict")
            }
 )
+
+#' Method num.
+#'
+#' @param Object object to be input
+#'
+#' @rdname predict-method
+#' @aliases predict
 
 setMethod(
   f = "predict",
@@ -136,11 +146,24 @@ setMethod(
 )
 
 
+#-----------------------------------------------------------------------
 #' Initialize an instance of a predictClass S4 class.
 #'
 #' Initialization method of the predictClass class.
 #'
-#' @rdname initialize-methods
+#' @param .Object object of class predictClass
+#' @param m spectroscopic data
+#' @param fittedCov fitted covariance matrix for the data
+#' @param lambdaS parameter for regularisation of spectra
+#' @param lambdaT parameter for regularisation of time
+#' @param model type of model to be used for prediction of labels
+#' Available models are "gaussian", "fisher". Default is "gaussian".
+#' @param validation logical to optimize the lambda.
+#' @param predicted_labels predicted class labels
+#' @param accuracy accracy of prediction
+#'
+#' @name initialize
+#' @rdname initialize-method
 #' @keywords internal
 #'
 
@@ -158,3 +181,18 @@ setMethod(
   return(.Object)
   }
 )
+
+
+#' Wrapper function fitSpectra.
+#'
+#' @param ... any paramaters to be input into the function
+#'
+#' @name predictClass
+#' @rdname predictClass-class
+#' @export
+
+predictClass <- function(...)
+{
+  o = new("predictClass", ...)
+  predict(o)
+}

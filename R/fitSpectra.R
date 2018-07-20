@@ -26,9 +26,6 @@
 #' @slot model use in prediction in case of validation is TRUE
 #' @slot covMat returning the covariance matrx
 #'
-#' @examples
-#' fittedCov = fit(x)
-#'
 #' @name fitSpectra
 #' @aliases fitSpectra-class
 #' @rdname fitSpectra-class
@@ -100,12 +97,25 @@ setClass(
   }
 )
 
+#' Method num.
+#'
+#' @name fit
+#' @rdname fit-method
+#' @exportMethod fit
+
 setGeneric("fit",
            def=function(Object)
            {
              standardGeneric("fit")
            }
 )
+
+#' #' Method num.
+#'
+#' @param Object object to be input
+#'
+#' @rdname fit-method
+#' @aliases fit
 
 setMethod(
   f = "fit",
@@ -179,6 +189,40 @@ setMethod(
   }
 )
 
+#-----------------------------------------------------------------------
+#' Initialize an instance of a fitSpectra S4 class.
+#'
+#' Initialization method of the fitSpectra class.
+#'
+#' @param .Object object of class fitSpectra
+#' @param m spectroscopic data
+#' @param modelname name of model to be used for calculating the covariance matrix. Available models are
+#' "full", "parsimonious". Default is "full".
+#' @param spectra type of spectra. Available models are "diag", "unknown" and "kernel".
+#' Default is "diag".
+#' @param time type of time. Available models are "diag", "unknown" and "kernel".
+#' Default is "diag".
+#' @param kerneltypeSpectra kernel to be used for covariance matrix of spectra
+#' Available kernels are "epanechnikov", "gaussian", "exponential", "uniform",
+#' "quadratic", "circular", "triangular", "rational quadratic", "inverse multiquadratic".
+#' Default is "exponential".
+#' @param kerneltypeTime kernel to be used for covariance matrix of time
+#' Available kernels are "epanechnikov", "gaussian", "exponential", "uniform",
+#' "quadratic", "circular", "triangular", "rational quadratic", "inverse multiquadratic".
+#' Default is "exponential".
+#' @param h used for kernel calculation
+#' @param s regularisation paramater for flip flop algorithm
+#' @param lambdaS regularisation for spectra for flip flop algorithm
+#' @param lambdaT regularisation for spectra for flip flop algorithm
+#' @param validation to optimize lambda or not
+#' @param model use in prediction in case of validation is TRUE
+#' @param covMat returning the covariance matrix
+#'
+#' @name initialize
+#' @rdname initialize-method
+#' @keywords internal
+#'
+
 setMethod(
   "initialize",
   "fitSpectra",
@@ -204,8 +248,11 @@ setMethod(
 
 #' Wrapper function fitSpectra.
 #'
-#' @namefitSpectra
+#' @param ... any paramaters to be input into the function
+#'
+#' @name fitSpectra
 #' @rdname fitSpectra-class
+#'
 #' @export
 fitSpectra <- function(...)
 {

@@ -2,7 +2,7 @@
 % Please edit documentation in R/automatisation.R
 \name{inversion}
 \alias{inversion}
-\title{Invert a matrix}
+\title{Inversion of matrix}
 \usage{
 inversion(mat)
 }
@@ -10,15 +10,8 @@ inversion(mat)
 \item{mat}{matrix to be inverted}
 }
 \value{
-Inverted matrix
+inverted matrix
 }
 \description{
-Invert a matrix
-}
-\examples{
-i = inversion(mat)
-
-}
-\author{
-Asmita Poddar & Florent Latimier
+Inversion of matrix
 }
