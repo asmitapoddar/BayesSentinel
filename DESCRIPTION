@@ -1,4 +1,4 @@
-Package: bayesS4
+Package: BayesSentinel
 Date: 2018-06-28
 Type: Package
 Title: Bayes Classification of Spetrometric Data

@@ -11,14 +11,13 @@
 #' @slot modelname type of model to be used to build covariance matrix.
 #' Available options are "full" and "parsimonious". Default is "full".
 #' @slot kernelSpectra type of kernel to be used to simulate  spectra. Available options
-#' are "diag", ""epanechnikov", "gaussian", "exponential", "uniform", "quadratic"
+#' are "diag", "epanechnikov", "gaussian", "exponential", "uniform", "quadratic"
 #' , "circular", "triangular", "rational quadratic", "inverse multiquadratic".
 #' Default is "gaussian".
 #' @slot kernelTime type of kernel to be used for simulating time. Available options are
-#' "diag", ""epanechnikov", "gaussian", "exponential", "uniform", "quadratic",
+#' "diag", "epanechnikov", "gaussian", "exponential", "uniform", "quadratic",
 #' "circular", "triangular", "rational quadratic", "inverse multiquadratic".
 #' Default is "gaussian".
-#' @slot nbSampling number of sampling
 #' @slot sigma a vector of size nbSpectrum giving the variance level of
 #' the spectrum
 #' @slot nbSampling number of time intervals of the simulation

@@ -42,8 +42,8 @@ setClass(
              , fittedCov         = list(0)
              , lambdaS           = 0.3
              , lambdaT           = 0.3
-             , listLambdaS       = seq(from=0.1,to=10,by=0.1)
-             , listLambdaT       = seq(from=0.1,to=10,by=0.1)
+             , listLambdaS       = seq(from=0.1,to=1,by=0.3)
+             , listLambdaT       = seq(from=0.1,to=1,by=0.3)
              , model             = "gaussian"
              , validation        = FALSE
   ),
