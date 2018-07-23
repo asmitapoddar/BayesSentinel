@@ -11,6 +11,8 @@
 #' @slot model type of model to be used for prediction of labels
 #' Available models are "gaussian", "fisher". Default is "gaussian".
 #' @slot validation logical to optimize the lambda.
+#' @slot listLambdaS list of parameter for regularisation of spectra when do validation
+#' @slot listLambdaT list of parameter for regularisation of time when do validation
 #' @slot predicted_labels predicted class labels
 #' @slot accuracy accracy of prediction
 #'
@@ -31,6 +33,8 @@ setClass(
                   , lambdaT             = "numeric"
                   , model               = "character"
                   , validation          = "logical"
+                  , listLambdaS         = "numeric"
+                  , listLambdaT         = "numeric"
                   , predicted_labels    = "integer"
                   , accuracy            = "numeric"
   ),
@@ -38,6 +42,8 @@ setClass(
              , fittedCov         = list(0)
              , lambdaS           = 0.3
              , lambdaT           = 0.3
+             , listLambdaS       = seq(from=0.1,to=10,by=0.1)
+             , listLambdaT       = seq(from=0.1,to=10,by=0.1)
              , model             = "gaussian"
              , validation        = FALSE
   ),
@@ -85,7 +91,7 @@ setMethod(
   {
     if(Object@validation)
     {
-      res = bestPredLambda(Object,listLambdaS = seq(from=0.1,to=10,by=0.1),listLambdaT = seq(from=0.1,to=10,by=0.1))
+      res = bestPredLambda(Object,listLambdaS = listLambdaS,listLambdaT = listLambdaT)
       Object@lambdaS = res$lambdaS
       Object@lambdaT = res$lambdaT
       Object@predicted_labels = res$predicted
@@ -170,14 +176,16 @@ setMethod(
 setMethod(
   "initialize",
   "predictClass",
-  function(.Object, m = list(0), fittedCov = list(0), lambdaS = 0.3, lambdaT = 0.3
-           , model = "gaussian", validation = FALSE)
+  function(.Object, m = list(0), fittedCov = list(0), lambdaS = 0.3, lambdaT = 0.3, model = "gaussian"
+           , validation = FALSE, listLambdaS = seq(from=0.1,to=10,by=0.1), listLambdaT = seq(from=0.1,to=10,by=0.1))
   { .Object@m = m
   .Object@fittedCov = fittedCov
   .Object@lambdaS = lambdaS
   .Object@lambdaT = lambdaT
   .Object@model = model
   .Object@validation = validation
+  .Object@listLambdaS = listLambdaS
+  .Object@listLambdaT = listLambdaT
   return(.Object)
   }
 )
