@@ -156,7 +156,7 @@ setMethod(
       {
         if(Object@validation)
         {
-          lambda = bestFitLambda(Object,listS = listLambdaS,listT = listLambdaS)
+          lambda = bestFitLambda(Object)
           Object@lambdaS = lambda[[1]]
           Object@lambdaT = lambda[[2]]
         }

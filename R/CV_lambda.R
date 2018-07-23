@@ -12,20 +12,20 @@
 #' @author Asmita Poddar & Florent Latimier
 
 
-bestPredLambda = function(objPred,listLambdaS=c(0),listLambdaT = c(0))
+bestPredLambda = function(objPred)
 {
   objPred@validation = FALSE
   if(objPred@fittedCov$modelname == "full"){
-    listLambdaS = unique(c(listLambdaS , listLambdaT))
-    listLambdaT = c(0)
+    objPred@listLambdaS = unique(c(objPred@listLambdaS , objPred@listLambdaT))
+    objPred@listLambdaT = c(0)
   }
   else
   {
     if(objPred@fittedCov$spectra != "unknown"){
-      listLambdaS = c(0)
+      objPred@listLambdaS = c(0)
     }
     if(objPred@fittedCov$time != "unknown"){
-      listLambdaT = c(0)
+      objPred@listLambdaT = c(0)
     }
     if(objPred@fittedCov$spectra == "unknown" && objPred@fittedCov$time == "unknown")
     {
@@ -45,27 +45,27 @@ bestPredLambda = function(objPred,listLambdaS=c(0),listLambdaT = c(0))
            ,objPred = objPred)
   }
 
-  p = lapply(listLambdaS,predict2, objPred = objPred,listLambdaT=listLambdaT)
+  p = lapply(objPred@listLambdaS,predict2, objPred = objPred,listLambdaT=objPred@listLambdaT)
   perc = vapply(p,function(list){vapply(list,function(pred){pred@accuracy},FUN.VALUE = vector('double',length = 1))},FUN.VALUE = vector('double',length = length(p[[1]])))
 
   lambda = c(0)
-  if(length(listLambdaS)==1 | length(listLambdaT)!=1)
+  if(length(objPred@listLambdaS)==1 | length(objPred@listLambdaT)!=1)
   {
-    lambda = listLambdaT
+    lambda = objPred@listLambdaT
     plot(x=lambda,y=perc,type = 'l')
     title(paste(objPred@fittedCov$modelname,objPred@fittedCov$spectra,objPred@fittedCov$time))
     l = list(lambdaS = lambda[which.max(perc)],lambdaT = lambda[which.max(perc)],predicted = p[[1]][[which.max(perc)]]@predicted_labels,percent = max(perc))
   }
   if(length(listLambdaS)!=1 | length(listLambdaT)==1)
   {
-    lambda = listLambdaS
+    lambda = objPred@listLambdaS
     plot(x=lambda,y=perc,type = 'l')
     title(paste(objPred@fittedCov$modelname,objPred@fittedCov$spectra,objPred@fittedCov$time))
     l = list(lambdaS = lambda[which.max(perc)],lambdaT = lambda[which.max(perc)],predicted = p[[which.max(perc)]][[1]]@predicted_labels,percent = max(perc))
   }
   else
   {
-    l = list(lambdaS = listLambdaS[matxMax(perc)[2]],lambdaT = listLambdaT[matxMax(perc)[1]],predicted = p[[matxMax(perc)[2]]][[matxMax(perc)[1]]]@predicted_labels,percent = max(perc))
+    l = list(lambdaS = objPred@listLambdaS[matxMax(perc)[2]],lambdaT = objPred@listLambdaT[matxMax(perc)[1]],predicted = p[[matxMax(perc)[2]]][[matxMax(perc)[1]]]@predicted_labels,percent = max(perc))
   }
   l
 }
@@ -104,7 +104,7 @@ matxMax <- function(mat)
 #'
 
 
-bestFitLambda = function(objFit, listS, listT)
+bestFitLambda = function(objFit)
 {
   objFit@validation = FALSE
   fitChangLambda = function(objFit, lambdaS, lambdaT, model)
@@ -117,13 +117,13 @@ bestFitLambda = function(objFit, listS, listT)
   }
 
   model = objFit@model
-  perc = vapply(listS, function(objFit, lambdaS, listT, model)
-    {vapply(listT, fitChangLambda, objFit = objFit, lambdaS = lambdaS, model =model
+  perc = vapply(objFit@listLambdaS, function(objFit, lambdaS, model)
+    {vapply(objFit@listLambdaT, fitChangLambda, objFit = objFit, lambdaS = objFit@lambdaS, model =model
             ,FUN.VALUE = vector('double',length(1)))}
-    , objFit=objFit, listT=listT, model=model
-    , FUN.VALUE = vector('double',length = length(listT)))
+    , objFit=objFit, model=model
+    , FUN.VALUE = vector('double',length = length(objFit@listLambdaT)))
 
-  list(lambdaS = listS[[matxMax(perc)[2]]], lambdaT = listS[[matxMax(perc)[1]]])
+  list(lambdaS = objFit@listLambdaS[[matxMax(perc)[2]]], lambdaT = objFit@listLambdaT[[matxMax(perc)[1]]])
 }
 
 
