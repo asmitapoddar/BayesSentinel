@@ -3,6 +3,7 @@ export( simulate
 	      , fit
         , fitSpectra
       	, predict
+        , predictClass
       	, percent
 	      , testTrain
 	      , tablesModel
