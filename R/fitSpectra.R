@@ -22,7 +22,9 @@
 #' @slot s regularisation paramater for flip flop algorithm
 #' @slot lambdaS regularisation for spectra for flip flop algorithm
 #' @slot lambdaT regularisation for spectra for flip flop algorithm
-#' @slot validation to optimize lambda or not
+#' @slot validation to optimize lambda in case of th model is : M = parsimonious, S=unknown, T=unknow
+#' @slot listLambdaS use in prediction in case of validation is TRUE
+#' @slot listLambdaT use in prediction in case of validation is TRUE
 #' @slot model use in prediction in case of validation is TRUE
 #' @slot covMat returning the covariance matrx
 #'
@@ -46,6 +48,8 @@ setClass(
                   , lambdaS             = "numeric"
                   , lambdaT             = "numeric"
                   , validation          = "logical"
+                  , listLambdaS         = "numeric"
+                  , listLambdaT         = "numeric"
                   , model               = "character"
                   , covMat              = "list"
   ),
@@ -60,6 +64,8 @@ setClass(
              , lambdaS           = 0.3
              , lambdaT           = 0.3
              , validation        = FALSE
+             , listLambdaS       = seq(from=0.1,to=10,by=0.1)
+             , listLambdaT       = seq(from=0.1,to=10,by=0.1)
              , model             = "gaussian"
   ),
   # validity function
@@ -150,7 +156,7 @@ setMethod(
       {
         if(Object@validation)
         {
-          lambda = bestFitLambda(Object,listS = seq(from=0.1,to=10,by=0.1),listT = seq(from=0.1,to=10,by=0.1))
+          lambda = bestFitLambda(Object,listS = listLambdaS,listT = listLambdaS)
           Object@lambdaS = lambda[[1]]
           Object@lambdaT = lambda[[2]]
         }
@@ -236,7 +242,7 @@ setMethod(
   function(.Object, m = list(0), modelname = "full", spectra = "diag", time = "diag"
            , kerneltypeSpectra = "exponential", kerneltypeTime    = "exponential"
            , h = 10, s = 0.01, lambdaS = 0.3, lambdaT = 0.3,validation = FALSE
-           , model = "gaussian")
+           , listLambdaS = seq(from=0.1,to=10,by=0.1), listLambdaT = seq(from=0.1,to=10,by=0.1), model = "gaussian")
   { .Object@m = m
   .Object@modelname = modelname
   .Object@spectra = spectra
@@ -248,6 +254,8 @@ setMethod(
   .Object@lambdaS = lambdaS
   .Object@lambdaT = lambdaT
   .Object@validation = validation
+  .Object@listLambdaS = listLambdaS
+  .Object@listLambdaT = listLambdaT
   .Object@model = model
   return(.Object)
   }
