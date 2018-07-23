@@ -135,7 +135,9 @@ setMethod(
   mean = meanData(Object@m)
 
   if (Object@modelname=="full")
+  {
     covmat = full(Object@m)
+  }
   if (Object@modelname=="parsimonious")
   {
     if (Object@spectra == "diag")
@@ -180,11 +182,16 @@ setMethod(
   }
 
   if (Object@modelname=="full")
+  {
     Object@covMat = list (covS = covmat, covT = 1, modelname = "full", spectra = Object@spectra
                           , time = Object@time, weight=weight, mean=mean)
+  }
   else
+  {
     Object@covMat = list (covS = covSpectra, covT = covTime, modelname = Object@modelname
                           , spectra = Object@spectra, time = Object@time, weight=weight, mean=mean)
+  }
+
   Object@covMat
   }
 )

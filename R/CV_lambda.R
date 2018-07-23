@@ -48,12 +48,20 @@ bestPredLambda = function(objPred,listLambdaS=c(0),listLambdaT = c(0))
   p = lapply(listLambdaS,predict2, objPred = objPred,listLambdaT=listLambdaT)
   perc = vapply(p,function(list){vapply(list,function(pred){pred@accuracy},FUN.VALUE = vector('double',length = 1))},FUN.VALUE = vector('double',length = length(p[[1]])))
 
-
-  if(length(listLambdaS)==1 | length(listLambdaT)==1)
+  lambda = c(0)
+  if(length(listLambdaS)==1 | length(listLambdaT)!=1)
   {
-    plot(x=listLambdaS,y=perc,type = 'l')
+    lambda = listLambdaT
+    plot(x=lambda,y=perc,type = 'l')
     title(paste(objPred@fittedCov$modelname,objPred@fittedCov$spectra,objPred@fittedCov$time))
-    l = list(lambdaS = listLambdaS[which.max(perc)],lambdaT = listLambdaS[which.max(perc)],predicted = p[[which.max(perc)]][[1]]@predicted_labels,percent = max(perc))
+    l = list(lambdaS = lambda[which.max(perc)],lambdaT = lambda[which.max(perc)],predicted = p[[1]][[which.max(perc)]]@predicted_labels,percent = max(perc))
+  }
+  if(length(listLambdaS)!=1 | length(listLambdaT)==1)
+  {
+    lambda = listLambdaS
+    plot(x=lambda,y=perc,type = 'l')
+    title(paste(objPred@fittedCov$modelname,objPred@fittedCov$spectra,objPred@fittedCov$time))
+    l = list(lambdaS = lambda[which.max(perc)],lambdaT = lambda[which.max(perc)],predicted = p[[which.max(perc)]][[1]]@predicted_labels,percent = max(perc))
   }
   else
   {
