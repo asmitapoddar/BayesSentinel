@@ -42,9 +42,9 @@ setClass(
              , fittedCov         = list(0)
              , lambdaS           = 0.3
              , lambdaT           = 0.3
-             , listLambdaS       = seq(from=0.1,to=1,by=0.3)
-             , listLambdaT       = seq(from=0.1,to=1,by=0.3)
-             , model             = "gaussian"
+             , listLambdaS       = seq(from=0.1,to=10,by=0.1)
+             , listLambdaT       = seq(from=0.1,to=10,by=0.1)
+         = "gaussian"
              , validation        = FALSE
   ),
   # validity function
@@ -91,7 +91,7 @@ setMethod(
   {
     if(Object@validation)
     {
-      res = bestPredLambda(Object,listLambdaS = listLambdaS,listLambdaT = listLambdaT)
+      res = bestPredLambda(Object)
       Object@lambdaS = res$lambdaS
       Object@lambdaT = res$lambdaT
       Object@predicted_labels = res$predicted

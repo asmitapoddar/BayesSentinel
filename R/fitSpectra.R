@@ -64,8 +64,8 @@ setClass(
              , lambdaS           = 0.3
              , lambdaT           = 0.3
              , validation        = FALSE
-             , listLambdaS       = seq(from=0.1,to=10,by=0.1)
-             , listLambdaT       = seq(from=0.1,to=10,by=0.1)
+             , listLambdaS       = seq(from=0.1,to=0.3,by=0.1)
+             , listLambdaT       = seq(from=0.1,to=0.3,by=0.1)
              , model             = "gaussian"
   ),
   # validity function
@@ -156,7 +156,7 @@ setMethod(
       {
         if(Object@validation)
         {
-          lambda = bestFitLambda(Object,listS = listLambdaS,listT = listLambdaS)
+          lambda = bestFitLambda(Object)
           Object@lambdaS = lambda[[1]]
           Object@lambdaT = lambda[[2]]
         }
@@ -242,7 +242,7 @@ setMethod(
   function(.Object, m = list(0), modelname = "full", spectra = "diag", time = "diag"
            , kerneltypeSpectra = "exponential", kerneltypeTime    = "exponential"
            , h = 10, s = 0.01, lambdaS = 0.3, lambdaT = 0.3,validation = FALSE
-           , listLambdaS = seq(from=0.1,to=10,by=0.1), listLambdaT = seq(from=0.1,to=10,by=0.1), model = "gaussian")
+           , listLambdaS = seq(from=0.1,to=0.3,by=0.1), listLambdaT = seq(from=0.1,to=0.3,by=0.1), model = "gaussian")
   { .Object@m = m
   .Object@modelname = modelname
   .Object@spectra = spectra

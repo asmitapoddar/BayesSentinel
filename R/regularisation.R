@@ -16,6 +16,7 @@ regularisation = function(fittedCov, lambdaS = 0.3 , lambdaT = 0.3)
   #print(lambdaS)
   returnMatrices = function(mat, lambda)
   {
+    mat = (mat + t(mat)) /2
     regul(mat + diag(rep(lambda,nrow(mat))))
   }
 

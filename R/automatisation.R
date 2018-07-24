@@ -71,7 +71,8 @@ inversion <- function(mat){
 tablesModel = function( data, lkernelS = list(), lkernelT = list(), lhS = list()
                        , lhT = list(), listModel = list("gaussian"))
 {
-  l = testTrain(data,0.8)
+  #l = testTrain(data,0.8)
+  l = list(data,data)
   nr = 2 + length(lkernelS)
   nc = 2 + length(lkernelT)
   res = list()
@@ -127,9 +128,9 @@ tablesModel = function( data, lkernelS = list(), lkernelT = list(), lhS = list()
       }
     }
 
-    rownames(p) <- c("diag","unknown", as.character(lkernelS))
-    colnames(p) <- c("diag", "unknown", as.character(lkernelT))
-    name = c(name, paste(c(full, p), "_", listModel[[k]], sep = ""))
+    rownames(p) <- paste("S_",c("diag","unknown", as.character(lkernelS)),sep="")
+    colnames(p) <- paste("T_",c("diag", "unknown", as.character(lkernelT)),sep="")
+    name = c(name, paste(c("full", "p"), "_", listModel[[k]], sep = ""))
     res = c(res,list(full,p))
   }
   names(res) <- name
