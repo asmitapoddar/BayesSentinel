@@ -16,16 +16,19 @@ bestPredLambda = function(objPred)
 {
   objPred@validation = FALSE
   if(objPred@fittedCov$modelname == "full"){
-    objPred@listLambdaS = unique(c(objPred@listLambdaS , objPred@listLambdaT))
-    objPred@listLambdaT = c(0)
+    listLambdaS = unique(c(objPred@listLambdaS , objPred@listLambdaT))
+    listLambdaT = c(0)
   }
   else
   {
+    listLambdaS = objPred@listLambdaS
+    listLambdaT = objPred@listLambdaT
+
     if(objPred@fittedCov$spectra != "unknown"){
-      objPred@listLambdaS = c(0)
+      listLambdaS = c(0)
     }
     if(objPred@fittedCov$time != "unknown"){
-      objPred@listLambdaT = c(0)
+      listLambdaT = c(0)
     }
     if(objPred@fittedCov$spectra == "unknown" && objPred@fittedCov$time == "unknown")
     {
@@ -45,20 +48,20 @@ bestPredLambda = function(objPred)
            ,objPred = objPred)
   }
 
-  p = lapply(objPred@listLambdaS,predict2, objPred = objPred,listLambdaT=objPred@listLambdaT)
+  p = lapply(listLambdaS,predict2, objPred = objPred,listLambdaT=listLambdaT)
   perc = vapply(p,function(list){vapply(list,function(pred){pred@accuracy},FUN.VALUE = vector('double',length = 1))},FUN.VALUE = vector('double',length = length(p[[1]])))
 
   lambda = c(0)
-  if(length(objPred@listLambdaS)==1 | length(objPred@listLambdaT)!=1)
+  if(length(listLambdaS)==1 && length(listLambdaT)!=1)
   {
-    lambda = objPred@listLambdaT
+    lambda = listLambdaT
     plot(x=lambda,y=perc,type = 'l')
     title(paste(objPred@fittedCov$modelname,objPred@fittedCov$spectra,objPred@fittedCov$time))
     l = list(lambdaS = lambda[which.max(perc)],lambdaT = lambda[which.max(perc)],predicted = p[[1]][[which.max(perc)]]@predicted_labels,percent = max(perc))
   }
-  if(length(listLambdaS)!=1 | length(listLambdaT)==1)
+  if(length(listLambdaS)!=1 && length(listLambdaT)==1)
   {
-    lambda = objPred@listLambdaS
+    lambda = listLambdaS
     plot(x=lambda,y=perc,type = 'l')
     title(paste(objPred@fittedCov$modelname,objPred@fittedCov$spectra,objPred@fittedCov$time))
     l = list(lambdaS = lambda[which.max(perc)],lambdaT = lambda[which.max(perc)],predicted = p[[which.max(perc)]][[1]]@predicted_labels,percent = max(perc))
