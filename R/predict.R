@@ -42,8 +42,8 @@ setClass(
              , fittedCov         = list(0)
              , lambdaS           = 0.3
              , lambdaT           = 0.3
-             , listLambdaS       = seq(from=0.1,to=10,by=0.1)
-             , listLambdaT       = seq(from=0.1,to=10,by=0.1)
+             , listLambdaS       = seq(from=0.1,to=0.3,by=0.1)
+             , listLambdaT       = seq(from=0.1,to=0.3,by=0.1)
              , model             = "gaussian"
              , validation        = FALSE
   ),
@@ -177,7 +177,7 @@ setMethod(
   "initialize",
   "predictClass",
   function(.Object, m = list(0), fittedCov = list(0), lambdaS = 0.3, lambdaT = 0.3, model = "gaussian"
-           , validation = FALSE, listLambdaS = seq(from=0.1,to=10,by=0.1), listLambdaT = seq(from=0.1,to=10,by=0.1))
+           , validation = FALSE, listLambdaS = seq(from=0.1,to=0.3,by=0.1), listLambdaT = seq(from=0.1,to=0.3,by=0.1))
   { .Object@m = m
   .Object@fittedCov = fittedCov
   .Object@lambdaS = lambdaS
