@@ -9,7 +9,7 @@
 #' @slot lambdaS parameter for regularisation of spectra
 #' @slot lambdaT parameter for regularisation of time
 #' @slot model type of model to be used for prediction of labels
-#' Available models are "gaussian", "fisher". Default is "gaussian".
+#' Available models are "gaussian", "tstudent". Default is "gaussian".
 #' @slot validation logical to optimize the lambda.
 #' @slot listLambdaS list of parameter for regularisation of spectra when do validation
 #' @slot listLambdaT list of parameter for regularisation of time when do validation
@@ -44,7 +44,7 @@ setClass(
              , lambdaT           = 0.3
              , listLambdaS       = seq(from=0.1,to=10,by=0.1)
              , listLambdaT       = seq(from=0.1,to=10,by=0.1)
-         = "gaussian"
+             , model = "gaussian"
              , validation        = FALSE
   ),
   # validity function
@@ -56,8 +56,8 @@ setClass(
     # stop("Enter correct format of covariance matrix to be predicted.")
     #if ( round(object@lambda) != object@lambda)
     # stop("lambda must be an integer.")
-    if (object@model != "gaussian" && object@model !="fisher")
-    { stop("model must be either \"gaussian\", \"fisher\".")}
+    if (object@model != "gaussian" && object@model !="tstudent")
+    { stop("model must be either \"gaussian\", \"tstudent\".")}
     if (object@validation != TRUE && object@validation != FALSE)
     { stop("validation must be logical.")}
     return(TRUE)
@@ -120,11 +120,11 @@ setMethod(
         log(weight) +  log(sqrt(abs(det(inv)))) + (-power/2)
       }
 
-      powerLabelF <-function(data,inv,mean,weight,X)
+      powerLabelF <-function(data, inv, mean, weight, X, nbSpectrum, nbSampling)
       {
         X = X - mean
         power = rowSums((X %*% inv) * X)
-        log(weight) - 1/2*log(abs(det(inv))) -165*log(1+power)
+        log(weight) - 1/2*log(abs(det(inv))) -(nbSpectrum*nbSampling+3)/2*log(1+power)
 
       }
 
@@ -134,11 +134,17 @@ setMethod(
         nbPixel = length( Object@m[[1]] )
         p = matrix(0, nbLabel, nbPixel)
         if(Object@model == "gaussian"){powerL = powerLabelG}
-        if(Object@model == "fisher"){powerL = powerLabelF}
+        if(Object@model == "tstudent"){powerL = powerLabelF}
         if(Object@model == "mvnorm"){powerL = mvnorm}
         X = do.call('cbind',Object@m[[3]])
         for(i in 1:nbLabel)
-          p[i,] = powerL(data,invers[[i]],mean[[i]],weight[[i]], X)
+        {
+          if (Object@model == "tstudent")
+          p[i,] = powerL(data,invers[[i]],mean[[i]],weight[[i]], X
+                         , Object@m$nbSpectrum, Object@m$nbSampling)
+          else
+            p[i,] = powerL(data,invers[[i]],mean[[i]],weight[[i]], X)
+        }
         p
       }
 
@@ -163,7 +169,7 @@ setMethod(
 #' @param lambdaS parameter for regularisation of spectra
 #' @param lambdaT parameter for regularisation of time
 #' @param model type of model to be used for prediction of labels
-#' Available models are "gaussian", "fisher". Default is "gaussian".
+#' Available models are "gaussian", "tstudent". Default is "gaussian".
 #' @param validation logical to optimize the lambda.
 #' @param predicted_labels predicted class labels
 #' @param accuracy accracy of prediction

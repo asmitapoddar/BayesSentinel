@@ -33,16 +33,14 @@ Wrapper function simulaSpectra.
 Available options are "full" and "parsimonious". Default is "full".}
 
 \item{\code{kernelSpectra}}{type of kernel to be used to simulate  spectra. Available options
-are "diag", ""epanechnikov", "gaussian", "exponential", "uniform", "quadratic"
+are "diag", "epanechnikov", "gaussian", "exponential", "uniform", "quadratic"
 , "circular", "triangular", "rational quadratic", "inverse multiquadratic".
 Default is "gaussian".}
 
 \item{\code{kernelTime}}{type of kernel to be used for simulating time. Available options are
-"diag", ""epanechnikov", "gaussian", "exponential", "uniform", "quadratic",
+"diag", "epanechnikov", "gaussian", "exponential", "uniform", "quadratic",
 "circular", "triangular", "rational quadratic", "inverse multiquadratic".
 Default is "gaussian".}
-
-\item{\code{nbSampling}}{number of sampling}
 
 \item{\code{sigma}}{a vector of size nbSpectrum giving the variance level of
 the spectrum}

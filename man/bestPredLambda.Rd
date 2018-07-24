@@ -4,14 +4,10 @@
 \alias{bestPredLambda}
 \title{Find best fitted lambda}
 \usage{
-bestPredLambda(objPred, listLambdaS = c(0), listLambdaT = c(0))
+bestPredLambda(objPred)
 }
 \arguments{
 \item{objPred}{prediction object}
-
-\item{listLambdaS}{list of lambda for spectra}
-
-\item{listLambdaT}{list of lambda for time}
 }
 \value{
 list of predicted lambda for spectra and time

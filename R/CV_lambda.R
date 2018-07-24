@@ -4,8 +4,6 @@
 #' Find best fitted lambda
 #'
 #' @param objPred prediction object
-#' @param listLambdaS list of lambda for spectra
-#' @param listLambdaT list of lambda for time
 #'
 #' @return list of predicted lambda for spectra and time
 #'
@@ -103,8 +101,6 @@ matxMax <- function(mat)
 #' Find best fitted lambda
 #'
 #' @param objFit prediction object
-#' @param listS list of lambda for spectra
-#' @param listT list of lambda for time
 #'
 #' @return list of predicted lambda for spectra and time
 #'

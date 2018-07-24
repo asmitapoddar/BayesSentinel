@@ -36,6 +36,10 @@ Available models are "gaussian", "fisher". Default is "gaussian".}
 
 \item{\code{validation}}{logical to optimize the lambda.}
 
+\item{\code{listLambdaS}}{list of parameter for regularisation of spectra when do validation}
+
+\item{\code{listLambdaT}}{list of parameter for regularisation of time when do validation}
+
 \item{\code{predicted_labels}}{predicted class labels}
 
 \item{\code{accuracy}}{accracy of prediction}

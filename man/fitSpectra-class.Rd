@@ -49,7 +49,11 @@ Default is "exponential".}
 
 \item{\code{lambdaT}}{regularisation for spectra for flip flop algorithm}
 
-\item{\code{validation}}{to optimize lambda or not}
+\item{\code{validation}}{to optimize lambda in case of th model is : M = parsimonious, S=unknown, T=unknow}
+
+\item{\code{listLambdaS}}{list of lambdaS used in prediction in case validation is TRUE}
+
+\item{\code{listLambdaT}}{list of lambdaT used in prediction in case validation is TRUE}
 
 \item{\code{model}}{use in prediction in case of validation is TRUE}
 

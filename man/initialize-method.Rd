@@ -10,11 +10,14 @@
 \S4method{initialize}{fitSpectra}(.Object, m = list(0), modelname = "full",
   spectra = "diag", time = "diag", kerneltypeSpectra = "exponential",
   kerneltypeTime = "exponential", h = 10, s = 0.01, lambdaS = 0.3,
-  lambdaT = 0.3, validation = FALSE, model = "gaussian")
+  lambdaT = 0.3, validation = FALSE, listLambdaS = seq(from = 0.1, to =
+  0.3, by = 0.1), listLambdaT = seq(from = 0.1, to = 0.3, by = 0.1),
+  model = "gaussian")
 
 \S4method{initialize}{predictClass}(.Object, m = list(0),
   fittedCov = list(0), lambdaS = 0.3, lambdaT = 0.3, model = "gaussian",
-  validation = FALSE)
+  validation = FALSE, listLambdaS = seq(from = 0.1, to = 10, by = 0.1),
+  listLambdaT = seq(from = 0.1, to = 10, by = 0.1))
 
 \S4method{initialize}{simulateSpectra}(.Object, nbPixel = 1000,
   nbCluster = 15, nbSpectrum = 10, nbSampling = 33,
@@ -58,6 +61,10 @@ Default is "exponential".}
 
 \item{validation}{to optimize lambda or not}
 
+\item{listLambdaS}{list of lambdaS used in prediction in case validation is TRUE}
+
+\item{listLambdaT}{list of lambdaT used in prediction in case validation is TRUE}
+
 \item{model}{use in prediction in case of validation is TRUE}
 
 \item{fittedCov}{fitted covariance matrix for the data}
@@ -89,8 +96,6 @@ Default is "gaussian".}
 "diag", ""epanechnikov", "gaussian", "exponential", "uniform", "quadratic",
 "circular", "triangular", "rational quadratic", "inverse multiquadratic".
 Default is "gaussian".}
-
-\item{covMat}{returning the covariance matrix}
 
 \item{.Object}{object of class predictClass}
 
