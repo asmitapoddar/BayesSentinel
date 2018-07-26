@@ -14,3 +14,19 @@ R (>= 3.0.2)
 - methods
 - mvtnorm
 - matrixcalc
+
+## Usage
+
+##### 1. Cloning the repository.
+```
+git clone ##### 2. Cloning the repository.
+```
+git clone https://github.com/asmitapoddar/BayesSentinel.git
+cd BayesSentinel
+```
+
+##### 1. Cloning the repository.
+``````
+library(BayesSentinel)  
+```
+
