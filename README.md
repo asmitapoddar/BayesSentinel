@@ -27,6 +27,8 @@ cd BayesSentinel
 ```
 
 ##### 2. Installing the package
+Open BayesSentinel.Rproj
+Load the package by:
 ```
 library(BayesSentinel)  
 ```
