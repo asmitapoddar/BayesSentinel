@@ -4,7 +4,8 @@ We have high dimensional temporal satellite spectroscopic data with missing valu
 We then use different models to estimate the covariance of the spectroscopic data and implement statistical models to classify the data into different classes. We carry out classification using probabilistic models (mixing models) for which we use the conditional independence hypothesis (modeling in the native space). This R Package performs the simulation and classification task as described above.
 
 ## Data
-The data is obtained from the [Sentinel-2 satellite] (http://www.cesbio.ups-tlse.fr/us/index_sentinel2.html)
+The data is obtained from the [Sentinel-2 satellite] (http://www.cesbio.ups-tlse.fr/us/index_sentinel2.html).
+The data can be downloaded from: http://www.cesbio.ups-tlse.fr/multitemp/?p=8547
 
 ## Environment
 R (>= 3.0.2)
