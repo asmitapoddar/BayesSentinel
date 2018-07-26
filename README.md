@@ -19,14 +19,21 @@ R (>= 3.0.2)
 
 ##### 1. Cloning the repository.
 ```
-git clone ##### 2. Cloning the repository.
-```
 git clone https://github.com/asmitapoddar/BayesSentinel.git
 cd BayesSentinel
 ```
 
-##### 1. Cloning the repository.
-``````
+##### 2. Installing the package
+```
 library(BayesSentinel)  
 ```
+##### 3. Example
+```
+library(BayesSentinel)  
+sim = simulateSpectra()
+cov = fitSpectra(sim)
+pred = predictClass(sim,cov)
+pred@accuracy
+```
+This will create an S4 object to simulate a dataset with the default values, fit a covarance matrix to the data and use the fitted covarance matrix to classify the data according to the Bayes Classification Rule. An S4 object containing the prediction accuracy is returned.
 
