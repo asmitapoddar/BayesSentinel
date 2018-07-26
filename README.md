@@ -1,4 +1,4 @@
-# BayesSentinel
+# R Package: BayesSentinel
 We have high dimensional temporal satellite spectroscopic data with missing values due to clouds, disturbances etc. taken of the region of France. We make a statistical study of the data to understand the means and covariance between the different spectra as well as the covariance of data between times of sampling. We use the means and covariances to simulate the spectroscopic data.  
 
 We then use different models to estimate the covariance of the spectroscopic data and implement statistical models to classify the data into different classes. We carry out classification using probabilistic models (mixing models) for which we use the conditional independence hypothesis (modeling in the native space). This R Package performs the simulation and classification task as described above.
