@@ -32,7 +32,7 @@ Wrapper function fitSpectra.
 \item{\code{lambdaT}}{parameter for regularisation of time}
 
 \item{\code{model}}{type of model to be used for prediction of labels
-Available models are "gaussian", "fisher". Default is "gaussian".}
+Available models are "gaussian", "tstudent". Default is "gaussian".}
 
 \item{\code{validation}}{logical to optimize the lambda.}
 

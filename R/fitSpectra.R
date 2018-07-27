@@ -19,7 +19,7 @@
 #' "quadratic", "circular", "triangular", "rational quadratic", "inverse multiquadratic".
 #' Default is "exponential".
 #' @slot h used for kernel calculation
-#' @slot s regularisation paramater for flip flop algorithm
+#' @slot s correction limit paramater for flip flop algorithm
 #' @slot lambdaS regularisation for spectra for flip flop algorithm
 #' @slot lambdaT regularisation for spectra for flip flop algorithm
 #' @slot validation to optimize lambda in case of th model is : M = parsimonious, S=unknown, T=unknow

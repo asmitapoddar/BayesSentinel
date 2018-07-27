@@ -106,7 +106,7 @@ Default is "gaussian".}
 \item{lambdaT}{parameter for regularisation of time}
 
 \item{model}{type of model to be used for prediction of labels
-Available models are "gaussian", "fisher". Default is "gaussian".}
+Available models are "gaussian", "tstudent". Default is "gaussian".}
 
 \item{validation}{logical to optimize the lambda.}
 
