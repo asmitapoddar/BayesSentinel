@@ -28,7 +28,7 @@
 #' @slot model use in prediction in case of validation is TRUE
 #' @slot covMat returning the covariance matrx
 #'
-#' @name fitSpectra
+#' @name fitSpectra-class
 #' @aliases fitSpectra-class
 #' @rdname fitSpectra-class
 #'
@@ -263,16 +263,33 @@ setMethod(
   }
 )
 
+
+
 #' Wrapper function fitSpectra.
 #'
-#' @param ... any paramaters to be input into the function
+#' @param ... nice
 #'
 #' @name fitSpectra
 #' @rdname fitSpectra-class
-#'
 #' @export
-fitSpectra <- function(...)
+#'
+fitSpectra <- function(m                   = list(0)
+                       , modelname         = "full"
+                       , spectra           = "diag"
+                       , time              = "diag"
+                       , kerneltypeSpectra = "exponential"
+                       , kerneltypeTime    = "exponential"
+                       , h                 = 10
+                       , s                 = 0.01
+                       , lambdaS           = 0.3
+                       , lambdaT           = 0.3
+                       , validation        = FALSE
+                       , listLambdaS       = seq(from=0.1,to=0.3,by=0.1)
+                       , listLambdaT       = seq(from=0.1,to=0.3,by=0.1)
+                       , model             = "gaussian")
 {
-  o = new("fitSpectra", ...)
+  o = new("fitSpectra", m = m, modelname = modelname, spectra = spectra, time = time, kerneltypeSpectra = kerneltypeSpectra
+          , kerneltypeTime    = kerneltypeTime, h = h, s = s, lambdaS = lambdaS, lambdaT = lambdaT, validation = validation
+          , listLambdaS  = listLambdaS, listLambdaT = listLambdaT, model = model)
   fit(o)
 }

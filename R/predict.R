@@ -197,9 +197,9 @@ setMethod(
 )
 
 
-#' Wrapper function fitSpectra.
+#' Wrapper function PredictClass
 #'
-#' @param ... any paramaters to be input into the function
+#' @param ... nice
 #'
 #' @name predictClass
 #' @rdname predictClass-class

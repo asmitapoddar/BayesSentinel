@@ -25,6 +25,6 @@ Collate:
     readSentinelFiles.R
     regularisation.R
     simulateKernel.R
-    simulateSpectra.R
+    simulateData.R
 Imports: matrixcalc, mvtnorm, methods, h5
 RoxygenNote: 6.0.1
