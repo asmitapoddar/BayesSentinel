@@ -277,7 +277,9 @@ setMethod(
 
 )
 
-#' Wrapper function simulateDataSet.
+#' SimulateDataMatrix
+#'
+#' Simulate a data that all observation is a matrix : [nbRow : nbCol].
 #'
 #' @param nbSample number of sample belonging to class k
 #' @param nbCluster number of cluster
@@ -303,10 +305,10 @@ setMethod(
 #' Default is 3.
 #' @param labels class labels of the data
 #'
-#' @name simulateDataSet
-#' @export simulateDataSet
+#' @name simulateDataMatrix
+#' @export simulateDataMatrix
 #'
-simulateDataSet <- function(...)
+simulateDataMatrix <- function(...)
 {
   o = new("simulateData", ...)
   simulate(o)

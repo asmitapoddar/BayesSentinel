@@ -2,7 +2,7 @@
 
 export(fitSpectra)
 export(predictClass)
-export(simulateDataSet)
+export(simulateDataMatrix)
 export(tablesModel)
 exportClasses(simulateData)
 exportMethods(fit)
