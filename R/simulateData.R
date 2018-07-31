@@ -304,7 +304,6 @@ setMethod(
 #' @param labels class labels of the data
 #'
 #' @name simulateDataSet
-#' @rdname simulateData-class
 #' @export simulateDataSet
 #'
 simulateDataSet <- function(...)

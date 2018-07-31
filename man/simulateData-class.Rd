@@ -4,52 +4,9 @@
 \name{simulateData}
 \alias{simulateData}
 \alias{simulateData-class}
-\alias{simulateDataSet}
 \title{Create a list with a simulated data set of matrix : [nbRow x nbCol]}
-\usage{
-simulateDataSet(...)
-}
-\arguments{
-\item{nbSample}{number of sample belonging to class k}
-
-\item{nbCluster}{number of cluster}
-
-\item{nbRow}{number of rows}
-
-\item{simulationType}{type of simulation. Available options are "gaussian" and
-"tstudent". Default is "gaussian".}
-
-\item{modelname}{type of model to be used to build covariance matrix.
-Available options are "full" and "parsimonious". Default is "full".}
-
-\item{kernelRow}{type of kernel to be used to simulate  rows. Available options
-are "diag", "epanechnikov", "gaussian", "exponential", "uniform", "quadratic"
-, "circular", "triangular", "rational quadratic", "inverse multiquadratic".
-Default is "gaussian".}
-
-\item{kernelCol}{type of kernel to be used for simulating columns. Available options are
-"diag", "epanechnikov", "gaussian", "exponential", "uniform", "quadratic",
-"circular", "triangular", "rational quadratic", "inverse multiquadratic".
-Default is "gaussian".}
-
-\item{sigma}{a vector of size nbRow giving the variance level of
-the row}
-
-\item{nbCol}{number of columns intervals of the simulation}
-
-\item{column}{columns intervals of the simulation}
-
-\item{width}{the width of the kernel to use for "gaussian" simulation. Default is 50.}
-
-\item{gamma}{degrees of freedom used for simulating "tstudent" distribution of data.
-Default is 3.}
-
-\item{labels}{class labels of the data}
-}
 \description{
 Create a list with a simulated data set of matrix : [nbRow x nbCol]
-
-Wrapper function simulateDataSet.
 }
 \section{Slots}{
 
