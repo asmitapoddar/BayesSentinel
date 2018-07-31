@@ -4,21 +4,18 @@
 \name{predictClass}
 \alias{predictClass}
 \alias{predictClass-class}
-\alias{predictClass}
 \title{Predict the label classes of the data}
 \usage{
 predictClass(...)
 }
 \arguments{
-\item{...}{any paramaters to be input into the function}
+\item{...}{nice}
 }
 \value{
 A list with the spectra
 }
 \description{
 Simulate one or more Gaussian spectra at regularly sampling time
-
-Wrapper function fitSpectra.
 }
 \section{Slots}{
 

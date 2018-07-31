@@ -4,7 +4,6 @@
 \name{predict}
 \alias{predict}
 \alias{predict,predictClass-method}
-\alias{predict}
 \title{Method num.}
 \usage{
 predict(Object)
