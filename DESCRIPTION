@@ -1,13 +1,13 @@
 Package: BayesSentinel
 Date: 2018-06-28
 Type: Package
-Title: Bayes Classification of Spetrometric Data
+Title: Bayes Classification of Matrix Data
 Version: 0.1.0
 Author: Asmita Poddar & Florent Latimier
 Maintainer: Asmita Poddar & Florent Latimier <asmita.podar@gmail.com>
 Depends:
     R (>= 3.0.2)
-Description: This package contains different models for estimating the covariance matrix of the spectra and times, and  using it for classification of spectrometric data using the Bayes Decision Rule. 
+Description: This package contains different models for estimating the covariance matrix of a data with matrix observation, and  using it for classify the data using the Bayes Decision Rule. 
 License: GPL (>= 2)
 Encoding: UTF-8
 LazyData: true
@@ -24,7 +24,10 @@ Collate:
     predict.R
     readSentinelFiles.R
     regularisation.R
-    simulateKernel.R
     simulateData.R
-Imports: matrixcalc, mvtnorm, methods, h5
+Imports: 
+	matrixcalc,
+	mvtnorm, 
+	methods, 
+	h5
 RoxygenNote: 6.1.0

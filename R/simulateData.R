@@ -142,7 +142,7 @@ setMethod(
       res
     }
 
-    KernelCov <- function(column, spectra, labels, modelname, kernelRow, kernelCol
+    KernelCov <- function(column, rows, labels, modelname, kernelRow, kernelCol
                           , nbCluster, nbRow, nbCol, h)
     {
       #source('~/bayesS4/R/simulateKernel.R')
@@ -150,7 +150,7 @@ setMethod(
       sigmaT = rexp(nbCol)
       sigmaL = rexp(nbCluster)
 
-      simulateKernel(modelname, kernelRow, kernelCol, column, spectra, labels
+      simulateKernel(modelname, kernelRow, kernelCol, column, rows, labels
                      , sigmaL, sigmaS, sigmaT, h)
     }
 
@@ -162,10 +162,10 @@ setMethod(
     #the probablilty of each cluster being between 0 and 1
     labels <- sample(1:Object@nbCluster, Object@nbSample
                      , prob = rexp(Object@nbCluster) , replace = T)
-    spectra = 1:Object@nbRow
+    rows = 1:Object@nbRow
     ##prob = rep(1, nbCluster)
 
-    covariance <- KernelCov(Object@column, spectra, labels, Object@modelname
+    covariance <- KernelCov(Object@column, rows, labels, Object@modelname
                             , Object@kernelRow, Object@kernelCol, Object@nbCluster
                             , Object@nbRow, Object@nbCol, Object@width)
     covariance <- lapply(covariance, function(mat){(mat %*% t(mat)) /2}) #to check symmetry
@@ -180,10 +180,10 @@ setMethod(
       , nb = nb, mean = means, covariance = covariance)
 
       data <- do.call("rbind",process)
-      process <- lapply(1:Object@nbRow,function(data,spectra,nbCol)
-      {data[,((spectra-1)*nbCol+1):(spectra*nbCol)]}
+      process <- lapply(1:Object@nbRow,function(data,rows,nbCol)
+      {data[,((rows-1)*nbCol+1):(rows*nbCol)]}
       , data = data, nbCol = Object@nbCol)
-      names(process) <- paste("spectra", 1:length(process), sep="")
+      names(process) <- paste("row", 1:length(process), sep="")
     }
     if (Object@simulationType == "tstudent")
     {
@@ -201,7 +201,7 @@ setMethod(
     }
 
 
-    Object@result = list(labels=labels , column = Object@column, spectra = process
+    Object@result = list(labels=labels , column = Object@column, rows = process
                          , clouds = list(years1 = matrix(0, nrow = Object@nbSample
                                                          , ncol = length(Object@column) ))
                          , means = means, sigma = sigma
@@ -314,3 +314,122 @@ simulateDataMatrix <- function(...)
   simulate(o)
 }
 
+
+
+
+#' SimulateKernel
+#'
+#' Simulate the covariance matrix as a diagonal or a kenrel
+#'
+#' @param modelname type of model to be used to build covariance matrix.
+#' Available options are "full" and "parsimonious". Default is "full".
+#' @param kernelRow type of kernel to be used to simulate  rows. Available options
+#' are "diag", "epanechnikov", "gaussian", "exponential", "uniform", "quadratic"
+#' , "circular", "triangular", "rational quadratic", "inverse multiquadratic".
+#' Default is "gaussian".
+#' @param kernelCol type of kernel to be used to simulate  columns. Available options
+#' are "diag", "epanechnikov", "gaussian", "exponential", "uniform", "quadratic"
+#' , "circular", "triangular", "rational quadratic", "inverse multiquadratic".
+#' Default is "gaussian".
+#' @param column columns intervals of the simulation
+#' @param rows rows intervals of the simulation
+#' @param labels class labels of the data
+#' @param sigmaL the variation due to the clusthers
+#' @param sigmaR the variation due to the rows
+#' @param sigmaC the variation due to the columns
+#' @param h the wide parameter to fit the kernel
+#'
+#' @name simulateKernel
+#' @export simulateKernel
+#'
+simulateKernel = function(modelname, kernelRow, kernelCol, column, rows
+                          , labels, sigmaL, sigmaR, sigmaC, h)
+{
+  if(modelname == "full")
+  {
+    Q = matrix(0, nrow = (length(column)*length(rows))
+               , ncol = (length(column)*length(rows)) )
+    l <- vector("double",length = (length(column)*length(rows)))
+    sigma <- vector("double",length = (length(column)*length(rows)))
+    for(i in 1:length(rows))
+    {
+      l[((i-1)*length(column)+1):(i*length(column))] <- rows[i] * column
+      sigma[((i-1)*length(column)+1):(i*length(column))] <- sigmaR[i] * sigmaC
+    }
+    for (i in 1:length(column))
+    {
+      Q[,i] <- abs(l[i]-l)
+    }
+    sigmal = lapply(sigmaL, function(list, int) {int*list}, list = sigma)
+    Q = ker(Q, kernelRow, h)
+    res = lapply(sigmal, function(mat,vect)
+    {diag(sqrt(vect)) %*% mat %*% diag(sqrt(vect)) }, mat = Q)
+  }
+
+
+  else
+  {
+    QR = matrix(0, nrow = length(rows), ncol = length(rows))
+    QC = matrix(0, nrow = length(column), ncol = length(column))
+    if(kernelRow != "diag")
+    {
+      for(i in 1:length(rows))
+      {
+        QR[,i] <- abs(rows[i]-rows)
+      }
+      QR = ker(QR,kernelRow,h)
+    }
+    else
+    {
+      QR = diag(rep(1,length(rows)))
+    }
+    if(kernelCol != "diag")
+    {
+      for(i in 1:length(column))
+      {
+        QC[,i] <- abs(column[i]-column)
+      }
+      QC = ker(QC,kernelCol,h)
+    }
+    else
+    {
+      QC = diag(rep(1,length(column)))
+    }
+
+    res = lapply(sigmaL, function(matR, vectR, matC, vectC, int)
+    {(diag(sqrt(int*vectR)) %*% matR %*% diag(sqrt(int*vectR))) %x%
+        (diag(sqrt(int*vectC)) %*% matC %*% diag(sqrt(int*vectC)) )
+    }, matR = QR , vectR = sigmaR, matC = QC , vectC = sigmaC)
+  }
+
+  res
+}
+
+
+
+
+#' ker
+#'
+#' Apply a kernel type on a matrix of distancies
+#'
+#' @param mat the matrix of distancies
+#' @param kernelType type of kernel to be apply on the matrix
+#' @param h the wide parameter to fit the kernel
+#'
+#' @name ker
+#' @export ker
+#'
+ker <- function(mat, kernelType,h)
+{
+  if (kernelType=="epanechnikov") K = K_E
+  if (kernelType=="gaussian") K = K_G
+  if (kernelType=="exponential") K = K_Exp
+  if (kernelType=="uniform") K = K_U
+  if (kernelType=="quadratic") K = K_Q
+  if (kernelType=="circular") K = K_C
+  if (kernelType=="triangular") K = K_T
+  if (kernelType=="rational quadratic") K = K_RQ
+  if (kernelType=="inverse multiquadratic") K = K_IMQ
+
+  K(mat,h)
+}
