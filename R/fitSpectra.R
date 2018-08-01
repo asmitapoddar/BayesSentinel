@@ -1,71 +1,71 @@
 #-----------------------------------------------------------------------
-#' Create a list with covariance matrices of the spectra and times
+#' Create a list with covariance matrices of a data with matrix observation.
 #'
 #' Return the covariance matrices
 #'
-#' @slot m spectroscopic data
+#' @slot m the 3 dimentional data
 #' @slot modelname name of model to be used for calculating the covariance matrix. Available models are
 #' "full", "parsimonious". Default is "full".
-#' @slot spectra type of spectra. Available models are "diag", "unknown" and "kernel".
+#' @slot rows type of rows. Available models are "diag", "unknown" and "kernel".
 #' Default is "diag".
-#' @slot time type of time. Available models are "diag", "unknown" and "kernel".
+#' @slot column type of column. Available models are "diag", "unknown" and "kernel".
 #' Default is "diag".
-#' @slot kerneltypeSpectra kernel to be used for covariance matrix of spectra
+#' @slot kerneltypeRow kernel to be used for covariance matrix of rows
 #' Available kernels are "epanechnikov", "gaussian", "exponential", "uniform",
 #' "quadratic", "circular", "triangular", "rational quadratic", "inverse multiquadratic".
 #' Default is "exponential".
-#' @slot kerneltypeTime kernel to be used for covariance matrix of time
+#' @slot kerneltypeCol kernel to be used for covariance matrix of column
 #' Available kernels are "epanechnikov", "gaussian", "exponential", "uniform",
 #' "quadratic", "circular", "triangular", "rational quadratic", "inverse multiquadratic".
 #' Default is "exponential".
 #' @slot h used for kernel calculation
 #' @slot s correction limit paramater for flip flop algorithm
-#' @slot lambdaS regularisation for spectra for flip flop algorithm
-#' @slot lambdaT regularisation for spectra for flip flop algorithm
+#' @slot lambdaR regularisation for rows for flip flop algorithm
+#' @slot lambdaC regularisation for rows for flip flop algorithm
 #' @slot validation to optimize lambda in case of th model is : M = parsimonious, S=unknown, T=unknow
-#' @slot listLambdaS list of lambdaS used in prediction in case validation is TRUE
-#' @slot listLambdaT list of lambdaT used in prediction in case validation is TRUE
+#' @slot listLambdaR list of lambdaR used in prediction in case validation is TRUE
+#' @slot listLambdaC list of lambdaC used in prediction in case validation is TRUE
 #' @slot model use in prediction in case of validation is TRUE
 #' @slot covMat returning the covariance matrx
 #'
-#' @name fitSpectra-class
-#' @aliases fitSpectra-class
-#' @rdname fitSpectra-class
+#' @name fitData-class
+#' @aliases fitData-class
+#' @rdname fitData-class
 #'
 #' @author Asmita Poddar & Florent Latimier
 #'
 
 setClass(
-  Class="fitSpectra",
+  Class="fitData",
   representation( m                     = "list"
                   , modelname           = "character"
-                  , spectra             = "character"
-                  , time                = "character"
-                  , kerneltypeSpectra   = "character"
-                  , kerneltypeTime      = "character"
+                  , rows             = "character"
+                  , column                = "character"
+                  , kerneltypeRow   = "character"
+                  , kerneltypeCol      = "character"
                   , h                   = "numeric"
                   , s                   = "numeric"
-                  , lambdaS             = "numeric"
-                  , lambdaT             = "numeric"
+                  , lambdaR             = "numeric"
+                  , lambdaC             = "numeric"
                   , validation          = "logical"
-                  , listLambdaS         = "numeric"
-                  , listLambdaT         = "numeric"
+                  , listLambdaR         = "numeric"
+                  , listLambdaC         = "numeric"
                   , model               = "character"
                   , covMat              = "list"
   ),
   prototype( m                   = list(0)
              , modelname         = "full"
-             , spectra           = "diag"
-             , time              = "diag"
-             , kerneltypeSpectra = "exponential"
-             , kerneltypeTime    = "exponential"
+             , rows           = "diag"
+             , column              = "diag"
+             , kerneltypeRow = "exponential"
+             , kerneltypeCol    = "exponential"
              , h                 = 10
              , s                 = 0.01
-             , lambdaS           = 0.3
-             , lambdaT           = 0.3
+             , lambdaR           = 0.3
+             , lambdaC           = 0.3
              , validation        = FALSE
-             , listLambdaS       = seq(from=0.1,to=0.3,by=0.1)
-             , listLambdaT       = seq(from=0.1,to=0.3,by=0.1)
+             , listLambdaR       = seq(from=0.1,to=0.3,by=0.1)
+             , listLambdaC       = seq(from=0.1,to=0.3,by=0.1)
              , model             = "gaussian"
   ),
   # validity function
@@ -73,31 +73,31 @@ setClass(
   {
     if (object@modelname != "full" && object@modelname != "parsimonious")
     { stop("modelname must be either \"full\", \"parsimonious\".")}
-    if (object@spectra != "diag" && object@spectra != "unknown" && object@spectra != "kernel")
-    { stop("spectra must be either \"diag\", \"unknown\", \"kernel\".")}
-    if (object@time != "diag" && object@time != "unknown" && object@time != "kernel")
-    { stop("time must be either \"diag\", \"unknown\", \"kernel\".")}
-    if (object@kerneltypeSpectra != "epanechnikov" && object@kerneltypeSpectra !="gaussian"
-        && object@kerneltypeSpectra != "exponential" && object@kerneltypeSpectra !="uniform"
-        &&object@kerneltypeSpectra != "quadratic" && object@kerneltypeSpectra != "circular"
-        &&object@kerneltypeSpectra !="triangular" && object@kerneltypeSpectra !="rational quadratic"
-        &&object@kerneltypeSpectra !="inverse multiquadratic")
-    { stop("wrong kerneltypeSpectra entered. ")}
-    if (object@kerneltypeTime != "epanechnikov" && object@kerneltypeTime !="gaussian"
-        && object@kerneltypeTime != "exponential" && object@kerneltypeTime !="uniform"
-        &&object@kerneltypeTime != "quadratic" && object@kerneltypeTime != "circular"
-        &&object@kerneltypeTime !="triangular" && object@kerneltypeTime !="rational quadratic"
-        &&object@kerneltypeTime !="inverse multiquadratic")
-    { stop("wrong kerneltypeTime entered. ")}
+    if (object@rows != "diag" && object@rows != "unknown" && object@rows != "kernel")
+    { stop("rows must be either \"diag\", \"unknown\", \"kernel\".")}
+    if (object@column != "diag" && object@column != "unknown" && object@column != "kernel")
+    { stop("column must be either \"diag\", \"unknown\", \"kernel\".")}
+    if (object@kerneltypeRow != "epanechnikov" && object@kerneltypeRow !="gaussian"
+        && object@kerneltypeRow != "exponential" && object@kerneltypeRow !="uniform"
+        &&object@kerneltypeRow != "quadratic" && object@kerneltypeRow != "circular"
+        &&object@kerneltypeRow !="triangular" && object@kerneltypeRow !="rational quadratic"
+        &&object@kerneltypeRow !="inverse multiquadratic")
+    { stop("wrong kerneltypeRow entered. ")}
+    if (object@kerneltypeCol != "epanechnikov" && object@kerneltypeCol !="gaussian"
+        && object@kerneltypeCol != "exponential" && object@kerneltypeCol !="uniform"
+        &&object@kerneltypeCol != "quadratic" && object@kerneltypeCol != "circular"
+        &&object@kerneltypeCol !="triangular" && object@kerneltypeCol !="rational quadratic"
+        &&object@kerneltypeCol !="inverse multiquadratic")
+    { stop("wrong kerneltypeCol entered. ")}
     if (round(object@h) != object@h)
     { stop("h must be an integer.")}
-    if (object@lambdaS < 0 | object@lambdaT < 0 )
-    { stop("lambdaS and lambdaT must be positive.")}
+    if (object@lambdaR < 0 | object@lambdaC < 0 )
+    { stop("lambdaR and lambdaC must be positive.")}
     if (object@validation != TRUE && object@validation != FALSE )
     { stop("validation is a logical argument.")}
     if(object@validation)
     { if(object@model != "gaussian" && object@model != "fisher")
-      { stop("With validation, the model must be either \"gaussian\", \"fisher\".")}
+    { stop("With validation, the model must be either \"gaussian\", \"fisher\".")}
     }
     return(TRUE)
   }
@@ -125,111 +125,111 @@ setGeneric("fit",
 
 setMethod(
   f = "fit",
-  signature = "fitSpectra",
+  signature = "fitData",
   definition=function(Object)
   {
 
-  #return a list of the list of integer elements
-  listof = function(list, int)
-  { lapply(list, function(l,int){l[[int]]}, int = int)
-  }
-
-  weight = lapply(levels(factor(Object@m[[1]])), function(k,data){length(data[which(data==k)])/length(data)}
-                  , data = Object@m[[1]])
-
-
-  mean = meanData(Object@m)
-
-  if (Object@modelname=="full")
-  {
-    covmat = full(Object@m)
-  }
-  if (Object@modelname=="parsimonious")
-  {
-    if (Object@spectra == "diag")
-    {
-      covSpectra = parsimoniousSpectra(Object@m)
+    #return a list of the list of integer elements
+    listof = function(list, int)
+    { lapply(list, function(l,int){l[[int]]}, int = int)
     }
-    if (Object@spectra == "unknown")
+
+    weight = lapply(levels(factor(Object@m[[1]])), function(k,data){length(data[which(data==k)])/length(data)}
+                    , data = Object@m[[1]])
+
+
+    mean = meanData(Object@m)
+
+    if (Object@modelname=="full")
     {
-      if(Object@time=="unknown")
+      covmat = full(Object@m)
+    }
+    if (Object@modelname=="parsimonious")
+    {
+      if (Object@rows == "diag")
       {
-        if(Object@validation)
-        {
-          lambda = bestFitLambda(Object)
-          Object@lambdaS = lambda[[1]]
-          Object@lambdaT = lambda[[2]]
-        }
-        ff = flipflop(data = Object@m, lmean = mean, s=Object@s, lambdaS = Object@lambdaS,lambdaT = Object@lambdaT)
-        covSpectra = listof(ff,1)
-        covTime = listof(ff,2)
+        covRow = diagRow(Object@m)
       }
-      else
-      covSpectra = fullSpectra(Object@m)
-    }
-    if (Object@spectra == "kernel")
-    {
-      covSpectra = kernelSpectra(Object@m, Object@kerneltypeSpectra, Object@h)
+      if (Object@rows == "unknown")
+      {
+        if(Object@column=="unknown")
+        {
+          if(Object@validation)
+          {
+            lambda = bestFitLambda(Object)
+            Object@lambdaR = lambda[[1]]
+            Object@lambdaC = lambda[[2]]
+          }
+          ff = flipflop(data = Object@m, lmean = mean, s=Object@s, lambdaR = Object@lambdaR,lambdaC = Object@lambdaC)
+          covRow = listof(ff,1)
+          covCol = listof(ff,2)
+        }
+        else
+          covRow = unknownRow(Object@m)
+      }
+      if (Object@rows == "kernel")
+      {
+        covRow = kernelRow(Object@m, Object@kerneltypeRow, Object@h)
+      }
+
+      if (Object@column == "diag")
+      {
+        covCol = diagCol(Object@m)
+      }
+      if (Object@column == "unknown")
+      {
+        if(Object@rows!="unknown")
+          covCol = unknownCol(Object@m)
+      }
+      if (Object@column == "kernel")
+      {
+        covCol = kernelCol(Object@m, Object@kerneltypeCol, Object@h)
+      }
     }
 
-    if (Object@time == "diag")
+    if (Object@modelname=="full")
     {
-      covTime = parsimoniousTime(Object@m)
+      Object@covMat = list (covR = covmat, covC = 1, modelname = "full", rows = Object@rows
+                            , column = Object@column, weight=weight, mean=mean)
     }
-    if (Object@time == "unknown")
+    else
     {
-      if(Object@spectra!="unknown")
-        covTime = fullTime(Object@m)
+      Object@covMat = list (covR = covRow, covC = covCol, modelname = Object@modelname
+                            , rows = Object@rows, column = Object@column, weight=weight, mean=mean)
     }
-    if (Object@time == "kernel")
-    {
-      covTime = kernelTime(Object@m, Object@kerneltypeTime, Object@h)
-    }
-  }
 
-  if (Object@modelname=="full")
-  {
-    Object@covMat = list (covS = covmat, covT = 1, modelname = "full", spectra = Object@spectra
-                          , time = Object@time, weight=weight, mean=mean)
-  }
-  else
-  {
-    Object@covMat = list (covS = covSpectra, covT = covTime, modelname = Object@modelname
-                          , spectra = Object@spectra, time = Object@time, weight=weight, mean=mean)
-  }
-
-  Object@covMat
+    Object@covMat
   }
 )
 
 #-----------------------------------------------------------------------
-#' Initialize an instance of a fitSpectra S4 class.
+#' Initialize an instance of a fitData S4 class.
 #'
-#' Initialization method of the fitSpectra class.
+#' Initialization method of the fitData class.
 #'
-#' @param .Object object of class fitSpectra
-#' @param m spectroscopic data
+#' @param .Object object of class fitData
+#' @param m the 3 dimentional data
 #' @param modelname name of model to be used for calculating the covariance matrix. Available models are
 #' "full", "parsimonious". Default is "full".
-#' @param spectra type of spectra. Available models are "diag", "unknown" and "kernel".
+#' @param rows type of rows. Available models are "diag", "unknown" and "kernel".
 #' Default is "diag".
-#' @param time type of time. Available models are "diag", "unknown" and "kernel".
+#' @param column type of column. Available models are "diag", "unknown" and "kernel".
 #' Default is "diag".
-#' @param kerneltypeSpectra kernel to be used for covariance matrix of spectra
+#' @param kerneltypeRow kernel to be used for covariance matrix of rows
 #' Available kernels are "epanechnikov", "gaussian", "exponential", "uniform",
 #' "quadratic", "circular", "triangular", "rational quadratic", "inverse multiquadratic".
 #' Default is "exponential".
-#' @param kerneltypeTime kernel to be used for covariance matrix of time
+#' @param kerneltypeCol kernel to be used for covariance matrix of column
 #' Available kernels are "epanechnikov", "gaussian", "exponential", "uniform",
 #' "quadratic", "circular", "triangular", "rational quadratic", "inverse multiquadratic".
 #' Default is "exponential".
 #' @param h used for kernel calculation
 #' @param s regularisation paramater for flip flop algorithm
-#' @param lambdaS regularisation for spectra for flip flop algorithm
-#' @param lambdaT regularisation for spectra for flip flop algorithm
+#' @param lambdaR regularisation for rows for flip flop algorithm
+#' @param lambdaC regularisation for rows for flip flop algorithm
 #' @param validation to optimize lambda or not
-#' @param listLambdaS list of lambdaS used in prediction in case validation is TRUE
-#' @param listLambdaT list of lambdaT used in prediction in case validation is TRUE
+#' @param listLambdaR list of lambdaR used in prediction in case validation is TRUE
+#' @param listLambdaC list of lambdaC used in prediction in case validation is TRUE
 #' @param model use in prediction in case of validation is TRUE
 #'
 #' @name initialize
@@ -239,25 +239,25 @@ setMethod(
 
 setMethod(
   "initialize",
-  "fitSpectra",
-  function(.Object, m = list(0), modelname = "full", spectra = "diag", time = "diag"
-           , kerneltypeSpectra = "exponential", kerneltypeTime    = "exponential"
-           , h = 10, s = 0.01, lambdaS = 0.3, lambdaT = 0.3, validation = FALSE
-           , listLambdaS = seq(from = 0.1, to=0.3, by=0.1)
-           , listLambdaT = seq(from=0.1, to=0.3, by=0.1), model = "gaussian")
+  "fitData",
+  function(.Object, m = list(0), modelname = "full", rows = "diag", column = "diag"
+           , kerneltypeRow = "exponential", kerneltypeCol    = "exponential"
+           , h = 10, s = 0.01, lambdaR = 0.3, lambdaC = 0.3, validation = FALSE
+           , listLambdaR = seq(from = 0.1, to=0.3, by=0.1)
+           , listLambdaC = seq(from=0.1, to=0.3, by=0.1), model = "gaussian")
   { .Object@m = m
   .Object@modelname = modelname
-  .Object@spectra = spectra
-  .Object@time = time
-  .Object@kerneltypeSpectra = kerneltypeSpectra
-  .Object@kerneltypeTime = kerneltypeTime
+  .Object@rows = rows
+  .Object@column = column
+  .Object@kerneltypeRow = kerneltypeRow
+  .Object@kerneltypeCol = kerneltypeCol
   .Object@h = h
   .Object@s = s
-  .Object@lambdaS = lambdaS
-  .Object@lambdaT = lambdaT
+  .Object@lambdaR = lambdaR
+  .Object@lambdaC = lambdaC
   .Object@validation = validation
-  .Object@listLambdaS = listLambdaS
-  .Object@listLambdaT = listLambdaT
+  .Object@listLambdaR = listLambdaR
+  .Object@listLambdaC = listLambdaC
   .Object@model = model
   return(.Object)
   }
@@ -265,31 +265,57 @@ setMethod(
 
 
 
-#' Wrapper function fitSpectra.
+#' fitDataMatrix
 #'
-#' @param ... nice
+#' Fit the mean and the covariance matrix according to the data
 #'
-#' @name fitSpectra
-#' @rdname fitSpectra-class
-#' @export
+#' @param .Object object of class fitData
+#' @param m the 3 dimentional data
+#' @param modelname name of model to be used for calculating the covariance matrix. Available models are
+#' "full", "parsimonious". Default is "full".
+#' @param rows type of rows. Available models are "diag", "unknown" and "kernel".
+#' Default is "diag".
+#' @param column type of column. Available models are "diag", "unknown" and "kernel".
+#' Default is "diag".
+#' @param kerneltypeRow kernel to be used for covariance matrix of rows
+#' Available kernels are "epanechnikov", "gaussian", "exponential", "uniform",
+#' "quadratic", "circular", "triangular", "rational quadratic", "inverse multiquadratic".
+#' Default is "exponential".
+#' @param kerneltypeCol kernel to be used for covariance matrix of column
+#' Available kernels are "epanechnikov", "gaussian", "exponential", "uniform",
+#' "quadratic", "circular", "triangular", "rational quadratic", "inverse multiquadratic".
+#' Default is "exponential".
+#' @param h used for kernel calculation
+#' @param s regularisation paramater for flip flop algorithm
+#' @param lambdaR regularisation for rows for flip flop algorithm
+#' @param lambdaC regularisation for rows for flip flop algorithm
+#' @param validation to optimize lambda or not
+#' @param listLambdaR list of lambdaR used in prediction in case validation is TRUE
+#' @param listLambdaC list of lambdaC used in prediction in case validation is TRUE
+#' @param model use in prediction in case of validation is TRUE
 #'
-fitSpectra <- function(m                   = list(0)
-                       , modelname         = "full"
-                       , spectra           = "diag"
-                       , time              = "diag"
-                       , kerneltypeSpectra = "exponential"
-                       , kerneltypeTime    = "exponential"
-                       , h                 = 10
-                       , s                 = 0.01
-                       , lambdaS           = 0.3
-                       , lambdaT           = 0.3
-                       , validation        = FALSE
-                       , listLambdaS       = seq(from=0.1,to=0.3,by=0.1)
-                       , listLambdaT       = seq(from=0.1,to=0.3,by=0.1)
-                       , model             = "gaussian")
+#' @return a list with covariance matrices for each clusther, of a data with matrix observation
+#'
+#' @name fitDataMatrix
+#' @export fitDataMatrix
+#'
+fitDataMatrix <- function(m                   = list(0)
+                    , modelname         = "full"
+                    , rows           = "diag"
+                    , column              = "diag"
+                    , kerneltypeRow = "exponential"
+                    , kerneltypeCol    = "exponential"
+                    , h                 = 10
+                    , s                 = 0.01
+                    , lambdaR           = 0.3
+                    , lambdaC           = 0.3
+                    , validation        = FALSE
+                    , listLambdaR       = seq(from=0.1,to=0.3,by=0.1)
+                    , listLambdaC       = seq(from=0.1,to=0.3,by=0.1)
+                    , model             = "gaussian")
 {
-  o = new("fitSpectra", m = m, modelname = modelname, spectra = spectra, time = time, kerneltypeSpectra = kerneltypeSpectra
-          , kerneltypeTime    = kerneltypeTime, h = h, s = s, lambdaS = lambdaS, lambdaT = lambdaT, validation = validation
-          , listLambdaS  = listLambdaS, listLambdaT = listLambdaT, model = model)
+  o = new("fitData", m = m, modelname = modelname, rows = rows, column = column, kerneltypeRow = kerneltypeRow
+          , kerneltypeCol    = kerneltypeCol, h = h, s = s, lambdaR = lambdaR, lambdaC = lambdaC, validation = validation
+          , listLambdaR  = listLambdaR, listLambdaC = listLambdaC, model = model)
   fit(o)
 }

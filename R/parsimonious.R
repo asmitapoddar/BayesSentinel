@@ -1,32 +1,50 @@
-### Full Spectra
-vectorSpectraLabel <- function(data,spectra,label)
+### Full Row
+vectorRowLabel <- function(data,row,label)
 {
-  as.numeric(data[[3]][[spectra]][which(data[[1]]==label),])
+  as.numeric(data[[3]][[row]][which(data[[1]]==label),])
 }
 
-covSLabel <- function(data,label)
+covRLabel <- function(data,label)
 {
-  cov(do.call("cbind",lapply(1:length(data[[3]]),vectorSpectraLabel,label=label,data=data)))
+  cov(do.call("cbind",lapply(1:length(data[[3]]),vectorRowLabel,label=label,data=data)))
 }
 
-fullSpectra <- function(data)
+#' Unknown row in parsimonious model
+#'
+#' Return the list of covariance in row for each clusther in case of a parsimonious model with unknown rows and known column.
+#'
+#' @param data the data with matrix observation
+#'
+#' @name unknownRow
+#' @export unknownRow
+#'
+unknownRow <- function(data)
 {
-  lapply(levels(factor(data[[1]])),covSLabel,data=data)
+  lapply(levels(factor(data[[1]])),covRLabel,data=data)
 }
 
 
-### Full time
-matrixSpectraLabel <- function(data,spectra,label)
+### Full column
+matrixRowLabel <- function(data,row,label)
 {
-  data[[3]][[spectra]][which(data[[1]]==label),]
+  data[[3]][[row]][which(data[[1]]==label),]
 }
 
 covTLabel <- function(data,label)
 {
-  cov(do.call("rbind",lapply(1:length(data[[3]]),matrixSpectraLabel,label=label,data=data)))
+  cov(do.call("rbind",lapply(1:length(data[[3]]),matrixRowLabel,label=label,data=data)))
 }
 
-fullTime <- function(data)
+#' Unknown column in parsimonious model
+#'
+#' Return the list of covariance in column for each clusther in case of a parsimonious model with unknown column and known rows
+#'
+#' @param data the data with matrix observation
+#'
+#' @name unknownCol
+#' @export unknownCol
+#'
+unknownCol <- function(data)
 {
   lapply(levels(factor(data[[1]])),covTLabel,data=data)
 }
@@ -35,14 +53,33 @@ fullTime <- function(data)
 
 ### Parsimonious
 
-parsimoniousSpectra <- function(data)
+#' Diagonal rows in parsimonious model
+#'
+#' Return the list of covariance in row for each clusther in case of a parsimonious model with diagonal row
+#'
+#' @param data the data with matrix observation
+#'
+#' @name diagRow
+#' @export diagRow
+#'
+diagRow <- function(data)
 {
-  lA = lapply(fullSpectra(data),diag)
+  lA = lapply(fullRow(data),diag)
   lapply(lA,diag)
 }
 
-parsimoniousTime <- function(data)
+
+#' Diagonal column in parsimonious model
+#'
+#' Return the list of covariance in column for each clusther in case of a parsimonious model with diagonal column
+#'
+#' @param data the data with matrix observation
+#'
+#' @name diagCol
+#' @export diagCol
+#'
+diagCol <- function(data)
 {
-  lA = lapply(fullTime(data),diag)
+  lA = lapply(fullCol(data),diag)
   lapply(lA,diag)
 }

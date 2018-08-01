@@ -38,6 +38,8 @@
 #' @rdname simulateData-class
 #' @exportClass simulateData
 #'
+#' @importFrom methods new
+#'
 
 setClass(
   Class="simulateData",
@@ -305,8 +307,13 @@ setMethod(
 #' Default is 3.
 #' @param labels class labels of the data
 #'
+#' @return simulated data as a list of all observation
+#'
 #' @name simulateDataMatrix
 #' @export simulateDataMatrix
+#'
+#' @importFrom stats dnorm rnorm rexp rt cov runif sigma
+#' @importFrom mvtnorm rmvnorm dmvnorm
 #'
 simulateDataMatrix <- function(...)
 {

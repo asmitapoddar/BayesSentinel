@@ -1,22 +1,25 @@
 #-----------------------------------------------------------------------
-#' Implementing the flip flop algorithm
+#' Flip - Flop
 #'
 #' Implementing the flip flop algorithm
 #'
 #' @param data sata sent
-#' @param lmean list of means
+#' @param list of means
 #' @param s parameter for regularisation
-#' @param lambdaS list of lambda for spectra
-#' @param lambdaT list of lambda for time
+#' @param lambdaR list of lambda for row
+#' @param lambdaC list of lambda for column
 #'
 #' @return list of predicted sigma for every label
 #'
+#' @name flipflop
+#' @export flipflop
+#'
 #' @author Asmita Poddar & Florent Latimier
 
-flipflop = function(data,lmean,s,lambdaS,lambdaT)
+flipflop = function(data,lmean,s,lambdaR,lambdaC)
 {
 
-  flipflopLabel = function(data, mean, s, lambdaS=0.1, lambdaT = 0.1)
+  flipflopLabel = function(data, mean, s, lambdaR=0.1, lambdaC = 0.1)
   {
     if(missing(data))  { stop("data is mandatory")}
     ns = dim(data)[3]
@@ -26,28 +29,28 @@ flipflop = function(data,lmean,s,lambdaS,lambdaT)
     mean = matrix(mean,ncol=ns)
     X2 = apply(data,1,function(x,mean){x-mean},mean = mean)
 
-    SigmaSold = 0
-    SigmaSnew = diag(rep(1,ns))
-    SigmaTold = 0
-    SigmaTnew = diag(rep(1/sqrt(nt),nt))
+    sigmaRold = 0
+    sigmaRnew = diag(rep(1,ns))
+    sigmaCold = 0
+    sigmaCnew = diag(rep(1/sqrt(nt),nt))
 
     l = 0
 
-    while(l<100 && testFlop(SigmaSold,SigmaSnew) > s && testFlop(SigmaTold,SigmaTnew) > s)
+    while(l<100 && testFlop(sigmaRold,sigmaRnew) > s && testFlop(sigmaCold,sigmaCnew) > s)
     {
       l <- l+1
 
-      invS = inversion(SigmaSnew+diag(rep(lambdaS,ns) ))
-      SigmaTold <- SigmaTnew
-      SigmaTnew <- calculFlip(X = data,S = invS,nt = nt)
+      invS = inversion(sigmaRnew+diag(rep(lambdaR,ns) ))
+      sigmaCold <- sigmaCnew
+      sigmaCnew <- calculFlip(X = data,S = invS,nt = nt)
 
-      invT = inversion(SigmaTnew+diag(rep(lambdaT,nt)))
-      SigmaSold <- SigmaSnew
-      SigmaSnew <- calculFlop(X=data,S = invT,ns=ns)
+      invT = inversion(sigmaCnew+diag(rep(lambdaC,nt)))
+      sigmaRold <- sigmaRnew
+      sigmaRnew <- calculFlop(X=data,S = invT,ns=ns)
 
     }
-    list(SigmaS = SigmaSnew, SigmaT = SigmaTnew)
-}
+    list(sigmaR = sigmaRnew, sigmaC = sigmaCnew)
+  }
 
   testFlop = function(old, new)
   {
@@ -69,11 +72,11 @@ flipflop = function(data,lmean,s,lambdaS,lambdaT)
   X = array(as.numeric(unlist(data[[3]]))
             ,dim = c(nrow(data[[3]][[1]]), ncol(data[[3]][[1]]), length(data[[3]])))
   lapply(levels(factor(data[[1]]))
-         , function(data,lmean,label,s,lambdaS,lambdaT)
-           {flipflopLabel(data = X[which(data[[1]]==label),,]
-                          , mean = lmean[[which(levels(factor(data[[1]]))==label)]]
-                          , s = s, lambdaS = lambdaS, lambdaT = lambdaT)}
-         , data = data, lmean = lmean, s = s, lambdaS = lambdaS,lambdaT = lambdaT)
+         , function(data,lmean,label,s,lambdaR,lambdaC)
+         {flipflopLabel(data = X[which(data[[1]]==label),,]
+                        , mean = lmean[[which(levels(factor(data[[1]]))==label)]]
+                        , s = s, lambdaR = lambdaR, lambdaC = lambdaC)}
+         , data = data, lmean = lmean, s = s, lambdaR = lambdaR,lambdaC = lambdaC)
 
 }
 
