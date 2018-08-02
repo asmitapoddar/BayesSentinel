@@ -69,7 +69,7 @@ kernelRow = function(data,kerneltype,h)
   #do the distancie matrix in rows
   QmatrixRow <- function(data)
   {
-    n = length(data[[6]])
+    n = length(data[[3]])
     # change l as the row vector
     l = 1:n
     matDiffRow = matrix (0,nrow = n,ncol = n)

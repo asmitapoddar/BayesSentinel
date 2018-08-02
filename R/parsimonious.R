@@ -64,7 +64,7 @@ unknownCol <- function(data)
 #'
 diagRow <- function(data)
 {
-  lA = lapply(fullRow(data),diag)
+  lA = lapply(unknownRow(data),diag)
   lapply(lA,diag)
 }
 
@@ -80,6 +80,6 @@ diagRow <- function(data)
 #'
 diagCol <- function(data)
 {
-  lA = lapply(fullCol(data),diag)
+  lA = lapply(unknownCol(data),diag)
   lapply(lA,diag)
 }
