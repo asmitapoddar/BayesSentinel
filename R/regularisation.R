@@ -1,77 +1,81 @@
 #-----------------------------------------------------------------------
+#' regularisation
+#'
 #' Perform regularisation on covariance matrix
 #'
 #' @param fittedCov fitted covariance matrix
-#' @param lambdaS regularisation parameter for spectra
-#' @param lambdaT regularisation parameter for time
+#' @param lambdaR regularisation parameter for row
+#' @param lambdaC regularisation parameter for column
 #'
 #' @return A list with regularised covariance matrix
 #'
 #' @author Asmita Poddar & Florent Latimier
 #'
-
-regularisation = function(fittedCov, lambdaS = 0.3 , lambdaT = 0.3)
+regularisation = function(fittedCov, lambdaR = 0.3 , lambdaC = 0.3)
 {
-  #print(lambdaT)
-  #print(lambdaS)
+  # due to the approximation, the matrix can be non-definie positive
+  regul = function(mat){
+    s=0
+    while(!is.positive.definite(mat)){
+      s = s + 0.000000001
+      mat = mat + diag(rep(0.000000001,nrow(mat)))
+    }
+    mat
+  }
+
+  #do the ridge regularisation
   returnMatrices = function(mat, lambda)
   {
+    #to assure the symetry due to approximation
     mat = (mat + t(mat)) /2
     regul(mat + diag(rep(lambda,nrow(mat))))
   }
 
+
   if (fittedCov$modelname == "full")
   {
-    reg = lapply(fittedCov$covS, returnMatrices, lambda = lambdaS )
+    reg = lapply(fittedCov$covR, returnMatrices, lambda = lambdaR )
     reg = lapply(reg,inversion)
   }
   else if (fittedCov$modelname == "parsimonious")
   {
-    if (fittedCov$spectra == "diag")
+    if (fittedCov$row == "diag")
     {
-      S = lapply(fittedCov$covS, returnMatrices, lambda = 0)
-      S = lapply(S,inversion)
+      R = lapply(fittedCov$covR, returnMatrices, lambda = 0)
+      R = lapply(R,inversion)
     }
-    if (fittedCov$spectra == "unknown")
+    if (fittedCov$row == "unknown")
     {
-      S = lapply(fittedCov$covS, returnMatrices, lambda = lambdaS)
-      S = lapply(S,inversion)
+      R = lapply(fittedCov$covR, returnMatrices, lambda = lambdaR)
+      R = lapply(R,inversion)
     }
-    if (fittedCov$spectra == "kernel")
+    if (fittedCov$row == "kernel")
     {
-      S = lapply(fittedCov$covS, returnMatrices, lambda = 0)
-      S = lapply(S,inversion)
-    }
-
-    if (fittedCov$time == "diag")
-    {
-      T = lapply(fittedCov$covT, returnMatrices, lambda = 0 )
-      T = lapply(T,inversion)
-    }
-    if (fittedCov$time == "unknown")
-    {
-      T = lapply(fittedCov$covT, returnMatrices, lambda =  lambdaT)
-      T = lapply(T,inversion)
-    }
-    if (fittedCov$time == "kernel")
-    {
-      T = lapply(fittedCov$covT, returnMatrices, lambda = 0 )
-      T = lapply(T,inversion)
+      R = lapply(fittedCov$covR, returnMatrices, lambda = 0)
+      R = lapply(R,inversion)
     }
 
-    reg = Map('%x%', S , T)
+    if (fittedCov$column == "diag")
+    {
+      C = lapply(fittedCov$covC, returnMatrices, lambda = 0 )
+      C = lapply(C,inversion)
+    }
+    if (fittedCov$column == "unknown")
+    {
+      C = lapply(fittedCov$covC, returnMatrices, lambda =  lambdaC)
+      C = lapply(C,inversion)
+    }
+    if (fittedCov$column == "kernel")
+    {
+      C = lapply(fittedCov$covC, returnMatrices, lambda = 0 )
+      C = lapply(C,inversion)
+    }
+
+    reg = Map('%x%', R , C)
   }
 
   reg
 }
 
 
-# due to the approximation, the matrix can be non-definie positive
-regul = function(mat){
-  s=0
-  while(!is.positive.definite(mat)){
-    s = s + 0.000000001
-    mat = mat + diag(rep(0.000000001,nrow(mat)))
-  }
-  mat
-}
+

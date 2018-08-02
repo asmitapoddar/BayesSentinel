@@ -2,6 +2,7 @@
 
 export(simulateDataMatrix)
 export(fitDataMatrix)
+export(predictData)
 importFrom(mvtnorm,dmvnorm)
 importFrom(mvtnorm,rmvnorm)
 importFrom(stats,cov)
@@ -11,3 +12,4 @@ importFrom(stats,rnorm)
 importFrom(stats,rt)
 importFrom(stats,runif)
 importFrom(stats,sigma)
+importFrom(matrixcalc,is.positive.definite)

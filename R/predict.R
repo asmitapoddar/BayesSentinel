@@ -1,22 +1,22 @@
 
 #-----------------------------------------------------------------------
+#' Predict
+#'
 #' Predict the label classes of the data
 #'
-#' Simulate one or more Gaussian spectra at regularly sampling time
-#'
-#' @slot m spectroscopic data
+#' @slot m the 3 dimentional data
 #' @slot fittedCov fitted covariance matrix for the data
-#' @slot lambdaS parameter for regularisation of spectra
-#' @slot lambdaT parameter for regularisation of time
+#' @slot lambdaR parameter for regularisation of row
+#' @slot lambdaC parameter for regularisation of column
 #' @slot model type of model to be used for prediction of labels
 #' Available models are "gaussian", "tstudent". Default is "gaussian".
 #' @slot validation logical to optimize the lambda.
-#' @slot listLambdaS list of parameter for regularisation of spectra when do validation
-#' @slot listLambdaT list of parameter for regularisation of time when do validation
+#' @slot listLambdaR list of parameter for regularisation of row when do validation
+#' @slot listLambdaC list of parameter for regularisation of column when do validation
 #' @slot predicted_labels predicted class labels
 #' @slot accuracy accracy of prediction
 #'
-#' @return A list with the spectra
+#' @return A list with the row
 #'
 #' @author Asmita Poddar & Florent Latimier
 #'
@@ -29,21 +29,21 @@ setClass(
   Class="predictClass",
   representation( m                     = "list"
                   , fittedCov           = "list"
-                  , lambdaS             = "numeric"
-                  , lambdaT             = "numeric"
+                  , lambdaR             = "numeric"
+                  , lambdaC             = "numeric"
                   , model               = "character"
                   , validation          = "logical"
-                  , listLambdaS         = "numeric"
-                  , listLambdaT         = "numeric"
+                  , listLambdaR         = "numeric"
+                  , listLambdaC         = "numeric"
                   , predicted_labels    = "integer"
                   , accuracy            = "numeric"
   ),
   prototype( m                   = list(0)
              , fittedCov         = list(0)
-             , lambdaS           = 0.3
-             , lambdaT           = 0.3
-             , listLambdaS       = seq(from=0.1,to=10,by=0.1)
-             , listLambdaT       = seq(from=0.1,to=10,by=0.1)
+             , lambdaR           = 0.3
+             , lambdaC           = 0.3
+             , listLambdaR       = seq(from=0.1,to=10,by=0.1)
+             , listLambdaC       = seq(from=0.1,to=10,by=0.1)
              , model = "gaussian"
              , validation        = FALSE
   ),
@@ -92,8 +92,8 @@ setMethod(
     if(Object@validation)
     {
       res = bestPredLambda(Object)
-      Object@lambdaS = res$lambdaS
-      Object@lambdaT = res$lambdaT
+      Object@lambdaR = res$lambdaR
+      Object@lambdaC = res$lambdaC
       Object@predicted_labels = res$predicted
       Object@accuracy = res$percent
     }
@@ -106,12 +106,12 @@ setMethod(
       }
 
       nbLabel = length(unique(Object@m[[1]]))
-      nbPixel = length(Object@m[[1]])
+      nbSample = length(Object@m[[1]])
 
-      p = matrix(0, nbLabel, nbPixel)
+      p = matrix(0, nbLabel, nbSample)
       weight  = Object@fittedCov$weight
       mean = Object@fittedCov$mean
-      reg = regularisation(Object@fittedCov, Object@lambdaS, Object@lambdaT)
+      reg = regularisation(Object@fittedCov, Object@lambdaR, Object@lambdaC)
 
       powerLabelG <- function(data,inv,mean,weight,X)
       {
@@ -120,19 +120,19 @@ setMethod(
         log(weight) +  log(sqrt(abs(det(inv)))) + (-power/2)
       }
 
-      powerLabelF <-function(data, inv, mean, weight, X, nbSpectrum, nbSampling)
+      powerLabelF <-function(data, inv, mean, weight, X, nbRow, nbSample)
       {
         X = X - mean
         power = rowSums((X %*% inv) * X)
-        log(weight) - 1/2*log(abs(det(inv))) -(nbSpectrum*nbSampling+3)/2*log(1+power)
+        log(weight) - 1/2*log(abs(det(inv))) -(nbRow*nbSample+3)/2*log(1+power)
 
       }
 
       power <- function(data,invers,mean,weight)
       {
         nbLabel = length( unique( Object@m[[1]] ) )
-        nbPixel = length( Object@m[[1]] )
-        p = matrix(0, nbLabel, nbPixel)
+        nbSample = length( Object@m[[1]] )
+        p = matrix(0, nbLabel, nbSample)
         if(Object@model == "gaussian"){powerL = powerLabelG}
         if(Object@model == "tstudent"){powerL = powerLabelF}
         if(Object@model == "mvnorm"){powerL = mvnorm}
@@ -140,8 +140,8 @@ setMethod(
         for(i in 1:nbLabel)
         {
           if (Object@model == "tstudent")
-          p[i,] = powerL(data,invers[[i]],mean[[i]],weight[[i]], X
-                         , Object@m$nbSpectrum, Object@m$nbSampling)
+            p[i,] = powerL(data,invers[[i]],mean[[i]],weight[[i]], X
+                           , Object@m$nbRow, Object@m$nbSample)
           else
             p[i,] = powerL(data,invers[[i]],mean[[i]],weight[[i]], X)
         }
@@ -164,10 +164,10 @@ setMethod(
 #' Initialization method of the predictClass class.
 #'
 #' @param .Object object of class predictClass
-#' @param m spectroscopic data
+#' @param m the 3 dimentional data
 #' @param fittedCov fitted covariance matrix for the data
-#' @param lambdaS parameter for regularisation of spectra
-#' @param lambdaT parameter for regularisation of time
+#' @param lambdaR parameter for regularisation of row
+#' @param lambdaC parameter for regularisation of column
 #' @param model type of model to be used for prediction of labels
 #' Available models are "gaussian", "tstudent". Default is "gaussian".
 #' @param validation logical to optimize the lambda.
@@ -178,34 +178,46 @@ setMethod(
 #' @rdname initialize-method
 #' @keywords internal
 #'
-
 setMethod(
   "initialize",
   "predictClass",
-  function(.Object, m = list(0), fittedCov = list(0), lambdaS = 0.3, lambdaT = 0.3, model = "gaussian"
-           , validation = FALSE, listLambdaS = seq(from=0.1,to=10,by=0.1), listLambdaT = seq(from=0.1,to=10,by=0.1))
+  function(.Object, m = list(0), fittedCov = list(0), lambdaR = 0.3, lambdaC = 0.3, model = "gaussian"
+           , validation = FALSE, listLambdaR = seq(from=0.1,to=10,by=0.1), listLambdaC = seq(from=0.1,to=10,by=0.1))
   { .Object@m = m
   .Object@fittedCov = fittedCov
-  .Object@lambdaS = lambdaS
-  .Object@lambdaT = lambdaT
+  .Object@lambdaR = lambdaR
+  .Object@lambdaC = lambdaC
   .Object@model = model
   .Object@validation = validation
-  .Object@listLambdaS = listLambdaS
-  .Object@listLambdaT = listLambdaT
+  .Object@listLambdaR = listLambdaR
+  .Object@listLambdaC = listLambdaC
   return(.Object)
   }
 )
 
 
-#' Wrapper function PredictClass
+#' predictData
 #'
-#' @param ... nice
+#' Predict the label classes of the data
 #'
-#' @name predictClass
-#' @rdname predictClass-class
-#' @export
+#' @param m the 3 dimentional data
+#' @param fittedCov fitted covariance matrix for the data
+#' @param lambdaR parameter for regularisation of row
+#' @param lambdaC parameter for regularisation of column
+#' @param model type of model to be used for prediction of labels
+#' Available models are "gaussian", "tstudent". Default is "gaussian".
+#' @param validation logical to optimize the lambda.
+#' @param listLambdaR list of parameter for regularisation of row when do validation
+#' @param listLambdaC list of parameter for regularisation of column when do validation
+#' @param predicted_labels predicted class labels
+#' @param accuracy accracy of prediction
+#'
+#' @return A list with the row
+#'
+#' @name predictData
+#' @export predictData
 
-predictClass <- function(...)
+predictData <- function(...)
 {
   o = new("predictClass", ...)
   predict(o)
