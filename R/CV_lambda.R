@@ -1,5 +1,5 @@
 #-----------------------------------------------------------------------
-#' Find best fitted lambda
+#' bestPredLambda
 #'
 #' Find best fitted lambda
 #'
@@ -77,7 +77,8 @@ bestPredLambda = function(objPred)
 }
 
 #-----------------------------------------------------------------------
-#' Find row and column of maximum element
+#' matxMax
+#'
 #' Find row and column of maximum element
 #'
 #' @param mat Matrix
@@ -96,7 +97,7 @@ matxMax <- function(mat)
 }
 
 #-----------------------------------------------------------------------
-#' Find best fitted lambda
+#' bestFitLambda
 #'
 #' Find best fitted lambda
 #'

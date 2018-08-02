@@ -34,7 +34,6 @@
 #'
 #' @author Asmita Poddar & Florent Latimier
 #'
-
 setClass(
   Class="fitData",
   representation( m                     = "list"
@@ -299,12 +298,12 @@ setMethod(
 #' @name fitDataMatrix
 #' @export fitDataMatrix
 #'
-fitDataMatrix <- function(m                   = list(0)
+fitDataMatrix <- function(m             = list(0)
                     , modelname         = "full"
-                    , rows           = "diag"
-                    , column              = "diag"
-                    , kerneltypeRow = "exponential"
-                    , kerneltypeCol    = "exponential"
+                    , rows              = "diag"
+                    , column            = "diag"
+                    , kerneltypeRow     = "exponential"
+                    , kerneltypeCol     = "exponential"
                     , h                 = 10
                     , s                 = 0.01
                     , lambdaR           = 0.3
