@@ -11,7 +11,7 @@ ker(mat, kernelType, h)
 
 \item{kernelType}{type of kernel to be apply on the matrix}
 
-\item{h}{the wide parameter to fit the kernel}
+\item{h}{the widths parameter to fit the kernel}
 }
 \description{
 Apply a kernel type on a matrix of distancies

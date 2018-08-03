@@ -14,7 +14,7 @@ Available kernels are "epanechnikov", "gaussian", "exponential", "uniform",
 "quadratic", "circular", "triangular", "rational quadratic", "inverse multiquadratic".
 Default is "exponential".}
 
-\item{h}{the wide to optimize the kernel}
+\item{h}{the widths to optimize the kernel}
 }
 \value{
 the kernel square matrix

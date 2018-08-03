@@ -2,7 +2,7 @@
 % Please edit documentation in R/automatisation.R
 \name{inversion}
 \alias{inversion}
-\title{Inversion of matrix}
+\title{inversion}
 \usage{
 inversion(mat)
 }
@@ -13,5 +13,5 @@ inversion(mat)
 inverted matrix
 }
 \description{
-Inversion of matrix
+Invert a symetrique matrix
 }

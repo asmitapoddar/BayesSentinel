@@ -8,9 +8,9 @@ Divide the data into training and test sets according to percentage provided by 
 testTrain(data, pTrain)
 }
 \arguments{
-\item{data}{first list}
+\item{data}{the 3 dimentional data}
 
-\item{pTrain}{second list}
+\item{pTrain}{the percent of training sample}
 }
 \value{
 list containing training and test set

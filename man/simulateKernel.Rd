@@ -33,7 +33,7 @@ Default is "gaussian".}
 
 \item{sigmaC}{the variation due to the columns}
 
-\item{h}{the wide parameter to fit the kernel}
+\item{h}{the widths parameter to fit the kernel}
 }
 \description{
 Simulate the covariance matrix as a diagonal or a kenrel

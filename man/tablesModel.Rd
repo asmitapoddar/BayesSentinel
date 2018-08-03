@@ -2,21 +2,21 @@
 % Please edit documentation in R/automatisation.R
 \name{tablesModel}
 \alias{tablesModel}
-\title{Inversion of matrix}
+\title{tablesModel}
 \usage{
-tablesModel(data, lkernelS = list(), lkernelT = list(), lhS = list(),
-  lhT = list(), listModel = list("gaussian"))
+tablesModel(data, lkernelR = list(), lkernelC = list(), lhR = list(),
+  lhC = list(), listModel = list("gaussian"))
 }
 \arguments{
-\item{data}{matrix to be inverted}
+\item{data}{th 3 dimentinal matrix}
 
-\item{lkernelS}{list of kernels for spectra}
+\item{lkernelR}{list of kernels for row}
 
-\item{lkernelT}{list of kernels for time}
+\item{lkernelC}{list of kernels for column}
 
-\item{lhS}{list of widths for spectra}
+\item{lhR}{list of widths for row}
 
-\item{lhT}{list of widths for spectra}
+\item{lhC}{list of widths for row}
 
 \item{listModel}{list of models}
 }
@@ -24,5 +24,5 @@ tablesModel(data, lkernelS = list(), lkernelT = list(), lhS = list(),
 list containing the accuaracy for different models
 }
 \description{
-Inversion of matrix
+Try all the model posible with validation.
 }
