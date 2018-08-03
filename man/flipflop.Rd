@@ -2,20 +2,20 @@
 % Please edit documentation in R/flip-flop.R
 \name{flipflop}
 \alias{flipflop}
-\title{Implementing the flip flop algorithm}
+\title{Flip - Flop}
 \usage{
-flipflop(data, lmean, s, lambdaS, lambdaT)
+flipflop(data, lmean, s, lambdaR, lambdaC)
 }
 \arguments{
 \item{data}{sata sent}
 
-\item{lmean}{list of means}
-
 \item{s}{parameter for regularisation}
 
-\item{lambdaS}{list of lambda for spectra}
+\item{lambdaR}{list of lambda for row}
 
-\item{lambdaT}{list of lambda for time}
+\item{lambdaC}{list of lambda for column}
+
+\item{list}{of means}
 }
 \value{
 list of predicted sigma for every label

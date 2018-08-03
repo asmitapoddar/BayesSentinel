@@ -1,4 +1,4 @@
-Package: BayesSentinel
+Package: BayesS4
 Date: 2018-06-28
 Type: Package
 Title: Bayes Classification of Matrix Data
@@ -13,8 +13,8 @@ Encoding: UTF-8
 LazyData: true
 Collate:
     automatisation.R
-    CV_lambda.R
-    fitSpectra.R
+    bestLambda.R
+    fit.R
     flip-flop.R
     full.R
     kernel.R

@@ -3,12 +3,12 @@
 \docType{methods}
 \name{fit}
 \alias{fit}
-\alias{fit,fitSpectra-method}
+\alias{fit,fitData-method}
 \title{Method num.}
 \usage{
 fit(Object)
 
-\S4method{fit}{fitSpectra}(Object)
+\S4method{fit}{fitData}(Object)
 }
 \arguments{
 \item{Object}{object to be input}

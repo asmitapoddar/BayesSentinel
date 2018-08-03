@@ -2,16 +2,16 @@
 % Please edit documentation in R/regularisation.R
 \name{regularisation}
 \alias{regularisation}
-\title{Perform regularisation on covariance matrix}
+\title{regularisation}
 \usage{
-regularisation(fittedCov, lambdaS = 0.3, lambdaT = 0.3)
+regularisation(fittedCov, lambdaR = 0.3, lambdaC = 0.3)
 }
 \arguments{
 \item{fittedCov}{fitted covariance matrix}
 
-\item{lambdaS}{regularisation parameter for spectra}
+\item{lambdaR}{regularisation parameter for row}
 
-\item{lambdaT}{regularisation parameter for time}
+\item{lambdaC}{regularisation parameter for column}
 }
 \value{
 A list with regularised covariance matrix

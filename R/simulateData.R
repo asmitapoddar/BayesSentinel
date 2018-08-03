@@ -344,7 +344,7 @@ simulateDataMatrix <- function(...)
 #' @param sigmaL the variation due to the clusthers
 #' @param sigmaR the variation due to the rows
 #' @param sigmaC the variation due to the columns
-#' @param h the wide parameter to fit the kernel
+#' @param h the widths parameter to fit the kernel
 #'
 #' @name simulateKernel
 #' @export simulateKernel
@@ -421,7 +421,7 @@ simulateKernel = function(modelname, kernelRow, kernelCol, column, rows
 #'
 #' @param mat the matrix of distancies
 #' @param kernelType type of kernel to be apply on the matrix
-#' @param h the wide parameter to fit the kernel
+#' @param h the widths parameter to fit the kernel
 #'
 #' @name ker
 #' @export ker

@@ -43,6 +43,9 @@ Default is 3.}
 
 \item{labels}{class labels of the data}
 }
+\value{
+simulated data as a list of all observation
+}
 \description{
 Simulate a data that all observation is a matrix : [nbRow : nbCol].
 }

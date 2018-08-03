@@ -4,38 +4,32 @@
 \name{predictClass}
 \alias{predictClass}
 \alias{predictClass-class}
-\title{Predict the label classes of the data}
-\usage{
-predictClass(...)
-}
-\arguments{
-\item{...}{nice}
-}
+\title{Predict}
 \value{
-A list with the spectra
+A list with the row
 }
 \description{
-Simulate one or more Gaussian spectra at regularly sampling time
+Predict the label classes of the data
 }
 \section{Slots}{
 
 \describe{
-\item{\code{m}}{spectroscopic data}
+\item{\code{m}}{the 3 dimentional data}
 
 \item{\code{fittedCov}}{fitted covariance matrix for the data}
 
-\item{\code{lambdaS}}{parameter for regularisation of spectra}
+\item{\code{lambdaR}}{parameter for regularisation of row}
 
-\item{\code{lambdaT}}{parameter for regularisation of time}
+\item{\code{lambdaC}}{parameter for regularisation of column}
 
 \item{\code{model}}{type of model to be used for prediction of labels
 Available models are "gaussian", "tstudent". Default is "gaussian".}
 
 \item{\code{validation}}{logical to optimize the lambda.}
 
-\item{\code{listLambdaS}}{list of parameter for regularisation of spectra when do validation}
+\item{\code{listLambdaR}}{list of parameter for regularisation of row when do validation}
 
-\item{\code{listLambdaT}}{list of parameter for regularisation of time when do validation}
+\item{\code{listLambdaC}}{list of parameter for regularisation of column when do validation}
 
 \item{\code{predicted_labels}}{predicted class labels}
 

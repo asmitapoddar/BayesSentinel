@@ -2,8 +2,7 @@
 % Please edit documentation in R/CV_lambda.R
 \name{matxMax}
 \alias{matxMax}
-\title{Find row and column of maximum element
-Find row and column of maximum element}
+\title{matxMax}
 \usage{
 matxMax(mat)
 }
@@ -14,7 +13,6 @@ matxMax(mat)
 Vector containing the row and column of maximum element
 }
 \description{
-Find row and column of maximum element
 Find row and column of maximum element
 }
 \author{

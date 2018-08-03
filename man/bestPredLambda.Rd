@@ -2,7 +2,7 @@
 % Please edit documentation in R/CV_lambda.R
 \name{bestPredLambda}
 \alias{bestPredLambda}
-\title{Find best fitted lambda}
+\title{bestPredLambda}
 \usage{
 bestPredLambda(objPred)
 }
@@ -10,7 +10,7 @@ bestPredLambda(objPred)
 \item{objPred}{prediction object}
 }
 \value{
-list of predicted lambda for spectra and time
+list of predicted lambda for row and column and the prediction with accuracy
 }
 \description{
 Find best fitted lambda

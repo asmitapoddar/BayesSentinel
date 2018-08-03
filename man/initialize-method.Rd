@@ -3,20 +3,20 @@
 \docType{methods}
 \name{initialize}
 \alias{initialize}
-\title{Initialize an instance of a fitSpectra S4 class.}
+\title{Initialize an instance of a fitData S4 class.}
 \usage{
-\S4method{initialize}{fitSpectra}(.Object, m = list(0),
-  modelname = "full", spectra = "diag", time = "diag",
-  kerneltypeSpectra = "exponential", kerneltypeTime = "exponential",
-  h = 10, s = 0.01, lambdaS = 0.3, lambdaT = 0.3,
-  validation = FALSE, listLambdaS = seq(from = 0.1, to = 0.3, by =
-  0.1), listLambdaT = seq(from = 0.1, to = 0.3, by = 0.1),
+\S4method{initialize}{fitData}(.Object, m = list(0),
+  modelname = "full", rows = "diag", column = "diag",
+  kerneltypeRow = "exponential", kerneltypeCol = "exponential",
+  h = 10, s = 0.01, lambdaR = 0.3, lambdaC = 0.3,
+  validation = FALSE, listLambdaR = seq(from = 0.1, to = 0.3, by =
+  0.1), listLambdaC = seq(from = 0.1, to = 0.3, by = 0.1),
   model = "gaussian")
 
 \S4method{initialize}{predictClass}(.Object, m = list(0),
-  fittedCov = list(0), lambdaS = 0.3, lambdaT = 0.3,
-  model = "gaussian", validation = FALSE, listLambdaS = seq(from =
-  0.1, to = 10, by = 0.1), listLambdaT = seq(from = 0.1, to = 10, by =
+  fittedCov = list(0), lambdaR = 0.3, lambdaC = 0.3,
+  model = "gaussian", validation = FALSE, listLambdaR = seq(from =
+  0.1, to = 10, by = 0.1), listLambdaC = seq(from = 0.1, to = 10, by =
   0.1))
 
 \S4method{initialize}{simulateData}(.Object, nbSample = 10000,
@@ -27,25 +27,25 @@
   modelname = "full", kernelRow = "gaussian", kernelCol = "gaussian")
 }
 \arguments{
-\item{.Object}{object of class fitSpectra}
+\item{.Object}{object of class fitData}
 
-\item{m}{spectroscopic data}
+\item{m}{the 3 dimentional data}
 
 \item{modelname}{name of model to be used for calculating the covariance matrix. Available models are
 "full", "parsimonious". Default is "full".}
 
-\item{spectra}{type of spectra. Available models are "diag", "unknown" and "kernel".
+\item{rows}{type of rows. Available models are "diag", "unknown" and "kernel".
 Default is "diag".}
 
-\item{time}{type of time. Available models are "diag", "unknown" and "kernel".
+\item{column}{type of column. Available models are "diag", "unknown" and "kernel".
 Default is "diag".}
 
-\item{kerneltypeSpectra}{kernel to be used for covariance matrix of spectra
+\item{kerneltypeRow}{kernel to be used for covariance matrix of rows
 Available kernels are "epanechnikov", "gaussian", "exponential", "uniform",
 "quadratic", "circular", "triangular", "rational quadratic", "inverse multiquadratic".
 Default is "exponential".}
 
-\item{kerneltypeTime}{kernel to be used for covariance matrix of time
+\item{kerneltypeCol}{kernel to be used for covariance matrix of column
 Available kernels are "epanechnikov", "gaussian", "exponential", "uniform",
 "quadratic", "circular", "triangular", "rational quadratic", "inverse multiquadratic".
 Default is "exponential".}
@@ -54,15 +54,15 @@ Default is "exponential".}
 
 \item{s}{regularisation paramater for flip flop algorithm}
 
-\item{lambdaS}{regularisation for spectra for flip flop algorithm}
+\item{lambdaR}{regularisation for rows for flip flop algorithm}
 
-\item{lambdaT}{regularisation for spectra for flip flop algorithm}
+\item{lambdaC}{regularisation for rows for flip flop algorithm}
 
 \item{validation}{to optimize lambda or not}
 
-\item{listLambdaS}{list of lambdaS used in prediction in case validation is TRUE}
+\item{listLambdaR}{list of lambdaR used in prediction in case validation is TRUE}
 
-\item{listLambdaT}{list of lambdaT used in prediction in case validation is TRUE}
+\item{listLambdaC}{list of lambdaC used in prediction in case validation is TRUE}
 
 \item{model}{use in prediction in case of validation is TRUE}
 
@@ -78,8 +78,6 @@ Default is "exponential".}
 
 \item{sigma}{a vector of size nbRow giving the variance level of
 the row}
-
-\item{column}{columns intervals of the simulation}
 
 \item{width}{the width of the kernel to use for "gaussian" simulation. Default is 50.}
 
@@ -98,11 +96,11 @@ Default is "gaussian".}
 
 \item{.Object}{object of class predictClass}
 
-\item{m}{spectroscopic data}
+\item{m}{the 3 dimentional data}
 
-\item{lambdaS}{parameter for regularisation of spectra}
+\item{lambdaR}{parameter for regularisation of row}
 
-\item{lambdaT}{parameter for regularisation of time}
+\item{lambdaC}{parameter for regularisation of column}
 
 \item{model}{type of model to be used for prediction of labels
 Available models are "gaussian", "tstudent". Default is "gaussian".}
@@ -118,6 +116,8 @@ Available models are "gaussian", "tstudent". Default is "gaussian".}
 \item{modelname}{type of model to be used to build covariance matrix.
 Available options are "full" and "parsimonious". Default is "full".}
 
+\item{column}{columns intervals of the simulation}
+
 \item{gamma}{degrees of freedom used for simulating "tstudent" distribution of data.
 Default is 3.}
 
@@ -126,7 +126,7 @@ Default is 3.}
 \item{result}{return a list of simulated data}
 }
 \description{
-Initialization method of the fitSpectra class.
+Initialization method of the fitData class.
 
 Initialization method of the predictClass class.
 

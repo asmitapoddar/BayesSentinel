@@ -7,7 +7,7 @@
 #' Available kernels are "epanechnikov", "gaussian", "exponential", "uniform",
 #' "quadratic", "circular", "triangular", "rational quadratic", "inverse multiquadratic".
 #' Default is "exponential".
-#' @param h the wide to optimize the kernel
+#' @param h the widths to optimize the kernel
 #'
 #' @return the kernel square matrix
 #'
@@ -57,7 +57,7 @@ kernelCol = function(data,kerneltype,h)
 #' Available kernels are "epanechnikov", "gaussian", "exponential", "uniform",
 #' "quadratic", "circular", "triangular", "rational quadratic", "inverse multiquadratic".
 #' Default is "exponential".
-#' @param h the wide to optimize the kernel
+#' @param h the widths to optimize the kernel
 #'
 #' @return the kernel square matrix
 #'

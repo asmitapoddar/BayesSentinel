@@ -2,18 +2,18 @@
 % Please edit documentation in R/CV_lambda.R
 \name{bestFitLambda}
 \alias{bestFitLambda}
-\title{Find best fitted lambda}
+\title{bestFitLambda}
 \usage{
 bestFitLambda(objFit)
 }
 \arguments{
-\item{objFit}{prediction object}
+\item{objFit}{fit object}
 }
 \value{
-list of predicted lambda for spectra and time
+list of covariance matrix with the best lambda for row and column
 }
 \description{
-Find best fitted lambda
+Find best fitted lambda for row and column
 }
 \author{
 Asmita Poddar & Florent Latimier
