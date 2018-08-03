@@ -63,8 +63,8 @@ setClass(
              , lambdaR           = 0.3
              , lambdaC           = 0.3
              , validation        = FALSE
-             , listLambdaR       = seq(from=0.1,to=0.3,by=0.1)
-             , listLambdaC       = seq(from=0.1,to=0.3,by=0.1)
+             , listLambdaR       = seq(from=0,to=1,by=0.1)
+             , listLambdaC       = seq(from=0,to=1,by=0.1)
              , model             = "gaussian"
   ),
   # validity function
@@ -242,8 +242,8 @@ setMethod(
   function(.Object, m = list(0), modelname = "full", rows = "diag", column = "diag"
            , kerneltypeRow = "exponential", kerneltypeCol    = "exponential"
            , h = 10, s = 0.01, lambdaR = 0.3, lambdaC = 0.3, validation = FALSE
-           , listLambdaR = seq(from = 0.1, to=0.3, by=0.1)
-           , listLambdaC = seq(from=0.1, to=0.3, by=0.1), model = "gaussian")
+           , listLambdaR = seq(from=0,to=1,by=0.1)
+           , listLambdaC = seq(from=0,to=1,by=0.1), model = "gaussian")
   { .Object@m = m
   .Object@modelname = modelname
   .Object@rows = rows
@@ -264,9 +264,9 @@ setMethod(
 
 
 
-#' fitDataMatrix
+#' Fit a 3 dimentional data
 #'
-#' Fit the mean and the covariance matrix according to the data
+#' Fit the mean and the covariance matrix according to the model
 #'
 #' @param .Object object of class fitData
 #' @param m the 3 dimentional data
@@ -309,8 +309,8 @@ fitDataMatrix <- function(m             = list(0)
                     , lambdaR           = 0.3
                     , lambdaC           = 0.3
                     , validation        = FALSE
-                    , listLambdaR       = seq(from=0.1,to=0.3,by=0.1)
-                    , listLambdaC       = seq(from=0.1,to=0.3,by=0.1)
+                    , listLambdaR       = seq(from=0,to=1,by=0.1)
+                    , listLambdaC       = seq(from=0,to=1,by=0.1)
                     , model             = "gaussian")
 {
   o = new("fitData", m = m, modelname = modelname, rows = rows, column = column, kerneltypeRow = kerneltypeRow

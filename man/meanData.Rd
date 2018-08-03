@@ -2,7 +2,7 @@
 % Please edit documentation in R/meanData.R
 \name{meanData}
 \alias{meanData}
-\title{meanData}
+\title{Mean of a 3 dimentional data}
 \usage{
 meanData(data)
 }

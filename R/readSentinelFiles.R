@@ -38,6 +38,8 @@
 #' multiSentinelSmoothed <- readMultiSentinelSmoothedData()
 #' }
 #'
+#' @importFrom h5 h5file
+#'
 #' @return A list with the sentinel data
 #' @author Serge Iovleff
 #'

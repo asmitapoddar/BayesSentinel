@@ -1,5 +1,5 @@
 #-----------------------------------------------------------------------
-#' regularisation
+#' Regularisation
 #'
 #' Perform regularisation on covariance matrix
 #'
@@ -10,6 +10,8 @@
 #' @return A list with regularised covariance matrix
 #'
 #' @author Asmita Poddar & Florent Latimier
+#'
+#'#' @import matrixcalc is.positive.definite
 #'
 regularisation = function(fittedCov, lambdaR = 0.3 , lambdaC = 0.3)
 {
@@ -28,7 +30,7 @@ regularisation = function(fittedCov, lambdaR = 0.3 , lambdaC = 0.3)
   {
     #to assure the symetry due to approximation
     mat = (mat + t(mat)) /2
-    regul(mat + diag(rep(lambda,nrow(mat))))
+    regul((1-lambda)*mat + lambda*mean(diag(mat))*diag(rep(1,nrow(mat))))
   }
 
 

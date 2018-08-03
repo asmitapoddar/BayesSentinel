@@ -2,7 +2,7 @@
 % Please edit documentation in R/simulateData.R
 \name{simulateKernel}
 \alias{simulateKernel}
-\title{SimulateKernel}
+\title{Simulate a data according to a kernel}
 \usage{
 simulateKernel(modelname, kernelRow, kernelCol, column, rows, labels,
   sigmaL, sigmaR, sigmaC, h)

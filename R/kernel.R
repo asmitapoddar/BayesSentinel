@@ -1,4 +1,4 @@
-#' kernelCol
+#' Kernel for the column covariance matrix
 #'
 #' Calculate the kernel matrix according to the column
 #'
@@ -48,7 +48,7 @@ kernelCol = function(data,kerneltype,h)
 }
 
 
-#' kernelRow
+#' Kernel for the row covariance matrix
 #'
 #' Calculate the kernel matrix according to the column
 #'

@@ -2,7 +2,7 @@
 % Please edit documentation in R/bestLambda.R
 \name{bestPredLambda}
 \alias{bestPredLambda}
-\title{bestPredLambda}
+\title{Best regularisation for prediction}
 \usage{
 bestPredLambda(objPred)
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/regularisation.R
 \name{regularisation}
 \alias{regularisation}
-\title{regularisation}
+\title{Regularisation}
 \usage{
 regularisation(fittedCov, lambdaR = 0.3, lambdaC = 0.3)
 }
@@ -21,4 +21,6 @@ Perform regularisation on covariance matrix
 }
 \author{
 Asmita Poddar & Florent Latimier
+
+#' @import matrixcalc is.positive.definite
 }

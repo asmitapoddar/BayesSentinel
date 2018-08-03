@@ -1,5 +1,5 @@
 #-----------------------------------------------------------------------
-#' bestPredLambda
+#' Best regularisation for prediction
 #'
 #' Find best fitted lambda
 #'

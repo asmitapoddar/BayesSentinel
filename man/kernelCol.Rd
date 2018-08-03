@@ -2,7 +2,7 @@
 % Please edit documentation in R/kernel.R
 \name{kernelCol}
 \alias{kernelCol}
-\title{kernelCol}
+\title{Kernel for the column covariance matrix}
 \usage{
 kernelCol(data, kerneltype, h)
 }

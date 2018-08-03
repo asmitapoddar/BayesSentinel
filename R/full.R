@@ -1,4 +1,4 @@
-#' Full model
+#' Full model for fitting
 #'
 #' Return the list of covariance for each clusther in case of a full model.
 #'

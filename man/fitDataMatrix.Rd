@@ -2,13 +2,13 @@
 % Please edit documentation in R/fit.R
 \name{fitDataMatrix}
 \alias{fitDataMatrix}
-\title{fitDataMatrix}
+\title{Fit a 3 dimentional data}
 \usage{
 fitDataMatrix(m = list(0), modelname = "full", rows = "diag",
   column = "diag", kerneltypeRow = "exponential",
   kerneltypeCol = "exponential", h = 10, s = 0.01, lambdaR = 0.3,
-  lambdaC = 0.3, validation = FALSE, listLambdaR = seq(from = 0.1, to
-  = 0.3, by = 0.1), listLambdaC = seq(from = 0.1, to = 0.3, by = 0.1),
+  lambdaC = 0.3, validation = FALSE, listLambdaR = seq(from = 0, to =
+  1, by = 0.1), listLambdaC = seq(from = 0, to = 1, by = 0.1),
   model = "gaussian")
 }
 \arguments{
@@ -55,5 +55,5 @@ Default is "exponential".}
 a list with covariance matrices for each clusther, of a data with matrix observation
 }
 \description{
-Fit the mean and the covariance matrix according to the data
+Fit the mean and the covariance matrix according to the model
 }

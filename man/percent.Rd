@@ -2,8 +2,7 @@
 % Please edit documentation in R/automatisation.R
 \name{percent}
 \alias{percent}
-\title{Find percentage of accuracy
-Find percentage of accuracy when two lists containig the class labels are provided}
+\title{Percent of good}
 \usage{
 percent(list1, list2)
 }
@@ -16,7 +15,6 @@ percent(list1, list2)
 percentage value - numeric
 }
 \description{
-Find percentage of accuracy
 Find percentage of accuracy when two lists containig the class labels are provided
 }
 \author{

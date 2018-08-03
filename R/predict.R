@@ -1,8 +1,8 @@
 
 #-----------------------------------------------------------------------
-#' Predict
+#' Prediction
 #'
-#' Predict the label classes of the data
+#' Predict the label classes of the data with 3 dimensions
 #'
 #' @slot m the 3 dimentional data
 #' @slot fittedCov fitted covariance matrix for the data
@@ -42,8 +42,8 @@ setClass(
              , fittedCov         = list(0)
              , lambdaR           = 0.3
              , lambdaC           = 0.3
-             , listLambdaR       = seq(from=0.1,to=10,by=0.1)
-             , listLambdaC       = seq(from=0.1,to=10,by=0.1)
+             , listLambdaR       = seq(from=0,to=1,by=0.1)
+             , listLambdaC       = seq(from=0,to=1,by=0.1)
              , model = "gaussian"
              , validation        = FALSE
   ),
@@ -182,7 +182,7 @@ setMethod(
   "initialize",
   "predictClass",
   function(.Object, m = list(0), fittedCov = list(0), lambdaR = 0.3, lambdaC = 0.3, model = "gaussian"
-           , validation = FALSE, listLambdaR = seq(from=0.1,to=10,by=0.1), listLambdaC = seq(from=0.1,to=10,by=0.1))
+           , validation = FALSE, listLambdaR = seq(from=0,to=1,by=0.1), listLambdaC = seq(from=0,to=1,by=0.1))
   { .Object@m = m
   .Object@fittedCov = fittedCov
   .Object@lambdaR = lambdaR
@@ -196,9 +196,9 @@ setMethod(
 )
 
 
-#' predictData
+#' Prediction of labels
 #'
-#' Predict the label classes of the data
+#' Predict the label classes of the data according to the fitted arguments.
 #'
 #' @param m the 3 dimentional data
 #' @param fittedCov fitted covariance matrix for the data

@@ -2,7 +2,7 @@
 % Please edit documentation in R/simulateData.R
 \name{simulateDataMatrix}
 \alias{simulateDataMatrix}
-\title{SimulateDataMatrix}
+\title{Simulate a 3 dimentional matrix}
 \usage{
 simulateDataMatrix(...)
 }

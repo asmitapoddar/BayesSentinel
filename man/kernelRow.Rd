@@ -2,7 +2,7 @@
 % Please edit documentation in R/kernel.R
 \name{kernelRow}
 \alias{kernelRow}
-\title{kernelRow}
+\title{Kernel for the row covariance matrix}
 \usage{
 kernelRow(data, kerneltype, h)
 }

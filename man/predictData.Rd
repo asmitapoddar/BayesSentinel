@@ -2,7 +2,7 @@
 % Please edit documentation in R/predict.R
 \name{predictData}
 \alias{predictData}
-\title{predictData}
+\title{Prediction of labels}
 \usage{
 predictData(...)
 }
@@ -32,5 +32,5 @@ Available models are "gaussian", "tstudent". Default is "gaussian".}
 A list with the row
 }
 \description{
-Predict the label classes of the data
+Predict the label classes of the data according to the fitted arguments.
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/full.R
 \name{full}
 \alias{full}
-\title{Full model}
+\title{Full model for fitting}
 \usage{
 full(data)
 }

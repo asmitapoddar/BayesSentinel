@@ -279,7 +279,7 @@ setMethod(
 
 )
 
-#' SimulateDataMatrix
+#' Simulate a 3 dimentional matrix
 #'
 #' Simulate a data that all observation is a matrix : [nbRow : nbCol].
 #'
@@ -324,7 +324,7 @@ simulateDataMatrix <- function(...)
 
 
 
-#' SimulateKernel
+#' Simulate a data according to a kernel
 #'
 #' Simulate the covariance matrix as a diagonal or a kenrel
 #'

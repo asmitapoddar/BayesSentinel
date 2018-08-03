@@ -1,4 +1,4 @@
-#' meanData
+#' Mean of a 3 dimentional data
 #'
 #' Calculate the mean for each label, in row and in column.
 #'

@@ -1,5 +1,6 @@
 #-----------------------------------------------------------------------
-#' Find percentage of accuracy
+#' Percent of good
+#'
 #' Find percentage of accuracy when two lists containig the class labels are provided
 #'
 #' @param list1 first list
@@ -56,7 +57,7 @@ inversion <- function(mat){
 }
 
 
-#' tablesModel
+#' Table of all model kind
 #'
 #' Try all the model posible with validation.
 #'
@@ -69,8 +70,9 @@ inversion <- function(mat){
 #'
 #' @return list containing the accuaracy for different models
 #'
-#' @export
-
+#' @name tablesModel
+#' @export tablesModel
+#'
 tablesModel = function( data, lkernelR = list(), lkernelC = list(), lhR = list()
                         , lhC = list(), listModel = list("gaussian"))
 {

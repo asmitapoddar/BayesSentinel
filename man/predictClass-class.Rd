@@ -4,12 +4,12 @@
 \name{predictClass}
 \alias{predictClass}
 \alias{predictClass-class}
-\title{Predict}
+\title{Prediction}
 \value{
 A list with the row
 }
 \description{
-Predict the label classes of the data
+Predict the label classes of the data with 3 dimensions
 }
 \section{Slots}{
 

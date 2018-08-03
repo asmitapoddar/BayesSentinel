@@ -2,7 +2,7 @@
 % Please edit documentation in R/automatisation.R
 \name{tablesModel}
 \alias{tablesModel}
-\title{tablesModel}
+\title{Table of all model kind}
 \usage{
 tablesModel(data, lkernelR = list(), lkernelC = list(), lhR = list(),
   lhC = list(), listModel = list("gaussian"))

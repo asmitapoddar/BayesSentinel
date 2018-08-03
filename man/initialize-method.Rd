@@ -9,15 +9,13 @@
   modelname = "full", rows = "diag", column = "diag",
   kerneltypeRow = "exponential", kerneltypeCol = "exponential",
   h = 10, s = 0.01, lambdaR = 0.3, lambdaC = 0.3,
-  validation = FALSE, listLambdaR = seq(from = 0.1, to = 0.3, by =
-  0.1), listLambdaC = seq(from = 0.1, to = 0.3, by = 0.1),
-  model = "gaussian")
+  validation = FALSE, listLambdaR = seq(from = 0, to = 1, by = 0.1),
+  listLambdaC = seq(from = 0, to = 1, by = 0.1), model = "gaussian")
 
 \S4method{initialize}{predictClass}(.Object, m = list(0),
   fittedCov = list(0), lambdaR = 0.3, lambdaC = 0.3,
-  model = "gaussian", validation = FALSE, listLambdaR = seq(from =
-  0.1, to = 10, by = 0.1), listLambdaC = seq(from = 0.1, to = 10, by =
-  0.1))
+  model = "gaussian", validation = FALSE, listLambdaR = seq(from = 0,
+  to = 1, by = 0.1), listLambdaC = seq(from = 0, to = 1, by = 0.1))
 
 \S4method{initialize}{simulateData}(.Object, nbSample = 10000,
   nbCluster = 15, nbRow = 10, nbCol = 33, sigma = rexp(nbRow),
