@@ -21,6 +21,7 @@ Collate:
     kernelTypes.R
     meanData.R
     parsimonious.R
+    plotMean.R
     predict.R
     readSentinelFiles.R
     regularisation.R
