@@ -24,10 +24,17 @@
 #' @slot width width of the kernel to use for "gaussian" simulation. Default is 50.
 #' @slot gamma degrees of freedom used for simulating "tstudent" distribution of data.
 #' Default is 3.
+<<<<<<< HEAD
 #' @slot a0 mean distance between two rows
 #' @slot b0 mean distance between two clusters
 #' @slot labels class label of the data
 #' @slot result a list of simulated data
+=======
+#' @slot a0 the mean distance between two row
+#' @slot b0 the mean distance between two cluster
+#' @slot labels class labels of the data
+#' @slot result return a list of simulated data
+>>>>>>> 2951fa4d260001bb148334406ad582a4956ceff7
 #'
 #' @examples
 #' m = new("simulateData")
@@ -76,7 +83,11 @@ setClass(
              , column = c(0,10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170
                           ,180,190,200,210,220,230,240,250,260,270,280,290,300,310,321)
              , a0           = 7
+<<<<<<< HEAD
              , b0           = 100
+=======
+             , b0           = 225
+>>>>>>> 2951fa4d260001bb148334406ad582a4956ceff7
              , result = list()
   ),
   # validity function
