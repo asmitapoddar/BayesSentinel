@@ -1,4 +1,4 @@
-Package: BayesS4
+Package: bayesS4
 Date: 2018-06-28
 Type: Package
 Title: Bayes Classification of Matrix Data
@@ -27,4 +27,7 @@ Collate:
     regularisation.R
     simulateData.R
 Imports: matrixcalc, mvtnorm, methods, h5
+Suggests: knitr, rmarkdown
+VignetteBuilder: knitr
 RoxygenNote: 6.1.0
+
