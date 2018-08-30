@@ -30,7 +30,7 @@ matrixRowLabel <- function(data,row,label)
   data[[3]][[row]][which(data[[1]]==label),]
 }
 
-covTLabel <- function(data,label)
+covCLabel <- function(data,label)
 {
   cov(do.call("rbind",lapply(1:length(data[[3]]),matrixRowLabel,label=label,data=data)))
 }
@@ -46,7 +46,7 @@ covTLabel <- function(data,label)
 #'
 unknownCol <- function(data)
 {
-  lapply(levels(factor(data[[1]])),covTLabel,data=data)
+  lapply(levels(factor(data[[1]])),covCLabel,data=data)
 }
 
 

@@ -268,7 +268,7 @@ setMethod(
            , nbCol = 33, sigma = rexp(nbRow), a0 = 7, b0 = 100
            , column = c(0,10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170
                         ,180,190,200,210,220,230,240,250,260,270,280,290,300,310,321)
-           , width = 50, simulationType = "gaussian", modelname     = "full"
+           , width = 100, simulationType = "gaussian", modelname     = "full"
            , kernelRow = "gaussian", kernelCol = "gaussian")
   { .Object@nbSample = nbSample
   .Object@nbCluster = nbCluster
@@ -371,7 +371,7 @@ simulateKernel = function( modelname, kernelRow, kernelCol, column, rows
     sigma <- vector("double",length = (length(column)*length(rows)))
     for(i in 1:length(rows))
     {
-      l[((i-1)*length(column)+1):(i*length(column))] <- rows[i] * column
+      l[((i-1)*length(column)+1):(i*length(column))] <- rows[i] * 365 + column
       sigma[((i-1)*length(column)+1):(i*length(column))] <- sigmaR[i] * sigmaC
     }
     for (i in 1:length(column))
@@ -382,6 +382,7 @@ simulateKernel = function( modelname, kernelRow, kernelCol, column, rows
     Q = ker(Q, kernelRow, h)
     res = lapply(sigmal, function(mat,vect)
     {diag(sqrt(vect)) %*% mat %*% diag(sqrt(vect)) }, mat = Q)
+    sigma=list(res)
   }
 
 
