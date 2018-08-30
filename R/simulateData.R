@@ -24,6 +24,8 @@
 #' @slot width the width of the kernel to use for "gaussian" simulation. Default is 50.
 #' @slot gamma degrees of freedom used for simulating "tstudent" distribution of data.
 #' Default is 3.
+#' @slot a0 the mean distance between two row
+#' @slot b0 the mean distance between two cluster
 #' @slot labels class labels of the data
 #' @slot result return a list of simulated data
 #'
@@ -55,6 +57,8 @@ setClass(
                   , column         = "numeric"
                   , width         = "numeric"
                   , gamma         = "numeric"
+                  , a0            = "numeric"
+                  , b0            = "numeric"
                   , labels        = "numeric"
                   , result        = "list"
   ),
@@ -71,6 +75,8 @@ setClass(
              , gamma        = 3
              , column = c(0,10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170
                           ,180,190,200,210,220,230,240,250,260,270,280,290,300,310,321)
+             , a0           = 7
+             , b0           = 225
              , result = list()
   ),
   # validity function
@@ -124,8 +130,6 @@ setMethod(
     mean=function(t, nbRow, nbCluster)
     {
       res <- array(0, c(nbCluster, nbRow, length(t)));
-      a0 = 100
-      b0 = 200
 
       ak = rexp(length(t))
       lk = rexp(length(t))
@@ -135,7 +139,7 @@ setMethod(
         for(j in 1:nbRow)
         {
           s = rep(0, length(Object@column))
-          meanLevel = a0*j+b0*i
+          meanLevel = Object@a0*j+Object@b0*i
           #s = meanLevel + colSums(ak*cos((2*pi*lk*t)/365))
           s = meanLevel + ak*cos((2*pi*lk*t)/365)
           res[i,j,]=s
@@ -241,6 +245,8 @@ setMethod(
 #' @param width the width of the kernel to use for "gaussian" simulation. Default is 50.
 #' @param gamma degrees of freedom used for simulating "tstudent" distribution of data.
 #' Default is 3.
+#' @param a0 the mean distance between two row
+#' @param b0 the mean distance between two cluster
 #' @param labels class labels of the data
 #' @param result return a list of simulated data
 #'
@@ -258,7 +264,7 @@ setMethod(
   "simulateData",
 
   function(.Object, nbSample = 10000, nbCluster = 15, nbRow = 10
-           , nbCol = 33, sigma = rexp(nbRow)
+           , nbCol = 33, sigma = rexp(nbRow), a0 = 7, b0 = 225
            , column = c(0,10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170
                         ,180,190,200,210,220,230,240,250,260,270,280,290,300,310,321)
            , width = 50, simulationType = "gaussian", modelname     = "full"
@@ -274,6 +280,8 @@ setMethod(
   .Object@modelname = modelname
   .Object@kernelRow = kernelRow
   .Object@kernelCol = kernelCol
+  .Object@a0 = a0
+  .Object@b0 = b0
   return(.Object)
   }
 
@@ -305,6 +313,8 @@ setMethod(
 #' @param width the width of the kernel to use for "gaussian" simulation. Default is 50.
 #' @param gamma degrees of freedom used for simulating "tstudent" distribution of data.
 #' Default is 3.
+#' @param a0 the mean distance between two row
+#' @param b0 the mean distance between two cluster
 #' @param labels class labels of the data
 #'
 #' @return simulated data as a list of all observation
