@@ -53,7 +53,7 @@ setClass(
                   , kernelRow	 = "character"
                   , kernelCol    = "character"
                   , nbCol   	 = "numeric"
-                  , sigma         = "numeric"
+                  , sigma         = "list"
                   , column         = "numeric"
                   , width         = "numeric"
                   , gamma         = "numeric"
@@ -70,7 +70,7 @@ setClass(
              , kernelRow      = "gaussian"
              , kernelCol      = "gaussian"
              , nbCol          = 33
-             , sigma          = integer(0)
+             , sigma          = list()
              , width          = 50
              , gamma          = 3
              , column = c(0,10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170
@@ -178,6 +178,8 @@ setMethod(
                            )
     covariance <- lapply(covariance, function(mat){(mat %*% t(mat)) /2}) # force symmetry
 
+
+
     if (Object@simulationType == "gaussian")
     {
       labels  = sort(labels)
@@ -211,7 +213,7 @@ setMethod(
     Object@result = list(labels=labels , column = Object@column, rows = process
                          , clouds = list(years1 = matrix(0, nrow = Object@nbSample
                                                          , ncol = length(Object@column) ))
-                         , means = means, sigma = sigma
+                         , means = means, sigma = covariance
     )
     return(Object@result)
   }
@@ -265,7 +267,7 @@ setMethod(
   "simulateData",
 
   function(.Object, nbSample = 10000, nbCluster = 15, nbRow = 10
-           , nbCol = 33, sigma = rexp(nbRow), a0 = 7, b0 = 100
+           , nbCol = 33, sigma = list(), a0 = 7, b0 = 100
            , column = c(0,10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170
                         ,180,190,200,210,220,230,240,250,260,270,280,290,300,310,321)
            , width = 100, simulationType = "gaussian", modelname     = "full"
@@ -368,11 +370,11 @@ simulateKernel = function( modelname, kernelRow, kernelCol, column, rows
     Q = matrix(0, nrow = (length(column)*length(rows))
                , ncol = (length(column)*length(rows)) )
     l <- vector("double",length = (length(column)*length(rows)))
-    sigma <- vector("double",length = (length(column)*length(rows)))
+    sigmas <- vector("double",length = (length(column)*length(rows)))
     for(i in 1:length(rows))
     {
       l[((i-1)*length(column)+1):(i*length(column))] <- rows[i] * 365 + column
-      sigma[((i-1)*length(column)+1):(i*length(column))] <- sigmaR[i] * sigmaC
+      sigmas[((i-1)*length(column)+1):(i*length(column))] <- sigmaR[i] * sigmaC
     }
     for (i in 1:length(column))
     {
@@ -382,7 +384,7 @@ simulateKernel = function( modelname, kernelRow, kernelCol, column, rows
     Q = ker(Q, kernelRow, h)
     res = lapply(sigmal, function(mat,vect)
     {diag(sqrt(vect)) %*% mat %*% diag(sqrt(vect)) }, mat = Q)
-    sigma=list(res)
+
   }
 
 
@@ -419,6 +421,7 @@ simulateKernel = function( modelname, kernelRow, kernelCol, column, rows
     {(diag(sqrt(int*vectR)) %*% matR %*% diag(sqrt(int*vectR))) %x%
         (diag(sqrt(int*vectC)) %*% matC %*% diag(sqrt(int*vectC)) )
     }, matR = QR , vectR = sigmaR, matC = QC , vectC = sigmaC)
+
   }
 
   res
