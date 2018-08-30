@@ -21,11 +21,13 @@
 #' the row
 #' @slot nbCol number of columns intervals of the simulation
 #' @slot column columns intervals of the simulation
-#' @slot width the width of the kernel to use for "gaussian" simulation. Default is 50.
+#' @slot width width of the kernel to use for "gaussian" simulation. Default is 50.
 #' @slot gamma degrees of freedom used for simulating "tstudent" distribution of data.
 #' Default is 3.
-#' @slot labels class labels of the data
-#' @slot result return a list of simulated data
+#' @slot a0 mean distance between two rows
+#' @slot b0 mean distance between two clusters
+#' @slot labels class label of the data
+#' @slot result a list of simulated data
 #'
 #' @examples
 #' m = new("simulateData")
@@ -55,22 +57,26 @@ setClass(
                   , column         = "numeric"
                   , width         = "numeric"
                   , gamma         = "numeric"
+                  , a0            = "numeric"
+                  , b0            = "numeric"
                   , labels        = "numeric"
                   , result        = "list"
   ),
   prototype( nbSample        = 10000
-             , nbCluster    = 15
-             , nbRow   = 10
+             , nbCluster      = 15
+             , nbRow          = 10
              , simulationType = "gaussian"
-             , modelname     = "full"
-             , kernelRow = "gaussian"
-             , kernelCol    = "gaussian"
-             , nbCol   = 33
-             , sigma        = integer(0)
-             , width        = 50
-             , gamma        = 3
+             , modelname       = "full"
+             , kernelRow      = "gaussian"
+             , kernelCol      = "gaussian"
+             , nbCol          = 33
+             , sigma          = integer(0)
+             , width          = 50
+             , gamma          = 3
              , column = c(0,10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170
                           ,180,190,200,210,220,230,240,250,260,270,280,290,300,310,321)
+             , a0           = 7
+             , b0           = 100
              , result = list()
   ),
   # validity function
@@ -121,21 +127,20 @@ setMethod(
   signature = "simulateData",
   definition=function(Object)
   {
+    # compute the mean values
     mean=function(t, nbRow, nbCluster)
     {
       res <- array(0, c(nbCluster, nbRow, length(t)));
-      a0 = 100
-      b0 = 200
-
-      ak = rexp(length(t))
-      lk = rexp(length(t))
-
+      # for each cluster
       for(i in 1:nbCluster)
       {
+        # for each rows simulate a vector of size nbCol
         for(j in 1:nbRow)
         {
-          s = rep(0, length(Object@column))
-          meanLevel = a0*j+b0*i
+          ak = rexp(length(t))
+          lk = rexp(length(t))
+          #s         = rep(0, length(Object@column))
+          meanLevel = Object@a0*j+Object@b0*i
           #s = meanLevel + colSums(ak*cos((2*pi*lk*t)/365))
           s = meanLevel + ak*cos((2*pi*lk*t)/365)
           res[i,j,]=s
@@ -144,8 +149,8 @@ setMethod(
       res
     }
 
-    KernelCov <- function(column, rows, labels, modelname, kernelRow, kernelCol
-                          , nbCluster, nbRow, nbCol, h)
+    KernelCov <- function( column, rows, labels, modelname, kernelRow, kernelCol
+                         , nbCluster, nbRow, nbCol, h)
     {
       #source('~/bayesS4/R/simulateKernel.R')
       sigmaS = rexp(nbRow)
@@ -162,23 +167,23 @@ setMethod(
 
     #creating a vector of size nbSample containing the labels (number of labels = nbCluster)
     #the probablilty of each cluster being between 0 and 1
-    labels <- sample(1:Object@nbCluster, Object@nbSample
-                     , prob = rexp(Object@nbCluster) , replace = T)
+    labels <- sample( 1:Object@nbCluster, Object@nbSample
+                    , prob = rexp(Object@nbCluster) , replace = T)
     rows = 1:Object@nbRow
     ##prob = rep(1, nbCluster)
 
-    covariance <- KernelCov(Object@column, rows, labels, Object@modelname
-                            , Object@kernelRow, Object@kernelCol, Object@nbCluster
-                            , Object@nbRow, Object@nbCol, Object@width)
-    covariance <- lapply(covariance, function(mat){(mat %*% t(mat)) /2}) #to check symmetry
+    covariance <- KernelCov( Object@column, rows, labels, Object@modelname
+                           , Object@kernelRow, Object@kernelCol, Object@nbCluster
+                           , Object@nbRow, Object@nbCol, Object@width
+                           )
+    covariance <- lapply(covariance, function(mat){(mat %*% t(mat)) /2}) # force symmetry
 
     if (Object@simulationType == "gaussian")
     {
       labels  = sort(labels)
-      nb = table(labels)
+      nb      = table(labels)
       process <- lapply(1:Object@nbCluster, function(nb,mean,covariance,label)
-      {rmvnorm(nb[label], mean = as.numeric(t(means[label,,]))
-               , sigma = covariance[[label]])}
+      { rmvnorm(nb[label], mean = as.numeric(t(means[label,,])), sigma = covariance[[label]])}
       , nb = nb, mean = means, covariance = covariance)
 
       data <- do.call("rbind",process)
@@ -241,6 +246,8 @@ setMethod(
 #' @param width the width of the kernel to use for "gaussian" simulation. Default is 50.
 #' @param gamma degrees of freedom used for simulating "tstudent" distribution of data.
 #' Default is 3.
+#' @param a0 the mean distance between two row
+#' @param b0 the mean distance between two cluster
 #' @param labels class labels of the data
 #' @param result return a list of simulated data
 #'
@@ -258,7 +265,7 @@ setMethod(
   "simulateData",
 
   function(.Object, nbSample = 10000, nbCluster = 15, nbRow = 10
-           , nbCol = 33, sigma = rexp(nbRow)
+           , nbCol = 33, sigma = rexp(nbRow), a0 = 7, b0 = 100
            , column = c(0,10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170
                         ,180,190,200,210,220,230,240,250,260,270,280,290,300,310,321)
            , width = 50, simulationType = "gaussian", modelname     = "full"
@@ -274,6 +281,8 @@ setMethod(
   .Object@modelname = modelname
   .Object@kernelRow = kernelRow
   .Object@kernelCol = kernelCol
+  .Object@a0 = a0
+  .Object@b0 = b0
   return(.Object)
   }
 
@@ -305,6 +314,8 @@ setMethod(
 #' @param width the width of the kernel to use for "gaussian" simulation. Default is 50.
 #' @param gamma degrees of freedom used for simulating "tstudent" distribution of data.
 #' Default is 3.
+#' @param a0 the mean distance between two row
+#' @param b0 the mean distance between two cluster
 #' @param labels class labels of the data
 #'
 #' @return simulated data as a list of all observation
@@ -349,8 +360,8 @@ simulateDataMatrix <- function(...)
 #' @name simulateKernel
 #' @export simulateKernel
 #'
-simulateKernel = function(modelname, kernelRow, kernelCol, column, rows
-                          , labels, sigmaL, sigmaR, sigmaC, h)
+simulateKernel = function( modelname, kernelRow, kernelCol, column, rows
+                         , labels, sigmaL, sigmaR, sigmaC, h)
 {
   if(modelname == "full")
   {
@@ -429,13 +440,13 @@ simulateKernel = function(modelname, kernelRow, kernelCol, column, rows
 ker <- function(mat, kernelType,h)
 {
   if (kernelType=="epanechnikov") K = K_E
-  if (kernelType=="gaussian") K = K_G
-  if (kernelType=="exponential") K = K_Exp
-  if (kernelType=="uniform") K = K_U
-  if (kernelType=="quadratic") K = K_Q
-  if (kernelType=="circular") K = K_C
-  if (kernelType=="triangular") K = K_T
-  if (kernelType=="rational quadratic") K = K_RQ
+  if (kernelType=="gaussian")     K = K_G
+  if (kernelType=="exponential")  K = K_Exp
+  if (kernelType=="uniform")      K = K_U
+  if (kernelType=="quadratic")    K = K_Q
+  if (kernelType=="circular")     K = K_C
+  if (kernelType=="triangular")    K = K_T
+  if (kernelType=="rational quadratic")     K = K_RQ
   if (kernelType=="inverse multiquadratic") K = K_IMQ
 
   K(mat,h)
