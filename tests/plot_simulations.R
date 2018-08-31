@@ -11,34 +11,54 @@ for(j in 1:10)
 }
 
 simClass <- res$rows$row1[which(res$labels==1),]
-for(j in dim(simClass)[1])
+for(j in 1:dim(simClass)[1])
 { lines(res$column,simClass[j,],col="orange")}
 
 simClass <- res$rows$row1[which(res$labels==2),]
-for(j in dim(simClass)[1])
+for(j in 1:dim(simClass)[1])
 { lines(res$column,simClass[j,],col="orange")}
 
 simClass <- res$rows$row1[which(res$labels==3),]
-for(j in dim(simClass)[1])
+for(j in 1:dim(simClass)[1])
 { lines(res$column,simClass[j,],col="orange")}
 
 simClass <- res$rows$row1[which(res$labels==4),]
-for(j in dim(simClass)[1])
+for(j in 1:dim(simClass)[1])
 { lines(res$column,simClass[j,],col="orange")}
 
 
 simClass <- res$rows$row10[which(res$labels==1),]
-for(j in dim(simClass)[1])
+for(j in 1:dim(simClass)[1])
 { lines(res$column,simClass[j,],col="purple")}
 
 simClass <- res$rows$row10[which(res$labels==2),]
-for(j in dim(simClass)[1])
+for(j in 1:dim(simClass)[1])
 { lines(res$column,simClass[j,],col="purple")}
 
 simClass <- res$rows$row10[which(res$labels==3),]
-for(j in dim(simClass)[1])
+for(j in 1:dim(simClass)[1])
 { lines(res$column,simClass[j,],col="purple")}
 
 simClass <- res$rows$row10[which(res$labels==4),]
-for(j in dim(simClass)[1])
+for(j in 1:dim(simClass)[1])
 { lines(res$column,simClass[j,],col="purple")}
+
+
+
+
+
+
+
+
+
+
+plot(res$column,res$means[1,1,],col=1,type='l',ylim=c(100,1000))
+for(j in 2:10){ lines(res$column,res$means[2,j,],col=j)}
+
+for(k in 1){
+for(i in 1){
+simClass <- res$rows[[i]][which(res$labels==k),]
+for(j in 1:5)
+{ lines(res$column,simClass[j,],col=i)}
+}
+}

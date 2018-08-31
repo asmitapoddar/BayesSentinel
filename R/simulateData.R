@@ -380,7 +380,7 @@ simulateKernel = function( modelname, kernelRow, kernelCol, column, rows
     {
       Q[,i] <- abs(l[i]-l)
     }
-    sigmal = lapply(sigmaL, function(list, int) {int*list}, list = sigma)
+    sigmal = lapply(sigmaL, function(list, int) {int*list}, list = sigmas)
     Q = ker(Q, kernelRow, h)
     res = lapply(sigmal, function(mat,vect)
     {diag(sqrt(vect)) %*% mat %*% diag(sqrt(vect)) }, mat = Q)
