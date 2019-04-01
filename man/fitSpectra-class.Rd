@@ -4,7 +4,6 @@
 \name{fitSpectra}
 \alias{fitSpectra}
 \alias{fitSpectra-class}
-\alias{fitSpectra}
 \title{Create a list with covariance matrices of the spectra and times}
 \usage{
 fitSpectra(...)
@@ -14,8 +13,6 @@ fitSpectra(...)
 }
 \description{
 Return the covariance matrices
-
-Wrapper function fitSpectra.
 }
 \section{Slots}{
 
@@ -43,7 +40,7 @@ Default is "exponential".}
 
 \item{\code{h}}{used for kernel calculation}
 
-\item{\code{s}}{regularisation paramater for flip flop algorithm}
+\item{\code{s}}{correction limit paramater for flip flop algorithm}
 
 \item{\code{lambdaS}}{regularisation for spectra for flip flop algorithm}
 

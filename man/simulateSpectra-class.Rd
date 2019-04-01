@@ -4,7 +4,6 @@
 \name{simulateSpectra}
 \alias{simulateSpectra}
 \alias{simulateSpectra-class}
-\alias{simulateSpectra}
 \title{Create a list with a simulated data set of spectra}
 \usage{
 simulateSpectra(...)
@@ -14,8 +13,6 @@ simulateSpectra(...)
 }
 \description{
 Simulate one or more Gaussian spectra at regularly sampling time
-
-Wrapper function simulaSpectra.
 }
 \section{Slots}{
 

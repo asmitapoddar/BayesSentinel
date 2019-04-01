@@ -4,7 +4,6 @@
 \name{fit}
 \alias{fit}
 \alias{fit,fitSpectra-method}
-\alias{fit}
 \title{Method num.}
 \usage{
 fit(Object)

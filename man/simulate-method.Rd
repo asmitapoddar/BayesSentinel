@@ -4,7 +4,6 @@
 \name{simulate}
 \alias{simulate}
 \alias{simulate,simulateSpectra-method}
-\alias{simulate}
 \title{Method num.}
 \usage{
 simulate(Object)

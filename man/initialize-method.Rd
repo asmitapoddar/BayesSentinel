@@ -3,28 +3,28 @@
 \docType{methods}
 \name{initialize}
 \alias{initialize}
-\alias{initialize}
-\alias{initialize}
 \title{Initialize an instance of a fitSpectra S4 class.}
 \usage{
-\S4method{initialize}{fitSpectra}(.Object, m = list(0), modelname = "full",
-  spectra = "diag", time = "diag", kerneltypeSpectra = "exponential",
-  kerneltypeTime = "exponential", h = 10, s = 0.01, lambdaS = 0.3,
-  lambdaT = 0.3, validation = FALSE, listLambdaS = seq(from = 0.1, to =
-  0.3, by = 0.1), listLambdaT = seq(from = 0.1, to = 0.3, by = 0.1),
+\S4method{initialize}{fitSpectra}(.Object, m = list(0),
+  modelname = "full", spectra = "diag", time = "diag",
+  kerneltypeSpectra = "exponential", kerneltypeTime = "exponential",
+  h = 10, s = 0.01, lambdaS = 0.3, lambdaT = 0.3,
+  validation = FALSE, listLambdaS = seq(from = 0.1, to = 0.3, by =
+  0.1), listLambdaT = seq(from = 0.1, to = 0.3, by = 0.1),
   model = "gaussian")
 
 \S4method{initialize}{predictClass}(.Object, m = list(0),
-  fittedCov = list(0), lambdaS = 0.3, lambdaT = 0.3, model = "gaussian",
-  validation = FALSE, listLambdaS = seq(from = 0.1, to = 10, by = 0.1),
-  listLambdaT = seq(from = 0.1, to = 10, by = 0.1))
+  fittedCov = list(0), lambdaS = 0.3, lambdaT = 0.3,
+  model = "gaussian", validation = FALSE, listLambdaS = seq(from =
+  0.1, to = 10, by = 0.1), listLambdaT = seq(from = 0.1, to = 10, by =
+  0.1))
 
-\S4method{initialize}{simulateSpectra}(.Object, nbPixel = 1000,
+\S4method{initialize}{simulateSpectra}(.Object, nbPixel = 10000,
   nbCluster = 15, nbSpectrum = 10, nbSampling = 33,
-  sigma = rexp(nbSpectrum), times = c(0, 10, 20, 30, 40, 50, 60, 70, 80, 90,
-  100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 210, 220, 230, 240,
-  250, 260, 270, 280, 290, 300, 310, 321), width = 50,
-  simulationType = "gaussian", modelname = "full",
+  sigma = rexp(nbSpectrum), times = c(0, 10, 20, 30, 40, 50, 60, 70,
+  80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 210, 220,
+  230, 240, 250, 260, 270, 280, 290, 300, 310, 321), width = 50,
+  simulationType = "gaussian", modelname = "parsimonious",
   kernelSpectra = "gaussian", kernelTime = "gaussian")
 }
 \arguments{

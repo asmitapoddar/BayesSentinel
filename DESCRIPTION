@@ -27,4 +27,4 @@ Collate:
     simulateKernel.R
     simulateSpectra.R
 Imports: matrixcalc, mvtnorm, methods, h5
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1
