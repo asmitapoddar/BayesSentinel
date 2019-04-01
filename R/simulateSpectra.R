@@ -151,8 +151,8 @@ setMethod(
     sigmaT = rexp(nbSampling)
     sigmaL = rexp(nbCluster)
 
-    simulateKernel(modelname, kernelSpectra, kernelTime, times, spectra, labels
-                   , sigmaL, sigmaS, sigmaT, h)
+    simulateKernel( modelname, kernelSpectra, kernelTime, times, spectra, labels
+                  , sigmaL, sigmaS, sigmaT, h)
   }
 
   Object@times = c(0,10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180
@@ -166,9 +166,10 @@ setMethod(
   spectra = 1:Object@nbSpectrum
   ##prob = rep(1, nbCluster)
 
-  covariance <- KernelCov(Object@times, spectra, labels, Object@modelname
-                          , Object@kernelSpectra, Object@kernelTime, Object@nbCluster
-                          , Object@nbSpectrum, Object@nbSampling, Object@width)
+  covariance <- KernelCov( Object@times, spectra, labels, Object@modelname
+                         , Object@kernelSpectra, Object@kernelTime, Object@nbCluster
+                         , Object@nbSpectrum, Object@nbSampling, Object@width
+                        )
   covariance <- lapply(covariance, function(mat){(mat %*% t(mat)) /2}) #to check symmetry
 
   if (Object@simulationType == "gaussian")
@@ -176,9 +177,10 @@ setMethod(
     labels  = sort(labels)
     nb = table(labels)
     process <- lapply(1:Object@nbCluster, function(nb,mean,covariance,label)
-    {rmvnorm(nb[label], mean = as.numeric(t(means[label,,]))
-             , sigma = covariance[[label]])}
-      , nb = nb, mean = means, covariance = covariance)
+                                          { rmvnorm(nb[label], mean = as.numeric(t(means[label,,]))
+                                                   , sigma = covariance[[label]])
+                                          }
+                    , nb = nb, mean = means, covariance = covariance)
 
     data <- do.call("rbind",process)
     process <- lapply(1:Object@nbSpectrum,function(data,spectra,nbSampling)
@@ -257,12 +259,12 @@ setMethod(
   "initialize",
   "simulateSpectra",
 
-  function(.Object, nbPixel = 10000, nbCluster = 15, nbSpectrum = 10
-           , nbSampling = 33, sigma = rexp(nbSpectrum)
-           , times = c(0,10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170
+  function( .Object, nbPixel = 10000, nbCluster = 15, nbSpectrum = 10
+          , nbSampling = 33, sigma = rexp(nbSpectrum)
+          , times = c(0,10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170
                        ,180,190,200,210,220,230,240,250,260,270,280,290,300,310,321)
-           , width = 50, simulationType = "gaussian", modelname     = "full"
-           , kernelSpectra = "gaussian", kernelTime = "gaussian")
+          , width = 50, simulationType = "gaussian", modelname     = "parsimonious"
+          , kernelSpectra = "gaussian", kernelTime = "gaussian")
   { .Object@nbPixel = nbPixel
   .Object@nbCluster = nbCluster
   .Object@nbSpectrum = nbSpectrum
@@ -286,8 +288,7 @@ setMethod(
 #' @name simulateSpectra
 #' @rdname simulateSpectra-class
 #' @export
-simulateSpectra <- function(...)
-  {
+simulateSpectra <- function(...){
     o = new("simulateSpectra", ...)
     simulate(o)
 }

@@ -2,22 +2,22 @@ simulateKernel = function(modelname, kernelSpectra, kernelTime, times, spectra
                           , labels, sigmaL, sigmaS, sigmaT, h)
 {
   if(modelname == "full")
- {
-   Q = matrix(0, nrow = (length(times)*length(spectra))
-              , ncol = (length(times)*length(spectra)) )
-   l <- vector("double",length = (length(times)*length(spectra)))
+  {
+    Q = matrix(0, nrow = (length(times)*length(spectra))
+                , ncol = (length(times)*length(spectra)) )
+    l <- vector("double",length = (length(times)*length(spectra)))
     sigma <- vector("double",length = (length(times)*length(spectra)))
     for(i in 1:length(spectra))
     {
       l[((i-1)*length(times)+1):(i*length(times))] <- spectra[i] * times
       sigma[((i-1)*length(times)+1):(i*length(times))] <- sigmaS[i] * sigmaT
     }
-   for (i in 1:length(times))
-   {
-     Q[,i] <- abs(l[i]-l)
-   }
-  sigmal = lapply(sigmaL, function(list, int) {int*list}, list = sigma)
-  Q = ker(Q, kernelSpectra, h)
+    for (i in 1:length(times))
+    {
+      Q[,i] <- abs(l[i]-l)
+    }
+    sigmal = lapply(sigmaL, function(list, int) {int*list}, list = sigma)
+    Q = ker(Q, kernelSpectra, h)
   res = lapply(sigmal, function(mat,vect)
     {diag(sqrt(vect)) %*% mat %*% diag(sqrt(vect)) }, mat = Q)
  }
